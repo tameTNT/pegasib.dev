@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#scene {
+    /* Add background that fills device viewport */
+    background-image: url("./surrounding_sky.jpg");
+    background-size: 110%;
+    background-repeat: repeat-y;
+    background-position: 50% 50%;
+}
