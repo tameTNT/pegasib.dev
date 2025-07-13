@@ -4,12 +4,17 @@ export default function Home() {
       <script type="text/javascript" src="/cursor_effects.js" defer>
       </script>
       <div id="scene"></div>
-      <div className="flex flex-row min-h-screen justify-center items-center">
-        <h1 id="title">51 Pegasi B</h1>
-      </div>
-      <div className="absolute right-1 bottom-1">
-        <i>
-          By ESO/Digitized Sky Survey 2 -{" "}
+        <div className="flex flex-row min-h-screen justify-center items-center">
+            <div className="grid grid-cols-3 gap-4 justify-items-center">
+                <h1 class="col-span-3" id="title">51 Pegasi B</h1>
+                <div className="icon"><object data="icons/github.svg"/></div>
+                <div className="icon"><object data="icons/wikipedia.svg"/></div>
+                <div className="icon"><object data="icons/linkedin.svg"/></div>
+            </div>
+        </div>
+        <div className="absolute right-1 bottom-1">
+            <i>
+                By ESO/Digitized Sky Survey 2 -{" "}
           <a
             rel="nofollow"
             class="external text"
@@ -33,7 +38,7 @@ export default function Home() {
           </a>
         </i>
       </div>
-      <div className="hidden absolute left-1 bottom-1" id="debug">
+      <div className="absolute left-1 bottom-1" id="debug">
         0,0
       </div>
     </div>

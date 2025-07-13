@@ -34,7 +34,7 @@ body {
   background-repeat: repeat-y;
   /* Starting position (modified in JS) */
   background-position: var(--xPos) var(--yPos);
-  opacity: 50%;
+  opacity: 80%;
 }
 
 #scene.resting {
@@ -65,4 +65,14 @@ h1 {
   font-optical-sizing: auto;
   font-weight: 800;
   font-style: normal;
+}
+
+.icon {
+  height: 2rem;
+  width: 2rem;
+}
+
+object {
+  width: 100%;
+  height: 100%;
 }
