@@ -1,9 +1,8 @@
 export default function Home() {
   return (
     <div className="text-white">
-      <script type="text/javascript" src="/cursor_effects.js" defer>
-      </script>
-      <div id="scene"></div>
+        <script type="text/javascript" src="/cursor_effects.js" defer></script>
+        <div id="scene"></div>
         <div className="flex flex-row min-h-screen justify-center items-center">
             <div className="grid grid-cols-3 gap-4 justify-items-center">
                 <h1 class="col-span-3" id="title">51 Pegasi B</h1>
@@ -39,7 +38,7 @@ export default function Home() {
         </i>
       </div>
       <div className="absolute left-1 bottom-1" id="debug">
-        0,0
+        x=0.000,y=0.000,angle=0.000
       </div>
     </div>
   );

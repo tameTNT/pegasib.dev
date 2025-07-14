@@ -31,10 +31,10 @@ document.addEventListener("mousemove", (e) => {
     relativeY.toFixed(3)
   },angle=${angleDeg}`;
 
-  const scale = 100;
-  const ratioAdjustment = 3 * window_width / window_height;
-  const xOffset = relativeX * ratioAdjustment * (window_width / scale);
-  const yOffset = relativeY * (window_height / scale);
+  const offsetSeverity = 0.01;  // higher number for more background movement (0.01)
+  const ratioAdjustment = 3 * window_width / window_height;  // tune width/height movement (3)
+  const xOffset = relativeX * ratioAdjustment * window_width * offsetSeverity;
+  const yOffset = relativeY * window_height * offsetSeverity;
 
   root.style.setProperty("--xPos", `${50 + xOffset}%`);
   root.style.setProperty("--yPos", `${50 + yOffset}%`);
@@ -44,17 +44,13 @@ document.addEventListener("mousemove", (e) => {
     const bounds = icon.getBoundingClientRect();
     let midX = bounds.right - (bounds.right - bounds.left) / 2;
     let midY = bounds.bottom - (bounds.bottom - bounds.top) / 2;
-    [midX, midY] = convertToRelative(midX, midY, window_width, window_height)
-    // console.log(midX, midY);
 
-    const prox = 0.15;  // todo: make this relative to offset between icons
-    const xtoCursor = Math.abs(midX - relativeX);
-    const ytoCursor = Math.abs(midY - relativeY);
-    if (xtoCursor < prox && ytoCursor < prox) {
-      icon.style = "scale: 1.5";
-    } else {
-      icon.style = "scale: 1";
-    }
+    const maxScale = 1.5;  // sets maximum size icons grow to (1.5)
+    const scaleFactor = 200;  // higher number activates icons from further away (200)
+    const xtoCursor = Math.abs(midX - e.pageX);
+    const ytoCursor = Math.abs(midY - e.pageY);
+    const distance = Math.sqrt(xtoCursor**2 + ytoCursor**2);
+    icon.style = `scale: ${Math.max((maxScale-distance/scaleFactor),1).toFixed(3)}`;
   }
 });
 
