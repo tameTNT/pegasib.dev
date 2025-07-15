@@ -39,6 +39,7 @@ jobs:
             --protocol tcp \
             --port 22 \
             --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      # Uses deploy strategy of https://stackoverflow.com/a/66661512/7253717
       - name: deploy to EC2 Server (via ssh-deploy)
         uses: easingthemes/ssh-deploy@main
         with:
@@ -50,12 +51,11 @@ jobs:
           TARGET: "/home/${{ secrets.REMOTE_USER }}/pegasib.dev"
           EXCLUDE: "deno_server/node_modules/, deno_server/_fresh/"
           SCRIPT_AFTER: |
-            echo $RSYNC_STDOUT
             cd /home/${{ secrets.REMOTE_USER }}/pegasib.dev/deno_server
             echo "Starting Deno build and deployment"
-            deno task build
+            ../../.deno/bin/deno task build
             cd /home/${{ secrets.REMOTE_USER }}
-            pup restart deno-server
+            ./.deno/bin/pup restart deno-server
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
         run: |
