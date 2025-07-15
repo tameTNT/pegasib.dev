@@ -20,11 +20,11 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "/home/${{ secrets.REMOTE_USER }}/pegasib_src"
-          EXCLUDE: "/node_modules/, /_fresh/"
+          EXCLUDE: "deno_server/node_modules/, deno_server/_fresh/"
           SCRIPT_AFTER: |
             echo $RSYNC_STDOUT
             cd /home/${{ secrets.REMOTE_USER }}
-            cd pegasib_src
+            cd pegasib_src/deno_server
             echo "Starting final deno build and deployment"
             deno task build
             pup restart deno-server

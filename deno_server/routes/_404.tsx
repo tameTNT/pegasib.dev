@@ -11,7 +11,9 @@ export default function Error404() {
         <div class="flex flex-col items-center justify-center">
           <h1>404</h1>
           <p>👾 We don't have a record of that page here 🛰️</p>
-          <p><a href="/" class="underline text-xl">Blast back to orbit</a></p>
+          <p>
+            <a href="/" class="underline text-xl">Blast back to orbit</a>
+          </p>
         </div>
       </div>
     </>

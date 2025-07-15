@@ -62,9 +62,9 @@ h1 {
   color: transparent;
   background-clip: text;
   background-image: linear-gradient(
-          var(--gradientAngle),
-          rebeccapurple 20%,
-          deepskyblue
+    var(--gradientAngle),
+    rebeccapurple 20%,
+    deepskyblue
   );
 }
 
