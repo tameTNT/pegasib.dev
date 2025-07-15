@@ -69,7 +69,6 @@ h1 {
 
 .icon {
   height: 2rem;
-  width: 2rem;
   transition: scale 250ms ease-out;
   /*No pointer events to allow for cursor tracking over SVGs: https://stackoverflow.com/a/71448597*/
   pointer-events: none;

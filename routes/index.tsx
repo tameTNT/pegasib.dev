@@ -4,11 +4,12 @@ export default function Home() {
         <script type="text/javascript" src="/cursor_effects.js" defer></script>
         <div id="scene"></div>
         <div className="flex flex-row min-h-screen justify-center items-center">
-            <div className="grid grid-cols-3 gap-4 justify-items-center">
-                <h1 class="col-span-3" id="title">51 Pegasi B</h1>
+            <div className="grid grid-cols-4 gap-4 justify-items-center">
+                <h1 class="col-span-4" id="title">51 Pegasi B</h1>
                 <div className="icon"><object data="icons/github.svg"/></div>
                 <div className="icon"><object data="icons/wikipedia.svg"/></div>
                 <div className="icon"><object data="icons/linkedin.svg"/></div>
+                <div className="icon"><object data="icons/email.svg"/></div>
             </div>
         </div>
         <div className="absolute right-1 bottom-1">
