@@ -1,5 +1,8 @@
 # docs: https://docs.github.com/en/actions
 name: push-to-EC2
+permissions:
+  contents: read
+  id-token: write
 on:
   push:
     branches: [ main ]
@@ -11,7 +14,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2 Server
+      # Following https://stackoverflow.com/a/72494416/7253717
+      - name: get action runner ip address
+        id: ip
+        uses: haythem/public-ip@v1.2
+      - name: git clone the repository
+        uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          role-session-name: github-deployment-action
+          aws-region: eu-west-2
+      - name: whitelist runner ip address (via aws CLI)
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ secrets.AWS_INSTANCE_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      - name: deploy to EC2 Server (via ssh-deploy)
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -19,13 +41,21 @@ jobs:
           SOURCE: "/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "/home/${{ secrets.REMOTE_USER }}/pegasib_src"
+          TARGET: "/home/${{ secrets.REMOTE_USER }}/pegasib.dev"
           EXCLUDE: "deno_server/node_modules/, deno_server/_fresh/"
           SCRIPT_AFTER: |
             echo $RSYNC_STDOUT
-            cd /home/${{ secrets.REMOTE_USER }}
-            cd pegasib_src/deno_server
-            echo "Starting final deno build and deployment"
+            cd /home/${{ secrets.REMOTE_USER }}/pegasib.dev/deno_server
+            echo "Starting Deno build and deployment"
             deno task build
+            cd /home/${{ secrets.REMOTE_USER }}
             pup restart deno-server
           SCRIPT_AFTER_REQUIRED: true
+      - name: revoke runner ip address (via aws CLI)
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ secrets.AWS_INSTANCE_SG_ID }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        if: ${{ always() }}
