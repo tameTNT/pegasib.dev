@@ -9,18 +9,23 @@ title.classList.add("resting");
 setTimeout(() => {
   scene.classList.remove("resting");
   title.classList.remove("resting");
-}, 1000)
+}, 1000);
 
 function convertToRelative(x, y, width, height) {
   const relativeX = (x - width / 2) / width;
   const relativeY = (y - height / 2) / height;
-  return [relativeX, relativeY]
+  return [relativeX, relativeY];
 }
 
 document.addEventListener("mousemove", (e) => {
   const window_width = document.documentElement.clientWidth;
   const window_height = document.documentElement.clientHeight;
-  const [relativeX, relativeY] = convertToRelative(e.pageX, e.pageY, window_width, window_height)
+  const [relativeX, relativeY] = convertToRelative(
+    e.pageX,
+    e.pageY,
+    window_width,
+    window_height,
+  );
   const angleRad = Math.atan2(relativeY, relativeX);
 
   // Convert radians to degrees.
@@ -31,8 +36,8 @@ document.addEventListener("mousemove", (e) => {
     relativeY.toFixed(3)
   },angle=${angleDeg}`;
 
-  const offsetSeverity = 0.01;  // higher number for more background movement (0.01)
-  const ratioAdjustment = 3 * window_width / window_height;  // tune width/height movement (3)
+  const offsetSeverity = 0.01; // higher number for more background movement (0.01)
+  const ratioAdjustment = 3 * window_width / window_height; // tune width/height movement (3)
   const xOffset = relativeX * ratioAdjustment * window_width * offsetSeverity;
   const yOffset = relativeY * window_height * offsetSeverity;
 
@@ -40,17 +45,19 @@ document.addEventListener("mousemove", (e) => {
   root.style.setProperty("--yPos", `${50 + yOffset}%`);
   root.style.setProperty("--gradientAngle", `${angleDeg}deg`);
 
-  for (let icon of icons) {
+  for (const icon of icons) {
     const bounds = icon.getBoundingClientRect();
-    let midX = bounds.right - (bounds.right - bounds.left) / 2;
-    let midY = bounds.bottom - (bounds.bottom - bounds.top) / 2;
+    const midX = bounds.right - (bounds.right - bounds.left) / 2;
+    const midY = bounds.bottom - (bounds.bottom - bounds.top) / 2;
 
-    const maxScale = 1.5;  // sets maximum size icons grow to (1.5)
-    const scaleFactor = 200;  // higher number activates icons from further away (200)
+    const maxScale = 1.5; // sets maximum size icons grow to (1.5)
+    const scaleFactor = 200; // higher number activates icons from further away (200)
     const xtoCursor = Math.abs(midX - e.pageX);
     const ytoCursor = Math.abs(midY - e.pageY);
-    const distance = Math.sqrt(xtoCursor**2 + ytoCursor**2);
-    icon.style = `scale: ${Math.max((maxScale-distance/scaleFactor),1).toFixed(3)}`;
+    const distance = Math.sqrt(xtoCursor ** 2 + ytoCursor ** 2);
+    icon.style = `scale: ${
+      Math.max(maxScale - distance / scaleFactor, 1).toFixed(3)
+    }`;
   }
 });
 
@@ -67,5 +74,5 @@ document.addEventListener("mouseenter", () => {
   setTimeout(() => {
     scene.classList.remove("resting");
     title.classList.remove("resting");
-  }, 1000)  // todo: fix snapping to new position after 'resting' ends
-})
+  }, 1000); // todo: fix snapping to new position after 'resting' ends
+});
