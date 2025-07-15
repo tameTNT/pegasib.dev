@@ -6,6 +6,10 @@
 
 body {
   background: black;
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 @property --xPos {
@@ -20,7 +24,7 @@ body {
   inherits: true;
 }
 
-#scene {
+#spaceScene {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -29,15 +33,15 @@ body {
   z-index: -1;
 
   /* Add background that fills device viewport */
-  background-image: url("./surrounding_sky.jpg");
+  background-image: url("surrounding_sky.jpg");
   background-size: 110%;
   background-repeat: repeat-y;
   /* Starting position (modified in JS) */
   background-position: var(--xPos) var(--yPos);
-  opacity: 80%;
+  opacity: 70%;
 }
 
-#scene.resting {
+#spaceScene.resting {
   transition: --xPos 1s ease-out, --yPos 1s ease-out;
 }
 
@@ -47,28 +51,25 @@ body {
   inherits: true;
 }
 
-#title {
-  font-size: 4rem;
-  font-weight: bold;
-  background-size: 100%;
-  color: transparent;
-  background-clip: text;
-  background-image: linear-gradient(
-    var(--gradientAngle),
-    rebeccapurple 20%,
-    deepskyblue
-  );
-}
-
-#title.resting {
-  transition: --gradientAngle 1s ease-out;
-}
-
 h1 {
   font-family: "Lexend", sans-serif;
   font-optical-sizing: auto;
   font-weight: 800;
   font-style: normal;
+
+  font-size: 4rem;
+  background-size: 100%;
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(
+          var(--gradientAngle),
+          rebeccapurple 20%,
+          deepskyblue
+  );
+}
+
+h1.resting {
+  transition: --gradientAngle 1s ease-out;
 }
 
 .icon {

@@ -1,12 +1,17 @@
 export default function Home() {
   return (
     <div className="text-white">
-      <script type="text/javascript" src="/cursor_effects.js" defer></script>
-      <div id="scene"></div>
+      <script type="text/javascript" src="/home_icon_swell.js" defer></script>
+      <div id="spaceScene"></div>
       <div className="flex flex-row min-h-screen justify-center items-center">
-        <div className="grid grid-cols-4 gap-4 justify-items-center">
-          <h1 class="col-span-4" id="title">51 Pegasi b</h1>
-          <a href="https://www.linkedin.com/in/luca-huelle/" target="_blank">
+        <div className="grid grid-cols-4 gap-4 justify-items-center px-10">
+          <h1 class="col-span-4">51 Pegasi b</h1>
+          <div className="-mt-4 col-span-2 col-end-4 text-lg text-center">
+            <p>Personal site of Luca Huelle</p>
+            <p>Programming & Applied Mathematics Graduate</p>
+          </div>
+          <a class="col-start-1"
+             href="https://www.linkedin.com/in/luca-huelle/" target="_blank">
             <div className="icon">
               <object data="icons/linkedin.svg" />
             </div>
