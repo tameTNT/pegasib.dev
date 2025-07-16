@@ -1,4 +1,6 @@
 # docs: https://docs.github.com/en/actions
+# todo: self-host the runner on EC2 too?
+#   https://docs.github.com/en/actions/how-tos/hosting-your-own-runners/managing-self-hosted-runners/adding-self-hosted-runners
 name: push-to-EC2
 permissions:
   contents: read
@@ -23,11 +25,11 @@ jobs:
       # Following https://stackoverflow.com/a/72494416/7253717
       - name: get action runner ip address
         id: ip
-        uses: haythem/public-ip@v1.2
+        uses: haythem/public-ip@v1.3
       - name: git clone the repository
         uses: actions/checkout@v4
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
+        uses: aws-actions/configure-aws-credentials@v4.2.1
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
           role-session-name: github-deployment-action
@@ -41,21 +43,21 @@ jobs:
             --cidr ${{ steps.ip.outputs.ipv4 }}/32
       # Uses deploy strategy of https://stackoverflow.com/a/66661512/7253717
       - name: deploy to EC2 Server (via ssh-deploy)
-        uses: easingthemes/ssh-deploy@main
+        uses: easingthemes/ssh-deploy@v5.1.1
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i --delete"
           SOURCE: "/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "/home/${{ secrets.REMOTE_USER }}/pegasib.dev"
+          TARGET: "~/pegasib.dev"
           EXCLUDE: "deno_server/node_modules/, deno_server/_fresh/"
           SCRIPT_AFTER: |
-            cd /home/${{ secrets.REMOTE_USER }}/pegasib.dev/deno_server
+            cd ~/pegasib.dev/deno_server
             echo "Starting Deno build and deployment"
-            ../../.deno/bin/deno task build
-            cd /home/${{ secrets.REMOTE_USER }}
-            ./.deno/bin/pup restart deno-server
+            ~/.deno/bin/deno task build
+            cd
+            ./.deno/bin/pup restart deno_server
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
         run: |
