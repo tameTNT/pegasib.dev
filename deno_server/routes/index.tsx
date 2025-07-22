@@ -36,30 +36,43 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <div className="absolute right-1 bottom-1">
+      <div className="absolute right-1 bottom-1 text-right">
         <i>
-          By ESO/Digitized Sky Survey 2 -{" "}
-          <a
-            rel="nofollow"
-            class="external text"
-            target="_blank"
-            href="https://www.eso.org/public/images/eso1517c/"
-          >
-            ESO website
-          </a>,{" "}
-          <a
-            href="https://creativecommons.org/licenses/by/4.0"
-            target="_blank"
-            title="Creative Commons Attribution 4.0"
-          >
-            CC BY 4.0
-          </a>,{" "}
-          <a
-            href="https://commons.wikimedia.org/w/index.php?curid=39719449"
-            target="_blank"
-          >
-            Link
-          </a>
+          <p>
+            Background by ESO/Digitized Sky Survey 2 -{" "}
+            <a
+              rel="nofollow"
+              class="external text"
+              target="_blank"
+              href="https://www.eso.org/public/images/eso1517c/"
+            >
+              ESO website
+            </a>,{" "}
+            <a
+              href="https://commons.wikimedia.org/w/index.php?curid=39719449"
+              target="_blank"
+            >
+              Wikimedia
+            </a>{" "}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0"
+              target="_blank"
+              title="Creative Commons Attribution 4.0"
+            >
+              (CC BY 4.0)
+            </a>
+          </p>
+          <p>
+            Planet favicon by Vicons Design from{" "}
+            <a
+              href="https://thenounproject.com/browse/icons/term/planet/"
+              target="_blank"
+              title="Planet Icons"
+            >
+              Noun Project
+            </a>{" "}
+            (CC BY 3.0)
+          </p>
         </i>
       </div>
       <div className="hidden absolute left-1 bottom-1" id="debug">
