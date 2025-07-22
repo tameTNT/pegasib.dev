@@ -33,7 +33,7 @@ body {
   z-index: -1;
 
   /* Add background that fills device viewport */
-  background-image: url("surrounding_sky.jpg");
+  background-image: url("surrounding_sky_compressed.jpg");
   background-size: 110%;
   background-repeat: repeat-y;
   /* Starting position (modified in JS) */
