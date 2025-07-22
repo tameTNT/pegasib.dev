@@ -12,14 +12,14 @@ export default function Home() {
           </div>
           <a
             class="col-start-1"
-            href="https://www.linkedin.com/in/luca-huelle/"
+            href="/links/linkedin"
             target="_blank"
           >
             <div className="icon">
               <object data="icons/linkedin.svg" />
             </div>
           </a>
-          <a href="https://github.com/tameTNT" target="_blank">
+          <a href="/links/github" target="_blank">
             <div className="icon">
               <object data="icons/github.svg" />
             </div>
@@ -29,7 +29,7 @@ export default function Home() {
               <object data="icons/email.svg" />
             </div>
           </a>
-          <a href="https://en.wikipedia.org/wiki/51_Pegasi_b" target="_blank">
+          <a href="/links/wikipedia" target="_blank">
             <div className="icon">
               <object data="icons/wikipedia.svg" />
             </div>
