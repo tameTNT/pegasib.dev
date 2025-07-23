@@ -1,4 +1,5 @@
 {
+  "name": "primary_pup",
   "processes": [
     {
       "id": "home_server",
