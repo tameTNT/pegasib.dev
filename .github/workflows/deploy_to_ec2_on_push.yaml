@@ -51,18 +51,18 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "~/pegasib.dev"
-          # Excludes all node_modules subdirectories etc. Do not include git on server.
-          EXCLUDE: "*/node_modules/, */_fresh/, .git/"
+          # Excludes all node_modules subdirectories etc. Do not include git things on server.
+          EXCLUDE: "*/node_modules/, */_fresh/, .git/, .run/, .github/"
           SCRIPT_AFTER: |
             echo "Starting Deno build and deployment for home_server"
             cd ~/pegasib.dev/home_server
             ~/.deno/bin/deno task build
             echo "Starting Deno build and deployment for heardle_server"
-            cd ~/pegasib.dev/loona-heardle
+            cd ../loona-heardle
             ~/.deno/bin/deno task build
-            cd
-            ./.deno/bin/pup restart home_server
-            ./.deno/bin/pup restart heardle_server
+            cd ..
+            ~/.deno/bin/pup restart home_server
+            ~/.deno/bin/pup restart heardle_server
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
         run: |
