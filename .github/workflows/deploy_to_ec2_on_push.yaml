@@ -58,7 +58,7 @@ jobs:
             cd ~/pegasib.dev/home_server
             ~/.deno/bin/deno task build
             echo "Starting Deno build and deployment for heardle_server"
-            cd ../loona-heardle
+            cd ../heardle_server
             ~/.deno/bin/deno task build
             cd ..
             ~/.deno/bin/pup restart home_server
