@@ -25,13 +25,15 @@ print(f"EC2 server's new public IPv4 address: {external_ip}")
 client = Cloudflare()
 zone_id = os.getenv("CLOUDFLARE_ZONE_ID")
 
-domain_name = "pegasib.dev"
+DOMAIN_NAME = "pegasib.dev"
 subdomains_to_update = ["51", "loona-heardle"]
 for subdomain in subdomains_to_update:
+    full_name = f"{subdomain}.{DOMAIN_NAME}"
+
     page = client.dns.records.list(
         zone_id=zone_id,
         type="A",
-        name={"startswith": subdomain},
+        name={"exact": full_name},
     )
 
     if page.success:
@@ -41,16 +43,16 @@ for subdomain in subdomains_to_update:
         record_edit_resp = client.dns.records.edit(
             dns_record_id=target_record_id,
             zone_id=zone_id,
-            name=f"{subdomain}.{domain_name}",
+            name=full_name,
             ttl=1,
             type="A",
             comment=f"Updated via API at {datetime.now(timezone.utc).isoformat()}",
             content=external_ip,
             proxied=True,
         )
-        print("Successfully updated Cloudflare DNS record with new IP address.")
+        print(f"Successfully updated Cloudflare DNS record for {full_name} with new IP address.")
     else:
-        raise Exception("Unable to locate correct DNS record")
+        raise Exception(f"Unable to locate correct DNS record for {full_name}.")
 
 # == Update GitHub repo actions REMOTE_HOST secret with new IPv4 address (for GitHub actions) ==
 github_auth = Auth.Token(os.getenv("GITHUB_ACCESS_TOKEN"))
