@@ -1,0 +1,14 @@
+{
+  "processes": [
+    {
+      "id": "home_server",
+      "cmd": "deno run -A home_server/main.ts",
+      "autostart": true
+    },
+    {
+      "id": "heardle_server",
+      "cmd": "deno run -A heardle_server/main.ts",
+      "autostart": true
+    }
+  ]
+}
