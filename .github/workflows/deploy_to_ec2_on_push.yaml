@@ -53,11 +53,11 @@ jobs:
           TARGET: "~/pegasib.dev"
           EXCLUDE: "deno_server/node_modules/, deno_server/_fresh/"
           SCRIPT_AFTER: |
-            cd ~/pegasib.dev/deno_server
-            echo "Starting Deno build and deployment"
+            echo "Starting Deno build and deployment for home_server"
+            cd ~/pegasib.dev/home_server
             ~/.deno/bin/deno task build
             cd
-            ./.deno/bin/pup restart deno_server
+            ./.deno/bin/pup restart home_server
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
         run: |
