@@ -13,6 +13,10 @@ function convertToRelative(
   return [relativeX, relativeY];
 }
 
+function convertTorem(px: number, base: number = 16) {
+  return px / base
+}
+
 if (scene !== null && title !== null) {
   scene.classList.add("resting");
   title.classList.add("resting");
@@ -24,6 +28,7 @@ if (scene !== null && title !== null) {
   document.addEventListener("mousemove", (e) => {
     const window_width = document.documentElement.clientWidth;
     const window_height = document.documentElement.clientHeight;
+    if (convertTorem(window_width) < 48) return;  // smaller than md breakpoint
     const [relativeX, relativeY] = convertToRelative(
       e.pageX,
       e.pageY,
