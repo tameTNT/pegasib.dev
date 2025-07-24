@@ -10,3 +10,6 @@ _fresh/
 # npm dependencies
 node_modules/
 /.idea/
+
+# Don't publish this scraped info
+/heardle_server/full_track_info.json
