@@ -46,15 +46,21 @@ jobs:
         uses: easingthemes/ssh-deploy@v5.1.1
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-rlgoDzvc -i --delete"
-          SOURCE: "/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SCRIPT_BEFORE: |
+            export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
+            cd ~/pegasib.dev
+            pup disable-service
+          # -i = output a change-summary for all updates, -r = recurse into dirs, -l = copy links, -g = group, -o = owner,
+          # -D = --devices --specials, -z = compress, -v = verbose, -c = skip based on checksum, not mod-time & size
+          # --delete-after = receiver deletes after transfer, not before (to empty .pup directory first)
+          ARGS: "-rlgoDzvc -i --delete-after"
+          SOURCE: "/"
           TARGET: "~/pegasib.dev"
           # Excludes all node_modules subdirectories etc. Do not include git things on server.
           EXCLUDE: "*/node_modules/, */_fresh/, .git/, .run/, .github/"
           SCRIPT_AFTER: |
-            export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
             echo "Starting Deno build and deployment for home_server"
             cd ~/pegasib.dev/home_server
             deno task build
@@ -62,6 +68,7 @@ jobs:
             cd ../heardle_server
             deno task build
             cd ~/pegasib.dev
+            pup enable-service
             pup restart home_server
             pup restart heardle_server
           SCRIPT_AFTER_REQUIRED: true
