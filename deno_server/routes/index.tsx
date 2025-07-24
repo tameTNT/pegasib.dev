@@ -1,52 +1,52 @@
 export default function Home() {
   return (
-    <div className="text-white">
+    <div class="text-white">
       <script type="text/javascript" src="/home_icon_swell.js" defer></script>
       <div id="spaceScene"></div>
-      <div className="flex flex-row min-h-screen justify-center items-center">
-        <div className="grid grid-cols-4 gap-4 justify-items-center px-20 w-2/3">
-          <h1 class="col-span-4">51 Pegasi b</h1>
-          <div className="-mt-4 col-span-2 col-end-4 text-lg text-center">
+      <div class="flex flex-row min-h-screen justify-center items-center">
+        <div class="md:grid md:grid-cols-4 gap-4 justify-items-center px-10 md:w-2/3">
+          <h1 class="col-span-4 -mb-4">51<br class="md:hidden"/> Pegasi b</h1>
+          <div class="max-md:my-10 md:col-span-2 md:col-end-4 text-lg text-center">
             <p>Personal site of Luca Huelle</p>
             <p>Programming & Applied Mathematics Graduate</p>
           </div>
           <a
-            class="col-start-1"
+            class="md:col-start-1"
             href="/links/linkedin"
             target="_blank"
           >
-            <div className="icon">
+            <div class="max-md:my-10 h-12 md:h-9 icon">
               <object data="icons/linkedin.svg" />
             </div>
           </a>
           <a href="/links/github" target="_blank">
-            <div className="icon">
+            <div class="max-md:my-10 h-12 md:h-9 icon">
               <object data="icons/github.svg" />
             </div>
           </a>
           <a href="mailto:wave@pegasib.dev">
-            <div className="icon">
+            <div class="max-md:my-10 h-12 md:h-9 icon">
               <object data="icons/email.svg" />
             </div>
           </a>
           <a href="/links/wikipedia" target="_blank">
-            <div className="icon">
+            <div class="max-md:my-10 h-12 md:h-9 icon">
               <object data="icons/wikipedia.svg" />
             </div>
           </a>
         </div>
       </div>
-      <div className="absolute right-1 bottom-1 text-right">
+      <div class="absolute right-1 bottom-1 text-right text-xs md:text-base">
         <i>
           <p>
-            Background by ESO/Digitized Sky Survey 2 -{" "}
+            Background by ESO/Digitized Sky Survey 2:<br className="md:hidden"/>
             <a
               rel="nofollow"
               class="external text"
               target="_blank"
               href="https://www.eso.org/public/images/eso1517c/"
             >
-              ESO website
+              {" "}ESO website
             </a>,{" "}
             <a
               href="https://commons.wikimedia.org/w/index.php?curid=39719449"
@@ -63,7 +63,7 @@ export default function Home() {
             </a>
           </p>
           <p>
-            Planet favicon by Vicons Design from{" "}
+          Planet favicon by Vicons Design from{" "}
             <a
               href="https://thenounproject.com/browse/icons/term/planet/"
               target="_blank"
@@ -75,7 +75,7 @@ export default function Home() {
           </p>
         </i>
       </div>
-      <div className="hidden absolute left-1 bottom-1" id="debug">
+      <div class="hidden absolute left-1 bottom-1" id="debug">
         x=0.000,y=0.000,angle=0.000
       </div>
     </div>
