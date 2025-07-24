@@ -1,3 +1,11 @@
+// common.ts
+function convertTorem(px, base = 16) {
+  return px / base;
+}
+function isVPSmallerThanmd() {
+  return convertTorem(document.documentElement.clientWidth) < 48;
+}
+
 // bg_cursor_move.ts
 var scene = document.getElementById("spaceScene");
 var title = document.querySelector("h1");
@@ -10,9 +18,6 @@ function convertToRelative(x, y, width, height) {
     relativeY
   ];
 }
-function convertTorem(px, base = 16) {
-  return px / base;
-}
 if (scene !== null && title !== null) {
   scene.classList.add("resting");
   title.classList.add("resting");
@@ -23,7 +28,7 @@ if (scene !== null && title !== null) {
   document.addEventListener("mousemove", (e) => {
     const window_width = document.documentElement.clientWidth;
     const window_height = document.documentElement.clientHeight;
-    if (convertTorem(window_width) < 48) return;
+    if (isVPSmallerThanmd()) return;
     const [relativeX, relativeY] = convertToRelative(e.pageX, e.pageY, window_width, window_height);
     const angleRad = Math.atan2(relativeY, relativeX);
     let angleDeg = Math.trunc(angleRad * (180 / Math.PI) + 90);

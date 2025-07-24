@@ -5,41 +5,40 @@ export default function Home() {
       <div id="spaceScene"></div>
       <div class="flex flex-row min-h-screen justify-center items-center">
         <div class="md:grid md:grid-cols-4 gap-4 justify-items-center px-10 md:w-2/3">
-          <h1 class="col-span-4 -mb-4">51<br class="md:hidden"/> Pegasi b</h1>
+          <h1 class="col-span-4 -mb-4">
+            51<br class="md:hidden" /> Pegasi b
+          </h1>
           <div class="max-md:my-10 md:col-span-2 md:col-end-4 text-lg text-center">
             <p>Personal site of Luca Huelle</p>
             <p>Programming & Applied Mathematics Graduate</p>
           </div>
-          <a
-            class="md:col-start-1"
-            href="/links/linkedin"
-            target="_blank"
-          >
-            <div class="max-md:my-10 h-12 md:h-9 icon">
+          <div class="max-md:my-10 h-12 md:h-9 icon md:col-start-1">
+            <a href="/links/linkedin" target="_blank">
               <object data="icons/linkedin.svg" />
-            </div>
-          </a>
-          <a href="/links/github" target="_blank">
-            <div class="max-md:my-10 h-12 md:h-9 icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="/links/github" target="_blank">
               <object data="icons/github.svg" />
-            </div>
-          </a>
-          <a href="mailto:wave@pegasib.dev">
-            <div class="max-md:my-10 h-12 md:h-9 icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="mailto:wave@pegasib.dev">
               <object data="icons/email.svg" />
-            </div>
-          </a>
-          <a href="/links/wikipedia" target="_blank">
-            <div class="max-md:my-10 h-12 md:h-9 icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="/links/wikipedia" target="_blank">
               <object data="icons/wikipedia.svg" />
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
       <div class="absolute right-1 bottom-1 text-right text-xs md:text-base">
         <i>
           <p>
-            Background by ESO/Digitized Sky Survey 2:<br className="md:hidden"/>
+            Background by ESO/Digitized Sky Survey
+            2:<br className="md:hidden" />
             <a
               rel="nofollow"
               class="external text"
@@ -63,7 +62,7 @@ export default function Home() {
             </a>
           </p>
           <p>
-          Planet favicon by Vicons Design from{" "}
+            Planet favicon by Vicons Design from{" "}
             <a
               href="https://thenounproject.com/browse/icons/term/planet/"
               target="_blank"
