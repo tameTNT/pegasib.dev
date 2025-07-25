@@ -16,3 +16,7 @@ interface Artist {
 interface SongDataState {
   songData: Array<Song>;
 }
+
+interface SongDataWithIndexState extends SongDataState {
+  selectedIndex: number;
+}
