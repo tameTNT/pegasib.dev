@@ -4,6 +4,8 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $api_middleware from "./routes/api/_middleware.ts";
+import * as $api_all_songs from "./routes/api/all-songs.ts";
 import * as $api_todays_song from "./routes/api/todays-song.ts";
 import * as $index from "./routes/index.tsx";
 import * as $guess_bar from "./islands/guess-bar.tsx";
@@ -13,6 +15,8 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/api/_middleware.ts": $api_middleware,
+    "./routes/api/all-songs.ts": $api_all_songs,
     "./routes/api/todays-song.ts": $api_todays_song,
     "./routes/index.tsx": $index,
   },
