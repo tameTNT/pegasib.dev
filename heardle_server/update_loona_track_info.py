@@ -38,14 +38,15 @@ def extract_track_from_playlist_item(item: dict):
 
 # Get tracks from playlist at https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn
 PLAYLIST_URI = "05bRCDfqjNVnysz17hocZn"
+INITIAL_OFFSET = 0
 tracks_got = []
-playlist_resp = sp.playlist_items(PLAYLIST_URI)
+playlist_resp = sp.playlist_items(PLAYLIST_URI, offset=INITIAL_OFFSET)
 tracks_got += map(extract_track_from_playlist_item, playlist_resp["items"])
-while len(tracks_got) < playlist_resp["total"]:
-    playlist_resp = sp.playlist_items(PLAYLIST_URI, offset=len(tracks_got))
+while len(tracks_got) + INITIAL_OFFSET < playlist_resp["total"]:
+    playlist_resp = sp.playlist_items(PLAYLIST_URI, offset=len(tracks_got)+INITIAL_OFFSET)
     tracks_got += map(extract_track_from_playlist_item, playlist_resp["items"])
 
-print(f"Got {len(tracks_got)} tracks from playlist successfully.")
+print(f"Got {len(tracks_got)} tracks from playlist successfully (INITIAL_OFFSET={INITIAL_OFFSET}).")
 
 # Scrape the mp3 preview URLs manually
 full_track_info = []
