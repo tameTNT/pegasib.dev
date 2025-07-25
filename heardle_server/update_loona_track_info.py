@@ -1,5 +1,4 @@
 # /// script
-# requires-python = ">=3.11"
 # dependencies = [
 #     "spotipy",
 #     "python-dotenv"
@@ -8,6 +7,7 @@
 
 import json
 import os
+from pathlib import Path
 import time
 import random
 import re
@@ -65,5 +65,6 @@ for i, track in enumerate(tracks_got):
 
     time.sleep(random.random() * 2)  # to avoid spamming the page/avoid rate limiting
 
-json.dump(full_track_info, open("full_track_info.json", "w+"), indent=2)
-print("Done. Song info dumped to full_track_info.json")
+output_file = Path("~/loona_track_info.json").expanduser()
+json.dump(full_track_info, output_file.open("w+"), indent=2)
+print(f"Done. Song info dumped to {output_file}.")
