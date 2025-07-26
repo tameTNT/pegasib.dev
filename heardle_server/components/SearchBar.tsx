@@ -1,8 +1,14 @@
 import { JSX } from "preact";
 import { useState, useEffect, useRef } from "preact/hooks";
 
+
+const subtitleForSong = (song: Song) => {
+  return <p class="text-xs">By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
+}
+
 export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
   const [inputValue, setInputValue] = useState("");
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [allSongs, setAllSongs] = useState<Song[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -27,9 +33,12 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
   }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => {
+    const query = inputValue.toLowerCase();
     if (inputValue.length > 0) {
       const filteredSuggestions = allSongs.filter((song) =>
-        song.name.toLowerCase().includes(inputValue.toLowerCase())
+        song.name.toLowerCase().includes(query) ||
+        song.artists.map(artist => artist.name.toLowerCase()).join(", ").includes(query) ||
+        song.album.name.toLowerCase().includes(query)
       );
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
@@ -41,10 +50,12 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
 
   const handleInputChange = (event: JSX.TargetedEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
+    setSelectedSong(null);
   };
 
   const handleSuggestionClick = (song: Song) => {
     setInputValue(song.name);
+    setSelectedSong(song);
     setShowSuggestions(false);
   };
 
@@ -65,7 +76,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
 
   return (
     <div class="relative">
-      {showSuggestions && suggestions.length > 0 && (
+      {(showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
           class="bg-gray-100 border border-gray-300 rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
@@ -78,11 +89,11 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
               onClick={() => handleSuggestionClick(song)}
             >
               <p>{song.name}</p>
-              <p class="text-xs"><i>{song.artists.map(artist => artist.name).join(", ")}</i> on {song.album.name}</p>
+              {subtitleForSong(song)}
             </div>
           ))}
         </div>
-      )}
+      )) || (selectedSong && <div class="text-right py-1 pe-1">{subtitleForSong(selectedSong)}</div>)}
       <input
         {...props}
         type="text"
