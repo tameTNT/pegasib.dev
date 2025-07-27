@@ -1,68 +1,81 @@
 export default function Home() {
   return (
-    <div className="text-white">
+    <div class="text-white">
       <script type="text/javascript" src="/home_icon_swell.js" defer></script>
       <div id="spaceScene"></div>
-      <div className="flex flex-row min-h-screen justify-center items-center">
-        <div className="grid grid-cols-4 gap-4 justify-items-center px-20 w-2/3">
-          <h1 class="col-span-4">51 Pegasi b</h1>
-          <div className="-mt-4 col-span-2 col-end-4 text-lg text-center">
+      <div class="flex flex-row min-h-screen justify-center items-center">
+        <div class="md:grid md:grid-cols-4 gap-4 justify-items-center px-10 md:w-2/3">
+          <h1 class="col-span-4 -mb-4">
+            51<br class="md:hidden" /> Pegasi b
+          </h1>
+          <div class="max-md:my-10 md:col-span-2 md:col-end-4 text-lg text-center">
             <p>Personal site of Luca Huelle</p>
             <p>Programming & Applied Mathematics Graduate</p>
           </div>
-          <a
-            class="col-start-1"
-            href="https://www.linkedin.com/in/luca-huelle/"
-            target="_blank"
-          >
-            <div className="icon">
+          <div class="max-md:my-10 h-12 md:h-9 icon md:col-start-1">
+            <a href="/links/linkedin" target="_blank">
               <object data="icons/linkedin.svg" />
-            </div>
-          </a>
-          <a href="https://github.com/tameTNT" target="_blank">
-            <div className="icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="/links/github" target="_blank">
               <object data="icons/github.svg" />
-            </div>
-          </a>
-          <a href="mailto:wave@pegasib.dev">
-            <div className="icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="mailto:wave@pegasib.dev">
               <object data="icons/email.svg" />
-            </div>
-          </a>
-          <a href="https://en.wikipedia.org/wiki/51_Pegasi_b" target="_blank">
-            <div className="icon">
+            </a>
+          </div>
+          <div class="max-md:my-10 h-12 md:h-9 icon">
+            <a href="/links/wikipedia" target="_blank">
               <object data="icons/wikipedia.svg" />
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
-      <div className="absolute right-1 bottom-1">
-        <i>
-          By ESO/Digitized Sky Survey 2 -{" "}
+      <div class="absolute right-1 bottom-1 text-right text-xs md:text-base italic">
+        <p>
+          Background by ESO/Digitized Sky Survey
+          2:<br className="md:hidden" />
           <a
             rel="nofollow"
             class="external text"
             target="_blank"
             href="https://www.eso.org/public/images/eso1517c/"
           >
-            ESO website
-          </a>,{" "}
-          <a
-            href="https://creativecommons.org/licenses/by/4.0"
-            target="_blank"
-            title="Creative Commons Attribution 4.0"
-          >
-            CC BY 4.0
+            {" "}ESO website
           </a>,{" "}
           <a
             href="https://commons.wikimedia.org/w/index.php?curid=39719449"
             target="_blank"
           >
-            Link
+            Wikimedia
+          </a>{" "}
+          <a
+            href="https://creativecommons.org/licenses/by/4.0"
+            target="_blank"
+            title="Creative Commons Attribution 4.0"
+          >
+            (CC BY 4.0)
           </a>
-        </i>
+        </p>
+        <p>
+          Planet favicon by Vicons Design from{" "}
+          <a
+            href="https://thenounproject.com/browse/icons/term/planet/"
+            target="_blank"
+            title="Planet Icons"
+          >
+            Noun Project
+          </a>{" "}
+          (CC BY 3.0)
+        </p>
       </div>
-      <div className="hidden absolute left-1 bottom-1" id="debug">
+      <div class="absolute left-1 top-1 text-xs text-gray-500 italic hover:underline">
+        <a href="/links/heardle">LOONA Heardle game</a>
+      </div>
+      <div class="hidden absolute left-1 bottom-1" id="debug">
         x=0.000,y=0.000,angle=0.000
       </div>
     </div>

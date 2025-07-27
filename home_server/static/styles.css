@@ -33,7 +33,7 @@ body {
   z-index: -1;
 
   /* Add background that fills device viewport */
-  background-image: url("surrounding_sky.jpg");
+  background-image: url("surrounding_sky_compressed.jpg");
   background-size: 110%;
   background-repeat: repeat-y;
   /* Starting position (modified in JS) */
@@ -73,14 +73,13 @@ h1.resting {
 }
 
 .icon {
-  height: 2rem;
   transition: scale 250ms ease-out;
-  /*No pointer events to allow for cursor tracking over SVGs: https://stackoverflow.com/a/71448597*/
-  pointer-events: none;
   scale: 1;
 }
 
 object {
+  /*No pointer events to allow for cursor tracking over SVGs: https://stackoverflow.com/a/71448597*/
+  pointer-events: none;
   width: 100%;
   height: 100%;
 }

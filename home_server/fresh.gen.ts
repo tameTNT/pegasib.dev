@@ -5,6 +5,8 @@
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $index from "./routes/index.tsx";
+import * as $links_linkName_ from "./routes/links/[linkName].ts";
+import * as $links_middleware from "./routes/links/_middleware.ts";
 
 import type { Manifest } from "$fresh/server.ts";
 
@@ -13,6 +15,8 @@ const manifest = {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
     "./routes/index.tsx": $index,
+    "./routes/links/[linkName].ts": $links_linkName_,
+    "./routes/links/_middleware.ts": $links_middleware,
   },
   islands: {},
   baseUrl: import.meta.url,
