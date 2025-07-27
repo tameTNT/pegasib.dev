@@ -1,4 +1,19 @@
+import { Handlers } from "$fresh/server.ts";
+
 import GuessBar from "../islands/guess-bar.tsx";
+
+
+export const handler: Handlers = {
+  async GET(_req, ctx) {
+    return await ctx.render();
+  },
+  async POST(req, _ctx) {
+    const form = await req.formData();
+    const songId = form.get("songId")?.toString();
+
+    return new Response(`Submitted with id ${songId}!`);
+  },
+};
 
 export default function Home() {
   return (

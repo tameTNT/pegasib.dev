@@ -104,6 +104,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
+      <input class="hidden" name="songId" value={selectedSong ? selectedSong.id : ""} />
     </div>
   );
 }
