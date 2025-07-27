@@ -34,45 +34,43 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div class="absolute right-1 bottom-1 text-right text-xs md:text-base">
-        <i>
-          <p>
-            Background by ESO/Digitized Sky Survey
-            2:<br className="md:hidden" />
-            <a
-              rel="nofollow"
-              class="external text"
-              target="_blank"
-              href="https://www.eso.org/public/images/eso1517c/"
-            >
-              {" "}ESO website
-            </a>,{" "}
-            <a
-              href="https://commons.wikimedia.org/w/index.php?curid=39719449"
-              target="_blank"
-            >
-              Wikimedia
-            </a>{" "}
-            <a
-              href="https://creativecommons.org/licenses/by/4.0"
-              target="_blank"
-              title="Creative Commons Attribution 4.0"
-            >
-              (CC BY 4.0)
-            </a>
-          </p>
-          <p>
-            Planet favicon by Vicons Design from{" "}
-            <a
-              href="https://thenounproject.com/browse/icons/term/planet/"
-              target="_blank"
-              title="Planet Icons"
-            >
-              Noun Project
-            </a>{" "}
-            (CC BY 3.0)
-          </p>
-        </i>
+      <div class="absolute right-1 bottom-1 text-right text-xs md:text-base italic">
+        <p>
+          Background by ESO/Digitized Sky Survey
+          2:<br className="md:hidden" />
+          <a
+            rel="nofollow"
+            class="external text"
+            target="_blank"
+            href="https://www.eso.org/public/images/eso1517c/"
+          >
+            {" "}ESO website
+          </a>,{" "}
+          <a
+            href="https://commons.wikimedia.org/w/index.php?curid=39719449"
+            target="_blank"
+          >
+            Wikimedia
+          </a>{" "}
+          <a
+            href="https://creativecommons.org/licenses/by/4.0"
+            target="_blank"
+            title="Creative Commons Attribution 4.0"
+          >
+            (CC BY 4.0)
+          </a>
+        </p>
+        <p>
+          Planet favicon by Vicons Design from{" "}
+          <a
+            href="https://thenounproject.com/browse/icons/term/planet/"
+            target="_blank"
+            title="Planet Icons"
+          >
+            Noun Project
+          </a>{" "}
+          (CC BY 3.0)
+        </p>
       </div>
       <div class="absolute left-1 top-1 text-xs text-gray-500 italic hover:underline">
         <a href="/links/heardle">LOONA Heardle game</a>
