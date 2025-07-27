@@ -5,7 +5,7 @@ export const handler = [
     const requestTime = new Date();
     const requestUrl = new URL(req.url);
 
-    console.log(`Request to ${requestUrl.pathname}`);
+    // console.log(`Request to ${requestUrl.pathname}`);
     await Deno.writeTextFile(
       "./redirects.log",
       `${requestTime.toISOString()} | ${requestUrl.pathname}\n`,
