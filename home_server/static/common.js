@@ -5,6 +5,4 @@ function convertTorem(px, base = 16) {
 function isVPSmallerThanmd() {
   return convertTorem(document.documentElement.clientWidth) < 48;
 }
-export {
-  isVPSmallerThanmd
-};
+export { isVPSmallerThanmd };

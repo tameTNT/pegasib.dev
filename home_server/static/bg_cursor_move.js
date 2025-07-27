@@ -15,7 +15,7 @@ function convertToRelative(x, y, width, height) {
   const relativeY = (y - height / 2) / height;
   return [
     relativeX,
-    relativeY
+    relativeY,
   ];
 }
 if (scene !== null && title !== null) {
@@ -29,13 +29,20 @@ if (scene !== null && title !== null) {
     const window_width = document.documentElement.clientWidth;
     const window_height = document.documentElement.clientHeight;
     if (isVPSmallerThanmd()) return;
-    const [relativeX, relativeY] = convertToRelative(e.pageX, e.pageY, window_width, window_height);
+    const [relativeX, relativeY] = convertToRelative(
+      e.pageX,
+      e.pageY,
+      window_width,
+      window_height,
+    );
     const angleRad = Math.atan2(relativeY, relativeX);
     let angleDeg = Math.trunc(angleRad * (180 / Math.PI) + 90);
     if (angleDeg < 0) angleDeg += 360;
     const debugEl = document.getElementById("debug");
     if (debugEl !== null) {
-      debugEl.innerText = `x=${relativeX.toFixed(3)},y=${relativeY.toFixed(3)},angle=${angleDeg}`;
+      debugEl.innerText = `x=${relativeX.toFixed(3)},y=${
+        relativeY.toFixed(3)
+      },angle=${angleDeg}`;
     }
     const offsetSeverity = 0.01;
     const ratioAdjustment = 3 * window_width / window_height;

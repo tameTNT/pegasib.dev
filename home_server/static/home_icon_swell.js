@@ -22,10 +22,11 @@ document.addEventListener("mousemove", (e) => {
       maxScale = 1.5;
       scaleFactor = 200;
     }
-    ;
     const xtoCursor = Math.abs(midX - e.pageX);
     const ytoCursor = Math.abs(midY - e.pageY);
     const distance = Math.sqrt(xtoCursor ** 2 + ytoCursor ** 2);
-    icon.style.scale = Math.max(maxScale - distance / scaleFactor, 1).toFixed(3);
+    icon.style.scale = Math.max(maxScale - distance / scaleFactor, 1).toFixed(
+      3,
+    );
   }
 });
