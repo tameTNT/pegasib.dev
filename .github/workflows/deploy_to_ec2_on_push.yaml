@@ -12,6 +12,7 @@ on:
       - README.md
       - .gitignore
       - .github/workflows/*
+      - .run/*
   workflow_dispatch:
     inputs:
       example:
@@ -52,6 +53,7 @@ jobs:
             export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
             cd ~/pegasib.dev
             pup disable-service
+            echo "Uninstalled pup service."
           # -i = output a change-summary for all updates, -r = recurse into dirs, -l = copy links, -g = group, -o = owner,
           # -D = --devices --specials, -z = compress, -v = verbose, -c = skip based on checksum, not mod-time & size
           # --delete-after = receiver deletes after transfer, not before (to empty .pup directory first)
@@ -62,13 +64,14 @@ jobs:
           EXCLUDE: "*/node_modules/, */_fresh/, .git/, .run/, .github/"
           SCRIPT_AFTER: |
             export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
-            echo "Starting Deno build and deployment for home_server"
+            echo "Starting Deno build and deployment for home_server..."
             cd ~/pegasib.dev/home_server
             deno task build
-            echo "Starting Deno build and deployment for heardle_server"
+            echo "Starting Deno build and deployment for heardle_server..."
             cd ../heardle_server
             deno task build
             cd ~/pegasib.dev
+            echo "Re-enabling pup service and restarting servers..."
             pup enable-service
             pup restart home_server
             pup restart heardle_server
