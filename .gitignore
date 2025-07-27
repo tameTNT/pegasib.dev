@@ -11,4 +11,4 @@ _fresh/
 node_modules/
 /.idea/
 
-/deno_server/redirects.log
+/home_server/redirects.log
