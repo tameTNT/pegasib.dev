@@ -61,6 +61,7 @@ jobs:
           # Excludes all node_modules subdirectories etc. Do not include git things on server.
           EXCLUDE: "*/node_modules/, */_fresh/, .git/, .run/, .github/"
           SCRIPT_AFTER: |
+            export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
             echo "Starting Deno build and deployment for home_server"
             cd ~/pegasib.dev/home_server
             deno task build
