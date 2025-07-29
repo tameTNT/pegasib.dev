@@ -1,0 +1,34 @@
+import { useState, useEffect } from "preact/hooks";
+
+import {Button} from "../components/Button.tsx";
+
+
+export default function SongBar() {
+  const [songPreviewUrl, setSongPreviewUrl] = useState("");
+
+  useEffect(() => {
+    async function fetchSongPreview() {
+      try {
+        const response = await fetch("/api/todays-song/preview-url");
+        if (response.ok) {
+          const urlString = await response.text();
+          setSongPreviewUrl(urlString);
+        } else {
+          console.error("Failed to fetch song preview:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching song preview:", error);
+      }
+    }
+    fetchSongPreview().then();
+  }, []);
+  return (
+    <div class="w-full">
+    {songPreviewUrl && (
+      <audio controls class="mx-auto w-80">
+        <source src={songPreviewUrl} type="audio/mpeg"/>
+      </audio>
+    )}
+    </div>
+  );
+}

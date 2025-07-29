@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "preact/hooks";
 
 
 const subtitleForSong = (song: Song) => {
-  return <p class="text-xs">By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
+  return <p>By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
 }
 
 export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
@@ -84,7 +84,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
           {suggestions.map((song, i) => (
             <div
               key={song}
-              tabindex={i+1}
+              tabindex={i + 1}
               class="z-10 p-2 border border-gray-300 hover:bg-cyan-200"
               onClick={() => handleSuggestionClick(song)}
             >
@@ -93,7 +93,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
             </div>
           ))}
         </div>
-      )) || (selectedSong && <div class="text-right py-1 pe-1">{subtitleForSong(selectedSong)}</div>)}
+      ))}
       <input
         {...props}
         type="text"
@@ -104,6 +104,9 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
+      <div class="text-xs text-right py-1 pe-1">
+        {(selectedSong && subtitleForSong(selectedSong)) || <i>Type a valid guess above ⬆️</i>}
+      </div>
       <input class="hidden" name="songId" value={selectedSong ? selectedSong.id : ""} />
     </div>
   );
