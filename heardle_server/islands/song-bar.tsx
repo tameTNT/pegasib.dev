@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 
 import {Button} from "../components/Button.tsx";
 
@@ -7,6 +7,7 @@ export default function SongBar() {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [guessCount, setGuessCount] = useState(0);
+  const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
 
   const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
 
@@ -29,6 +30,12 @@ export default function SongBar() {
       if (audioElement) {
         audioElement.volume = 0.1;
         console.log(`Set volume to ${audioElement.volume}`);
+        audioElement.addEventListener("play", () => {
+          if (legalStartRef.current === false) {  // The user used external controls to play/pause the audio!
+            audioElement.pause();
+            alert("Please only use the on-page play/pause button.")
+          }
+        })
       }
     });
   }, []);
@@ -39,13 +46,16 @@ export default function SongBar() {
       if (isPlaying) {
         audioElement.pause();
         setIsPlaying(false);
+        legalStartRef.current = false;
       } else {
         snippetLengths[snippetLengths.length-1] = audioElement.duration;
         audioElement.currentTime = 0;
         setIsPlaying(true);
+        legalStartRef.current = true;
         audioElement.play().then(() => setTimeout(() => {
           audioElement.pause();
           setIsPlaying(false);
+          legalStartRef.current = false;
         }, snippetLengths[guessCount] * 1000));
       }
     }
