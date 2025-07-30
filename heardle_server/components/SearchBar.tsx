@@ -81,12 +81,13 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
           ref={suggestionsRef}
           class="bg-gray-100 border border-gray-300 rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
         >
-          {suggestions.map((song, i) => (
+          {suggestions.map((song) => (
             <div
               key={song}
-              tabindex={i + 1}
+              tabindex={0}
               class="z-10 p-2 border border-gray-300 hover:bg-cyan-200"
               onClick={() => handleSuggestionClick(song)}
+              onKeyDown={e => e.key === 'Enter' ? handleSuggestionClick(song) : undefined}
             >
               <p>{song.name}</p>
               {subtitleForSong(song)}
