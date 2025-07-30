@@ -5,6 +5,9 @@ import {Button} from "../components/Button.tsx";
 
 export default function SongBar() {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
+  const [guessCount, setGuessCount] = useState(0);
+
+  const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
 
   useEffect(() => {
     async function fetchSongPreview() {
@@ -20,11 +23,27 @@ export default function SongBar() {
         console.error("Error fetching song preview:", error);
       }
     }
-    fetchSongPreview().then();
+    fetchSongPreview().then(() => {
+      const audioElement = document.querySelector("audio");
+      if (audioElement) {
+        audioElement.volume = 0.1;
+        console.log(`Set volume to ${audioElement.volume}`);
+      }
+    });
   }, []);
+
+  const handlePlayButtonClick = () => {
+    const audioElement = document.querySelector("audio");
+    if (audioElement) {
+      snippetLengths[snippetLengths.length-1] = audioElement.duration;
+      audioElement.currentTime = 0;
+      audioElement.play().then(() => setTimeout(() => audioElement.pause(), snippetLengths[guessCount] * 1000));
+    }
+  };
+
   return (
     <div class="flex justify-center w-1/3">
-      <Button id="playButton" class="rounded-full w-full">Play</Button>
+      <Button id="playButton" class="rounded-full w-full" onClick={handlePlayButtonClick}>Play</Button>
       {songPreviewUrl && (
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg"/>
