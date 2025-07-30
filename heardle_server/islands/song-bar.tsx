@@ -7,10 +7,15 @@ export default function SongBar() {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
   const [guessCount, setGuessCount] = useState(0);
+
   const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
   const playIdRef = useRef(0);  // Use a 'playId' to only stop play automatically on the newest play button press
 
   const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
+
+  const getAllowedMilliseconds = () => {
+    return snippetLengths[guessCount] * 1000; // Convert seconds to milliseconds
+  }
 
   useEffect(() => {
     async function fetchSongPreview() {
@@ -36,7 +41,11 @@ export default function SongBar() {
             stopAudio();
             alert("Please only use the on-page play/pause button.")
           }
+        });
+        audioElement.addEventListener("timeupdate", () => {
+          document.getElementById("audioProgress").style.width = `${(100*1000*audioElement.currentTime/getAllowedMilliseconds()).toFixed()}%`;
         })
+        audioElement.currentTime = 0;  // Reset to the start
       }
     });
   }, []);
@@ -66,14 +75,18 @@ export default function SongBar() {
         playIdRef.current = newPlayId;
         audioElement.play().then(() => setTimeout(() => {
           if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
-        }, snippetLengths[guessCount] * 1000));
+        }, getAllowedMilliseconds()));
       }
     }
   };
 
   return (
     <div class="flex justify-center w-1/3">
-      <Button id="playButton" class="rounded-full w-full" onClick={handlePlayButtonClick}>{(isPlaying && "Stop") || (!isPlaying && "Play")}</Button>
+      <div class="w-full relative isolate overflow-hidden rounded-full">
+        <div id="audioProgress" class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay"></div>
+        <Button id="playButton" class="w-full rounded-full font-bold"
+                   onClick={handlePlayButtonClick}>{(isPlaying && "Stop") || (!isPlaying && "Play")}</Button>
+      </div>
       {songPreviewUrl && (
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg"/>
