@@ -8,6 +8,7 @@ export default function SongBar() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [guessCount, setGuessCount] = useState(0);
   const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
+  const playIdRef = useRef(0);  // Use a 'playId' to only stop play automatically on the newest play button press
 
   const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
 
@@ -32,7 +33,7 @@ export default function SongBar() {
         console.log(`Set volume to ${audioElement.volume}`);
         audioElement.addEventListener("play", () => {
           if (legalStartRef.current === false) {  // The user used external controls to play/pause the audio!
-            audioElement.pause();
+            stopAudio();
             alert("Please only use the on-page play/pause button.")
           }
         })
@@ -40,22 +41,31 @@ export default function SongBar() {
     });
   }, []);
 
+  const stopAudio = () => {
+    const audioElement = document.querySelector("audio");
+    if (audioElement) {
+      audioElement.pause();
+      setIsPlaying(false);
+      legalStartRef.current = false;
+      audioElement.currentTime = 0;  // reset to prevent illegal resumes midway
+    }
+  }
+
   const handlePlayButtonClick = () => {
     const audioElement = document.querySelector("audio");
     if (audioElement) {
       if (isPlaying) {
-        audioElement.pause();
-        setIsPlaying(false);
-        legalStartRef.current = false;
+        stopAudio();
       } else {
         snippetLengths[snippetLengths.length-1] = audioElement.duration;
         audioElement.currentTime = 0;
         setIsPlaying(true);
         legalStartRef.current = true;
+
+        const newPlayId = Date.now();
+        playIdRef.current = newPlayId;
         audioElement.play().then(() => setTimeout(() => {
-          audioElement.pause();
-          setIsPlaying(false);
-          legalStartRef.current = false;
+          if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
         }, snippetLengths[guessCount] * 1000));
       }
     }
@@ -63,7 +73,7 @@ export default function SongBar() {
 
   return (
     <div class="flex justify-center w-1/3">
-      <Button id="playButton" class="rounded-full w-full" onClick={handlePlayButtonClick}>{(isPlaying && "Pause") || (!isPlaying && "Play")}</Button>
+      <Button id="playButton" class="rounded-full w-full" onClick={handlePlayButtonClick}>{(isPlaying && "Stop") || (!isPlaying && "Play")}</Button>
       {songPreviewUrl && (
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg"/>
