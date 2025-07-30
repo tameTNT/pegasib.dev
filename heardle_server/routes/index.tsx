@@ -24,7 +24,7 @@ export default function Home() {
         <p class="italic">Includes solo, subunit, and all post-BBC tracks.</p>
         <div class="my-5 square"></div>
       </main>
-      <footer class="sticky bottom-0 w-full bg-gray-500/40 flex flex-col items-center p-2 gap-2">
+      <footer class="sticky bottom-0 w-full bg-gray-500/40 flex flex-col items-center p-2 gap-1">
         <SongBar/>
         <GuessBar/>
       </footer>

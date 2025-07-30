@@ -23,12 +23,13 @@ export default function SongBar() {
     fetchSongPreview().then();
   }, []);
   return (
-    <div class="w-full">
-    {songPreviewUrl && (
-      <audio controls class="mx-auto w-80">
-        <source src={songPreviewUrl} type="audio/mpeg"/>
-      </audio>
-    )}
+    <div class="flex justify-center w-1/3">
+      <Button id="playButton" class="rounded-full w-full">Play</Button>
+      {songPreviewUrl && (
+        <audio class="">
+          <source src={songPreviewUrl} type="audio/mpeg"/>
+        </audio>
+      )}
     </div>
   );
 }
