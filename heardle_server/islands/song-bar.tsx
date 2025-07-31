@@ -25,58 +25,61 @@ export default function SongBar() {
           const urlString = await response.text();
           setSongPreviewUrl(urlString);
         } else {
-          console.error("Failed to fetch song preview:", response.statusText);
+          throw new Error(response.statusText);
         }
       } catch (error) {
-        console.error("Error fetching song preview:", error);
+        throw new Error(`Error fetching song preview url: ${error}`);
       }
     }
     fetchSongPreview().then(() => {
       const audioElement = document.querySelector("audio");
-      if (audioElement) {
-        audioElement.volume = 0.1;
-        console.log(`Set volume to ${audioElement.volume}`);
-        audioElement.addEventListener("play", () => {
-          if (legalStartRef.current === false) {  // The user used external controls to play/pause the audio!
-            stopAudio();
-            alert("Please only use the on-page play/pause button.")
-          }
-        });
-        audioElement.addEventListener("timeupdate", () => {
-          document.getElementById("audioProgress").style.width = `${(100*1000*audioElement.currentTime/getAllowedMilliseconds()).toFixed()}%`;
-        })
-        audioElement.currentTime = 0;  // Reset to the start
-      }
+      if (!audioElement) throw new Error("No audio HTML element found on page.");
+
+      audioElement.volume = 0.1;
+      // console.log(`Set volume to ${audioElement.volume}`);
+      audioElement.addEventListener("play", () => {
+        if (legalStartRef.current === false) {  // The user used external controls to play/pause the audio!
+          stopAudio();
+          alert("Please only use the on-page play/pause button.")
+        }
+      });
+      audioElement.addEventListener("timeupdate", () => {
+        const progressBar = document.getElementById("audioProgress");
+        if (!progressBar) throw new Error("No element with id=audioProgress found on page.");
+
+        progressBar.style.width = `${(100*1000*audioElement.currentTime/getAllowedMilliseconds()).toFixed()}%`;
+      })
+      audioElement.currentTime = 0;  // Reset to the start
     });
   }, []);
 
   const stopAudio = () => {
     const audioElement = document.querySelector("audio");
-    if (audioElement) {
-      audioElement.pause();
-      setIsPlaying(false);
-      legalStartRef.current = false;
-      audioElement.currentTime = 0;  // reset to prevent illegal resumes midway
-    }
+    if (!audioElement) throw new Error("No audio HTML element found on page.");
+
+    audioElement.pause();
+    setIsPlaying(false);
+    legalStartRef.current = false;
+    audioElement.currentTime = 0;  // reset to prevent illegal resumes midway
   }
 
   const handlePlayButtonClick = () => {
     const audioElement = document.querySelector("audio");
-    if (audioElement) {
-      if (isPlaying) {
-        stopAudio();
-      } else {
-        snippetLengths[snippetLengths.length-1] = audioElement.duration;
-        audioElement.currentTime = 0;
-        setIsPlaying(true);
-        legalStartRef.current = true;
+    if (!audioElement) throw new Error("No audio HTML element found on page.");
 
-        const newPlayId = Date.now();
-        playIdRef.current = newPlayId;
-        audioElement.play().then(() => setTimeout(() => {
-          if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
-        }, getAllowedMilliseconds()));
-      }
+    if (isPlaying) {
+      stopAudio();
+    } else {
+      snippetLengths[snippetLengths.length-1] = audioElement.duration;
+      audioElement.currentTime = 0;
+      setIsPlaying(true);
+      legalStartRef.current = true;
+
+      const newPlayId = Date.now();
+      playIdRef.current = newPlayId;
+      audioElement.play().then(() => setTimeout(() => {
+        if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
+      }, getAllowedMilliseconds()));
     }
   };
 

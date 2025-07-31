@@ -21,7 +21,7 @@ export default function GuessBar() {
       .then(data => {
         console.log("Guess result:", data);
       })
-      .catch(err => console.log(`Error while verifying guess: ${err}.`));
+      .catch(err => console.error(`Error while verifying guess: ${err}.`));
   }
 
   return (
