@@ -13,7 +13,7 @@ export default function SongBar() {
 
   const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
 
-  const getAllowedMilliseconds = () => {
+  function getAllowedMilliseconds(){
     return snippetLengths[guessCount] * 1000; // Convert seconds to milliseconds
   }
 
@@ -53,7 +53,7 @@ export default function SongBar() {
     });
   }, []);
 
-  const stopAudio = () => {
+  function stopAudio(){
     const audioElement = document.querySelector("audio");
     if (!audioElement) throw new Error("No audio HTML element found on page.");
 
@@ -63,7 +63,7 @@ export default function SongBar() {
     audioElement.currentTime = 0;  // reset to prevent illegal resumes midway
   }
 
-  const handlePlayButtonClick = () => {
+  function handlePlayButtonClick(){
     const audioElement = document.querySelector("audio");
     if (!audioElement) throw new Error("No audio HTML element found on page.");
 
@@ -81,7 +81,7 @@ export default function SongBar() {
         if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
       }, getAllowedMilliseconds()));
     }
-  };
+  }
 
   return (
     <div class="flex justify-center w-1/3">

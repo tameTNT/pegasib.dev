@@ -2,7 +2,7 @@ import { JSX } from "preact";
 import { useState, useEffect, useRef } from "preact/hooks";
 
 
-const subtitleForSong = (song: Song) => {
+function subtitleForSong(song: Song){
   return <p>By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
 }
 
@@ -48,31 +48,31 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
     }
   }, [inputValue, allSongs]);
 
-  const handleInputChange = (event: JSX.TargetedEvent<HTMLInputElement>) => {
+  function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>){
     setInputValue(event.currentTarget.value);
     setSelectedSong(null);
-  };
+  }
 
-  const handleSuggestionClick = (song: Song) => {
+  function handleSuggestionClick(song: Song){
     setInputValue(song.name);
     setSelectedSong(song);
     setShowSuggestions(false);
-  };
+  }
 
-  const handleFocus = () => {
+  function handleFocus(){
     if (inputValue.length > 0) {
       setShowSuggestions(true);
     }
-  };
+  }
 
-  const handleBlur = (event: FocusEvent) => {
+  function handleBlur(event: FocusEvent){
     // Use setTimeout to allow click on suggestion before hiding
     setTimeout(() => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.relatedTarget as Node)) {
         setShowSuggestions(false);
       }
     }, 100);
-  };
+  }
 
   return (
     <div class="relative">

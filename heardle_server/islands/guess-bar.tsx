@@ -3,7 +3,7 @@ import {Button} from "../components/Button.tsx";
 
 
 export default function GuessBar() {
-  const handleGuess = () => {
+  function handleGuess(){
     // Handle the guess submission logic here
     const idElement = document.getElementById("songId");
     if (!idElement) return;
