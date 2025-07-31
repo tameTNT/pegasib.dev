@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from "preact/hooks";
 
 import {Button} from "../components/Button.tsx";
 
+import {GuessInfoProps} from "./islandProps.d.ts";
 
-export default function SongBar() {
+
+export default function SongBar(props: GuessInfoProps) {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  const [guessCount, setGuessCount] = useState(0);
 
   const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
   const playIdRef = useRef(0);  // Use a 'playId' to only stop play automatically on the newest play button press
@@ -14,7 +15,7 @@ export default function SongBar() {
   const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
 
   function getAllowedMilliseconds(){
-    return snippetLengths[guessCount] * 1000; // Convert seconds to milliseconds
+    return snippetLengths[props.count.value] * 1000; // Convert seconds to milliseconds
   }
 
   useEffect(() => {

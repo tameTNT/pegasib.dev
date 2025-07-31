@@ -1,4 +1,5 @@
 import { JSX } from "preact";
+import { Signal, useSignalEffect } from '@preact/signals';
 import { useState, useEffect, useRef } from "preact/hooks";
 
 
@@ -6,7 +7,7 @@ function subtitleForSong(song: Song){
   return <p>By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
 }
 
-export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
+export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
   const [inputValue, setInputValue] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
@@ -47,6 +48,16 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
       setShowSuggestions(false);
     }
   }, [inputValue, allSongs]);
+
+  useSignalEffect(() => {  // Runs whenever guessCount Signal changes
+    if (props.guessCount.value > 0) {
+      // Reset the input and selected song when a guess is made
+      setInputValue("");
+      setSelectedSong(null);
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  });
 
   function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>){
     setInputValue(event.currentTarget.value);

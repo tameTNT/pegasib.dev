@@ -1,8 +1,10 @@
 import { SearchBar } from "../components/SearchBar.tsx";
 import {Button} from "../components/Button.tsx";
 
+import {GuessInfoProps} from "./islandProps.d.ts";
 
-export default function GuessBar() {
+
+export default function GuessBar(props: GuessInfoProps) {
   function handleGuess(){
     // Handle the guess submission logic here
     const idElement = document.getElementById("songId");
@@ -10,6 +12,7 @@ export default function GuessBar() {
 
     const guessedId = idElement.textContent;
     if (!guessedId) return;  // No song selected, do nothing
+
     fetch(`/api/todays-song/check?id=${guessedId}`)
       .then(res => {
         if (res.ok) {
@@ -18,8 +21,17 @@ export default function GuessBar() {
           throw new Error(`Status ${res.status} | ${res.statusText}`);
         }
       })
-      .then(data => {
-        console.log("Guess result:", data);
+      .then((isCorrect: boolean) => {
+        // console.log("Guess result:", isCorrect);
+
+        if (props.count.value >= props.allowed) return;
+
+        // Update the history via a new array to trigger reactivity signal
+        const newHistory = [...props.history.value];
+        newHistory[props.count.value] = isCorrect;
+        props.history.value = newHistory;
+
+        props.count.value++;
       })
       .catch(err => console.error(`Error while verifying guess: ${err}.`));
   }
@@ -27,7 +39,7 @@ export default function GuessBar() {
   return (
     <div class="flex justify-center w-80">
       <div class="flex flex-row align-center gap-1">
-        <div class="flex-1"><SearchBar placeholder="Search by title, album, or artist" size={25}/></div>
+        <div class="flex-1"><SearchBar placeholder="Search by title, album, or artist" size={25} guessCount={props.count}/></div>
         <Button type="button" class="rounded" onClick={handleGuess}>Guess!</Button>
       </div>
     </div>
