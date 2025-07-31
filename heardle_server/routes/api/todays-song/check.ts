@@ -2,7 +2,10 @@ import { FreshContext } from "$fresh/server.ts";
 
 
 export const handler = {
-  POST(_req: Request, ctx: FreshContext<SongDataWithIndexState>) {
-    return new Response(`Correct answer is "${ctx.state.songData[ctx.state.selectedIndex].name}"`);
-  },
+  GET(req: Request, ctx: FreshContext<SongDataWithIndexState>) {
+    const requestParams = new URL(req.url).searchParams;
+    const guessedId = requestParams.get("id");
+    // console.log(ctx.state.songData[ctx.state.selectedIndex].name);
+    return new Response(ctx.state.songData[ctx.state.selectedIndex].id === guessedId ? "true" : "false");
+  }
 };

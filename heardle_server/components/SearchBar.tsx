@@ -108,8 +108,8 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement>) {
       <div class="text-xs text-right py-1 pe-1">
         {(selectedSong && subtitleForSong(selectedSong)) || <i>Type a valid guess above ⬆️</i>}
       </div>
-      {/* todo: handle text overflow for long song/artists names (e.g. HULA HOOP) */}
-      <input class="hidden" id="songId" value={selectedSong ? selectedSong.id : ""} />
+      {/* todo: handle text overflow (rather than new line) for long song/artists names (e.g. Sweet Crazy Love Eng) */}
+      <span class="hidden" id="songId">{selectedSong ? selectedSong.id : ""}</span>
     </div>
   );
 }

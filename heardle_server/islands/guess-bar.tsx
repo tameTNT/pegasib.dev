@@ -5,7 +5,23 @@ import {Button} from "../components/Button.tsx";
 export default function GuessBar() {
   const handleGuess = () => {
     // Handle the guess submission logic here
-    console.log(document.getElementById("songId").value);
+    const idElement = document.getElementById("songId");
+    if (!idElement) return;
+
+    const guessedId = idElement.textContent;
+    if (!guessedId) return;  // No song selected, do nothing
+    fetch(`/api/todays-song/check?id=${guessedId}`)
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(`Status ${res.status} | ${res.statusText}`);
+        }
+      })
+      .then(data => {
+        console.log("Guess result:", data);
+      })
+      .catch(err => console.log(`Error while verifying guess: ${err}.`));
   }
 
   return (
