@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "preact/hooks";
+import {useEffect, useRef, useState} from "preact/hooks";
 
 import {Button} from "../components/Button.tsx";
 
@@ -10,12 +10,13 @@ export default function SongBar(props: GuessInfoProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
-  const playIdRef = useRef(0);  // Use a 'playId' to only stop play automatically on the newest play button press
+  // Refs to track the play timeout and progress bar update interval tasks and clear them early if needed
+  const playIdRef = useRef(0);
+  const currentPBIdRef = useRef(0);
+  const snippetLengthsRef = useRef([0.5, 1.5, 3, 5, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
 
-  const snippetLengths = [0.5, 1.5, 3, 5, 10, 30];
-
-  function getAllowedMilliseconds(){
-    return snippetLengths[props.count.value] * 1000; // Convert seconds to milliseconds
+  function getAllowedMilliseconds(){  // todo: can return NaN once over max guesses
+    return snippetLengthsRef.current[props.current.value] * 1000; // Convert seconds to milliseconds
   }
 
   useEffect(() => {
@@ -37,24 +38,28 @@ export default function SongBar(props: GuessInfoProps) {
       if (!audioElement) throw new Error("No audio HTML element found on page.");
 
       audioElement.volume = 0.1;
-      // console.log(`Set volume to ${audioElement.volume}`);
-      audioElement.addEventListener("play", () => {
-        if (legalStartRef.current === false) {  // The user used external controls to play/pause the audio!
-          stopAudio();
-          alert("Please only use the on-page play/pause button.")
-        }
-      });
-      audioElement.addEventListener("timeupdate", () => {
-        const progressBar = document.getElementById("audioProgress");
-        if (!progressBar) throw new Error("No element with id=audioProgress found on page.");
-
-        progressBar.style.width = `${(100*1000*audioElement.currentTime/getAllowedMilliseconds()).toFixed()}%`;
-      })
       audioElement.currentTime = 0;  // Reset to the start
+      // console.log(`Set volume to ${audioElement.volume}`);
+
+      audioElement.addEventListener("canplaythrough", () => {
+        // duration is not defined until the audio is loaded and can play through
+        // console.log(`Audio duration is ${audioElement.duration} seconds.`);
+        snippetLengthsRef.current[snippetLengthsRef.current.length-1] = audioElement.duration;
+      });
+
+      audioElement.addEventListener("play", () => {
+        if (legalStartRef.current) return;
+        // The user used external controls to play/pause the audio!
+        resetAudio();
+        alert("Please only use the on-page play/pause button.");
+      });
+      audioElement.addEventListener("pause", () => {
+        legalStartRef.current = false;  // Reset legal start when the audio is paused
+      });
     });
   }, []);
 
-  function stopAudio(){
+  function resetAudio(){
     const audioElement = document.querySelector("audio");
     if (!audioElement) throw new Error("No audio HTML element found on page.");
 
@@ -62,6 +67,16 @@ export default function SongBar(props: GuessInfoProps) {
     setIsPlaying(false);
     legalStartRef.current = false;
     audioElement.currentTime = 0;  // reset to prevent illegal resumes midway
+
+    resetProgressBar();
+  }
+
+  function resetProgressBar() {
+    const progressBar = document.getElementById("audioProgress");
+    if (!progressBar) throw new Error("No element with id=audioProgress found on page.");
+
+    clearInterval(currentPBIdRef.current);  // Stop updating the progress bar via existing interval
+    progressBar.style.width = "0%";  // Reset progress bar width
   }
 
   function handlePlayButtonClick(){
@@ -69,29 +84,39 @@ export default function SongBar(props: GuessInfoProps) {
     if (!audioElement) throw new Error("No audio HTML element found on page.");
 
     if (isPlaying) {
-      stopAudio();
+      resetAudio();
     } else {
-      snippetLengths[snippetLengths.length-1] = audioElement.duration;
-      audioElement.currentTime = 0;
       setIsPlaying(true);
       legalStartRef.current = true;
+      audioElement.currentTime = 0;
 
-      const newPlayId = Date.now();
-      playIdRef.current = newPlayId;
-      audioElement.play().then(() => setTimeout(() => {
-        if (playIdRef.current === newPlayId) { stopAudio() }  // Only stop audio if it was started by this button click
-      }, getAllowedMilliseconds()));
+      const progressBar = document.getElementById("audioProgress");
+      if (!progressBar) throw new Error("No element with id=audioProgress found on page.");
+
+      resetProgressBar();
+
+      // Fix allowed ms in case guess button is pressed and guess count changes
+      const currentAllowedMilliseconds = getAllowedMilliseconds();
+      currentPBIdRef.current = setInterval(() => {  // Set ID for currently active progress bar interval task
+        progressBar.style.width = `${(100*(1000*audioElement.currentTime/currentAllowedMilliseconds)).toFixed()}%`;
+      }, 100);  // Update progress bar every 100ms (same as transition)
+
+      clearTimeout(playIdRef.current);  // Clear any previous play timeout task
+      audioElement.play().then(() => {
+        playIdRef.current = setTimeout(resetAudio, currentAllowedMilliseconds);
+      });
     }
   }
 
   return (
-    <div class="flex justify-center w-3/4 md:w-1/3">
+    <div class="flex justify-center w-3/4 md:w-1/2">
       <div class="w-full relative isolate overflow-hidden rounded-full">
         <div
           id="audioProgress"
-          class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay transition-all duration-500 ease-linear"/>
-        <Button id="playButton" class="w-full rounded-full font-bold"
-                   onClick={handlePlayButtonClick}>{(isPlaying && "Stop") || (!isPlaying && "Play")}</Button>
+          class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay transition-width duration-100 ease-linear"/>
+        <Button id="playButton" class="w-full rounded-full font-bold" onClick={handlePlayButtonClick}>
+          {(isPlaying && "Stop") || (!isPlaying && `Play (${(getAllowedMilliseconds()/1000).toFixed(1)}s)`)}
+        </Button>
       </div>
       {songPreviewUrl && (
         <audio class="">
