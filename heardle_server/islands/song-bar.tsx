@@ -85,9 +85,11 @@ export default function SongBar(props: GuessInfoProps) {
   }
 
   return (
-    <div class="flex justify-center w-1/3">
+    <div class="flex justify-center w-3/4 md:w-1/3">
       <div class="w-full relative isolate overflow-hidden rounded-full">
-        <div id="audioProgress" class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay"></div>
+        <div
+          id="audioProgress"
+          class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay transition-all duration-500 ease-linear"/>
         <Button id="playButton" class="w-full rounded-full font-bold"
                    onClick={handlePlayButtonClick}>{(isPlaying && "Stop") || (!isPlaying && "Play")}</Button>
       </div>
