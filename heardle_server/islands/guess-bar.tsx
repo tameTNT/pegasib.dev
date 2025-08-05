@@ -22,16 +22,15 @@ export default function GuessBar(props: GuessInfoProps) {
         }
       })
       .then((isCorrect: boolean) => {
-        // console.log("Guess result:", isCorrect);
-
-        if (props.count.value >= props.allowed) return;
+        // console.log(`guess count=${props.current.value}`, isCorrect);
+        if (props.current.value >= props.max) return;
 
         // Update the history via a new array to trigger reactivity signal
         const newHistory = [...props.history.value];
-        newHistory[props.count.value] = isCorrect;
+        newHistory[props.current.value] = isCorrect;
         props.history.value = newHistory;
 
-        props.count.value++;
+        props.current.value++;
       })
       .catch(err => console.error(`Error while verifying guess: ${err}.`));
   }
@@ -39,7 +38,7 @@ export default function GuessBar(props: GuessInfoProps) {
   return (
     <div class="flex justify-center w-80">
       <div class="flex flex-row align-center gap-1">
-        <div class="flex-1"><SearchBar placeholder="Search by title, album, or artist" size={25} guessCount={props.count}/></div>
+        <div class="flex-1"><SearchBar placeholder="Search by title, album, or artist" size={25} guessCount={props.current}/></div>
         <Button type="button" class="rounded" onClick={handleGuess}>Guess!</Button>
       </div>
     </div>
