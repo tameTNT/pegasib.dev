@@ -50,7 +50,7 @@ print(f"Got {len(tracks_got)} tracks from playlist successfully (INITIAL_OFFSET=
 # Scrape the mp3 preview URLs manually
 full_track_info = []
 for i, track in enumerate(tracks_got):
-    # print(f"On track: {i+1: 3}/{len(tracks_got):03}", end="\r")
+    print(f"On track: {i+1: 3}/{len(tracks_got):03}", end="\r")
     track_resp = requests.get(track["url"])
     if track_resp.status_code == 200:
         raw = track_resp.content.decode("utf-8")
@@ -58,12 +58,12 @@ for i, track in enumerate(tracks_got):
         if preview_re_search:
             track["preview_url"] = preview_re_search.group(1)
             full_track_info.append(track)
-    #     else:
-    #         print(f"Failed to find preview URL for {track['name']}\n")
-    # else:
-    #     print(f"Got non-OK {track_resp.status_code} status for {track['name']}\n")
+        else:
+            print(f"Failed to find preview URL for {track['name']}\n")
+    else:
+        print(f"Got non-OK {track_resp.status_code} status for {track['name']}\n")
 
-    time.sleep(random.random() * 2)  # to avoid spamming the page/avoid rate limiting
+    time.sleep(random.random() / 2)  # to avoid spamming the page/avoid rate limiting
 
 output_file = Path("~/loona_track_info.json").expanduser()
 json.dump(full_track_info, output_file.open("w+"), indent=2)
