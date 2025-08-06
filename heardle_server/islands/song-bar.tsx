@@ -1,8 +1,9 @@
 import {useEffect, useRef, useState} from "preact/hooks";
 
-import {Button} from "../components/Button.tsx";
+import Button from "../components/Button.tsx";
 
 import {GuessInfoProps} from "./islandProps.d.ts";
+import {hasWon} from "../helpers.tsx";
 
 
 export default function SongBar(props: GuessInfoProps) {
@@ -15,8 +16,14 @@ export default function SongBar(props: GuessInfoProps) {
   const currentPBIdRef = useRef(0);
   const snippetLengthsRef = useRef([0.5, 1.5, 3, 5, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
 
-  function getAllowedMilliseconds(){  // todo: can return NaN once over max guesses
-    return snippetLengthsRef.current[props.current.value] * 1000; // Convert seconds to milliseconds
+  function getAllowedMilliseconds(){
+    let lengthInSeconds: number;
+    if (hasWon(props.history.value)) {
+      lengthInSeconds = snippetLengthsRef.current[snippetLengthsRef.current.length - 1];  // Play the full song if a correct guess has been made
+    } else {  // todo: can return NaN once over max guesses
+      lengthInSeconds = snippetLengthsRef.current[props.current.value]; // Convert seconds to milliseconds
+    }
+    return lengthInSeconds * 1000;  // Convert seconds to milliseconds
   }
 
   useEffect(() => {

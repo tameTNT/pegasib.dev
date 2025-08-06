@@ -1,11 +1,15 @@
-import { SearchBar } from "../components/SearchBar.tsx";
-import {Button} from "../components/Button.tsx";
+import { useState } from "preact/hooks";
+
+import SearchBar from "../components/SearchBar.tsx";
+import Button from "../components/Button.tsx";
 
 import {GuessInfoProps, CheckApiResponse} from "./islandProps.d.ts";
 import {guessResult} from "./islandProps.ts";
 
 
 export default function GuessBar(props: GuessInfoProps) {
+  const [hasWon, setHasWon] = useState(false);
+
   function handleGuess(){
     // Handle the guess submission logic here
     const idElement = document.getElementById("songId");
@@ -42,6 +46,11 @@ export default function GuessBar(props: GuessInfoProps) {
         props.history.value = newHistory;
 
         props.current.value++;
+
+        if (isCorrect) {
+          setHasWon(true);
+          alert(`Correct! Come back tomorrow for a new song!`);  // todo: show modal instead of alert
+        }
       })
       .catch(err => console.error(`Error while verifying guess: ${err}.`));
   }
@@ -49,8 +58,17 @@ export default function GuessBar(props: GuessInfoProps) {
   return (
     <div class="flex justify-center w-80">
       <div class="flex flex-row align-center gap-1">
-        <div class="flex-1"><SearchBar placeholder="Search by title, album, or artist" size={25} guessCount={props.current}/></div>
-        <Button type="button" class="rounded" onClick={handleGuess}>Guess!</Button>
+        <div class="flex-1">
+          <SearchBar
+            placeholder="Search by title, album, or artist"
+            size={25}
+            guessCount={props.current}
+            disabled={hasWon}
+          />
+        </div>
+        <Button type="button" class="rounded" onClick={handleGuess} disabled={hasWon}>
+          Guess!
+        </Button>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "preact/hooks";
 import {subtitleForSong} from "../helpers.tsx";
 
 
-export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
+export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
   const [inputValue, setInputValue] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
