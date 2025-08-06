@@ -2,10 +2,8 @@ import { JSX } from "preact";
 import { Signal, useSignalEffect } from '@preact/signals';
 import { useState, useEffect, useRef } from "preact/hooks";
 
+import {subtitleForSong} from "../helpers.tsx";
 
-function subtitleForSong(song: Song){
-  return <p>By <i>{song.artists.map(artist => artist.name).join(", ")}</i> on <i>{song.album.name}</i></p>;
-}
 
 export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
   const [inputValue, setInputValue] = useState("");
@@ -101,7 +99,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessC
               onKeyDown={e => e.key === 'Enter' ? handleSuggestionClick(song) : undefined}
             >
               <p>{song.name}</p>
-              {subtitleForSong(song)}
+              <p>By {subtitleForSong(song)}</p>
             </div>
           ))}
         </div>
@@ -117,7 +115,7 @@ export function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessC
         onBlur={handleBlur}
       />
       <div class="text-xs text-right py-1 pe-1">
-        {(selectedSong && subtitleForSong(selectedSong)) || <i>Type a valid guess above ⬆️</i>}
+        {(selectedSong && <p>By {subtitleForSong(selectedSong)}</p>) || <i>Type a valid guess above ⬆️</i>}
       </div>
       {/* todo: handle text overflow (rather than new line) for long song/artists names (e.g. Sweet Crazy Love Eng) */}
       <span class="hidden" id="songId">{selectedSong ? selectedSong.id : ""}</span>

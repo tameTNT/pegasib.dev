@@ -3,12 +3,14 @@ import { signal } from '@preact/signals';
 import GuessBar from "../islands/guess-bar.tsx";
 import SongBar from "../islands/song-bar.tsx";
 import ProgressBlock from "../islands/progress-block.tsx";
+import {PastGuess} from "../islands/islandProps.d.ts";
+import {guessResult} from "../islands/islandProps.ts";
 
 export default function Home() {
   const MAX_GUESSES = 6; // 6 guesses in total (guess number 0-5)
   const currentGuess = signal(0);
-  const guessHistory = signal<Array<boolean | null>>(
-    Array(MAX_GUESSES).fill(null)
+  const guessHistory = signal<PastGuess[]>(
+    Array(MAX_GUESSES).fill({song: undefined, result: guessResult.NONE})
   );
 
 

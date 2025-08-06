@@ -1,7 +1,8 @@
 import { SearchBar } from "../components/SearchBar.tsx";
 import {Button} from "../components/Button.tsx";
 
-import {GuessInfoProps} from "./islandProps.d.ts";
+import {GuessInfoProps, CheckApiResponse} from "./islandProps.d.ts";
+import {guessResult} from "./islandProps.ts";
 
 
 export default function GuessBar(props: GuessInfoProps) {
@@ -16,18 +17,28 @@ export default function GuessBar(props: GuessInfoProps) {
     fetch(`/api/todays-song/check?id=${guessedId}`)
       .then(res => {
         if (res.ok) {
-          return res.json();
+          return res.json() as unknown as CheckApiResponse;
         } else {
           throw new Error(`Status ${res.status} | ${res.statusText}`);
         }
       })
-      .then((isCorrect: boolean) => {
+      .then(({isCorrect, songData}) => {
         // console.log(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
-        // Update the history via a new array to trigger reactivity signal
+        // Update the history by redefining array to trigger reactivity signal
         const newHistory = [...props.history.value];
-        newHistory[props.current.value] = isCorrect;
+        if (isCorrect) {
+          newHistory[props.current.value] = {
+            song: songData,
+            result: guessResult.CORRECT
+          };
+        } else {
+          newHistory[props.current.value] = {
+            song: songData,
+            result: guessResult.INCORRECT
+          };
+        }
         props.history.value = newHistory;
 
         props.current.value++;

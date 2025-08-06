@@ -6,6 +6,12 @@ export const handler = {
     const requestParams = new URL(req.url).searchParams;
     const guessedId = requestParams.get("id");
     // console.log(ctx.state.songData[ctx.state.selectedIndex].name);
-    return new Response(ctx.state.songData[ctx.state.selectedIndex].id === guessedId ? "true" : "false");
+    const correctSong = ctx.state.songData[ctx.state.selectedIndex];
+
+    const respObj = {
+      isCorrect: correctSong.id === guessedId,
+      songData: ctx.state.songData.find(song => song.id === guessedId),
+    }
+    return new Response(JSON.stringify(respObj));
   }
 };
