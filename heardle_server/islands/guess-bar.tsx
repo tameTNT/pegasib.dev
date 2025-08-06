@@ -47,9 +47,20 @@ export default function GuessBar(props: GuessInfoProps) {
 
         props.current.value++;
 
+        const footerEl = document.querySelector("footer");
+        if (footerEl) {
+          const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
+          footerEl.classList.add(colorFlash);
+          if (!isCorrect) {  // Only flash red if incorrect; stay green on correct guess
+            setTimeout(() => {
+              footerEl.classList.remove(colorFlash);
+            }, 1000)
+          }
+        }
+
         if (isCorrect) {
           setHasWon(true);
-          alert(`Correct! Come back tomorrow for a new song!`);  // todo: show modal instead of alert
+          alert(`Well Done! Come back tomorrow for a new song!`);  // todo: show modal instead of alert
         }
       })
       .catch(err => console.error(`Error while verifying guess: ${err}.`));

@@ -29,7 +29,7 @@ export default function Home() {
           <p class="italic text-xs">All audio courtesy of Spotify.</p>
           <ProgressBlock max={MAX_GUESSES} current={currentGuess} history={guessHistory}/>
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/40 flex flex-col items-center p-2 gap-1">
+        <footer class="sticky bottom-0 w-full bg-gray-500/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
           <SongBar max={MAX_GUESSES} current={currentGuess} history={guessHistory}/>
           <GuessBar max={MAX_GUESSES} current={currentGuess} history={guessHistory}/>
         </footer>
