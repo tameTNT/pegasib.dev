@@ -7,7 +7,7 @@ import {subtitleForSong} from "../helpers.tsx";
 const GuessStatusComponent = (
   props: JSX.IntrinsicAttributes & { guess: PastGuess, componentIndex: number, activeIndex: number, correctIndex: number }
 ) => {
-  let classStyle = "p-2 w-2/3 text-center rounded transition-color duration-500 ";
+  let classStyle = "p-2 w-full text-center rounded transition-color duration-500 ";
   const guessedSong = props.guess.song;
   let resultText: string;
 

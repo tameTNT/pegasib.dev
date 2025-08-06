@@ -115,7 +115,7 @@ export default function SongBar(props: GuessInfoProps) {
     }
   }
 
-  return (
+  return (  // todo: add skip button
     <div class="flex justify-center w-3/4 md:w-1/2">
       <div class="w-full relative isolate overflow-hidden rounded-full">
         <div
