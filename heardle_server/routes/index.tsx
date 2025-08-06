@@ -14,6 +14,7 @@ export default function Home() {
   );
 
   // todo: auto dark theme
+  // todo: LOONA background/styling
   return (  // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
     <>
       <a href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server" target="_blank" class="cursor-pointer">

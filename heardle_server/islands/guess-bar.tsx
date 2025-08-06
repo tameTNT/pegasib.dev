@@ -18,6 +18,11 @@ export default function GuessBar(props: GuessInfoProps) {
     const guessedId = idElement.textContent;
     if (!guessedId) return;  // No song selected, do nothing
 
+    if (props.history.value.some(guess => guess.song?.id === guessedId)) {
+      alert("You have already guessed this song!");  // todo: show modals instead of alerts
+      return;  // todo: strange bug where I can't click on input without first clicking somewhere else
+    }
+
     fetch(`/api/todays-song/check?id=${guessedId}`)
       .then(res => {
         if (res.ok) {
@@ -60,7 +65,7 @@ export default function GuessBar(props: GuessInfoProps) {
 
         if (isCorrect) {
           setHasWon(true);
-          alert(`Well Done! Come back tomorrow (UTC) for a new song!`);  // todo: show modal instead of alert
+          alert(`Well Done! Come back tomorrow (UTC) for a new song!`);
         }
       })
       .catch(err => console.error(`Error while verifying guess: ${err}.`));

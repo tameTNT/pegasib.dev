@@ -2,7 +2,7 @@ import { JSX } from "preact";
 import { Signal, useSignalEffect } from '@preact/signals';
 import { useState, useEffect, useRef } from "preact/hooks";
 
-import {getSubtitleForSong} from "../helpers.tsx";
+import {getSubtitleForSong, makeArtistString} from "../helpers.tsx";
 
 
 export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
@@ -13,8 +13,7 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Fetch all songs when the component mounts
+  useEffect(() => {  // Fetch all songs when the component mounts
     async function fetchSongs() {
       try {
         const response = await fetch("/api/all-songs");
@@ -31,12 +30,12 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
     fetchSongs().then(() => console.log("Songs fetched successfully"));
   }, []); // Empty dependency array means this runs once on mount
 
-  useEffect(() => {
+  useEffect(() => { // runs whenever inputValue or allSongs changes
     const query = inputValue.toLowerCase();
     if (inputValue.length > 0) {
       const filteredSuggestions = allSongs.filter((song) =>
         song.name.toLowerCase().includes(query) ||
-        song.artists.map(artist => artist.name.toLowerCase()).join(", ").includes(query) ||
+        makeArtistString(song.artists).toLowerCase().includes(query) ||
         song.album.name.toLowerCase().includes(query)
       );
       setSuggestions(filteredSuggestions);
