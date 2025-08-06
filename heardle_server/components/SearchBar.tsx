@@ -1,11 +1,12 @@
 import { JSX } from "preact";
-import { Signal, useSignalEffect } from '@preact/signals';
-import { useState, useEffect, useRef } from "preact/hooks";
+import { Signal, useSignalEffect } from "@preact/signals";
+import { useEffect, useRef, useState } from "preact/hooks";
 
-import {getSubtitleForSong, makeArtistString} from "../helpers.tsx";
+import { getSubtitleForSong, makeArtistString } from "../helpers.tsx";
 
-
-export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> }) {
+export default function SearchBar(
+  props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> },
+) {
   const [inputValue, setInputValue] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
@@ -13,7 +14,7 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {  // Fetch all songs when the component mounts
+  useEffect(() => { // Fetch all songs when the component mounts
     async function fetchSongs() {
       try {
         const response = await fetch("/api/all-songs");
@@ -46,7 +47,7 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
     }
   }, [inputValue, allSongs]);
 
-  useSignalEffect(() => {  // Runs whenever guessCount Signal changes
+  useSignalEffect(() => { // Runs whenever guessCount Signal changes
     if (props.guessCount.value > 0) {
       // Reset the input and selected song when a guess is made
       setInputValue("");
@@ -56,27 +57,30 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
     }
   });
 
-  function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>){
+  function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     setInputValue(event.currentTarget.value);
     setSelectedSong(null);
   }
 
-  function handleSuggestionClick(song: Song){
+  function handleSuggestionClick(song: Song) {
     setInputValue(song.name);
     setSelectedSong(song);
     setShowSuggestions(false);
   }
 
-  function handleFocus(){
+  function handleFocus() {
     if (inputValue.length > 0) {
       setShowSuggestions(true);
     }
   }
 
-  function handleBlur(event: FocusEvent){
+  function handleBlur(event: FocusEvent) {
     // Use setTimeout to allow click on suggestion before hiding
     setTimeout(() => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.relatedTarget as Node)) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.relatedTarget as Node)
+      ) {
         setShowSuggestions(false);
       }
     }, 100);
@@ -84,7 +88,7 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
 
   return (
     <div class="relative">
-      {(showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
           class="bg-gray-100 border border-gray-300 rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
@@ -95,14 +99,15 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
               tabindex={0}
               class="z-10 p-2 border border-gray-300 hover:bg-cyan-200"
               onClick={() => handleSuggestionClick(song)}
-              onKeyDown={e => e.key === 'Enter' ? handleSuggestionClick(song) : undefined}
+              onKeyDown={(e) =>
+                e.key === "Enter" ? handleSuggestionClick(song) : undefined}
             >
               <p>{song.name}</p>
               <p>By {getSubtitleForSong(song)}</p>
             </div>
           ))}
         </div>
-      ))}
+      )}
       <input
         {...props}
         type="text"
@@ -114,10 +119,14 @@ export default function SearchBar(props: JSX.HTMLAttributes<HTMLInputElement> & 
         onBlur={handleBlur}
       />
       <div class="text-xs text-right py-1 pe-1">
-        {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || <i>Type a valid guess above ⬆️</i>}
+        {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || (
+          <i>Type a valid guess above ⬆️</i>
+        )}
       </div>
       {/* todo: handle text overflow (rather than new line) for long song/artists names (e.g. Sweet Crazy Love Eng) */}
-      <span class="hidden" id="songId">{selectedSong ? selectedSong.id : ""}</span>
+      <span class="hidden" id="songId">
+        {selectedSong ? selectedSong.id : ""}
+      </span>
     </div>
   );
 }

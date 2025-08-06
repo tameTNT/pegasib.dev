@@ -1,6 +1,5 @@
 import { FreshContext } from "$fresh/server.ts";
 
-
 export const handler = {
   GET(req: Request, ctx: FreshContext<SongDataWithIndexState>) {
     const requestParams = new URL(req.url).searchParams;
@@ -10,8 +9,8 @@ export const handler = {
 
     const respObj = {
       isCorrect: correctSong.id === guessedId,
-      songData: ctx.state.songData.find(song => song.id === guessedId),
-    }
+      songData: ctx.state.songData.find((song) => song.id === guessedId),
+    };
     return new Response(JSON.stringify(respObj));
-  }
+  },
 };

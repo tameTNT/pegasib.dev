@@ -1,8 +1,7 @@
-import {FreshContext} from "$fresh/server.ts";
+import { FreshContext } from "$fresh/server.ts";
 
 import pathTools from "node:path";
 import os from "node:os";
-
 
 function loadSongData(): Array<Song> {
   const decoder = new TextDecoder("utf-8");

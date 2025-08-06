@@ -3,35 +3,34 @@ import { useState } from "preact/hooks";
 import SearchBar from "../components/SearchBar.tsx";
 import Button from "../components/Button.tsx";
 
-import {GuessInfoProps, CheckApiResponse} from "./islandProps.d.ts";
-import {guessResult} from "./islandProps.ts";
-
+import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
+import { guessResult } from "./islandProps.ts";
 
 export default function GuessBar(props: GuessInfoProps) {
   const [hasWon, setHasWon] = useState(false);
 
-  function handleGuess(){
+  function handleGuess() {
     // Handle the guess submission logic here
     const idElement = document.getElementById("songId");
     if (!idElement) return;
 
     const guessedId = idElement.textContent;
-    if (!guessedId) return;  // No song selected, do nothing
+    if (!guessedId) return; // No song selected, do nothing
 
-    if (props.history.value.some(guess => guess.song?.id === guessedId)) {
-      alert("You have already guessed this song!");  // todo: show modals instead of alerts
-      return;  // todo: strange bug where I can't click on input without first clicking somewhere else
+    if (props.history.value.some((guess) => guess.song?.id === guessedId)) {
+      alert("You have already guessed this song!"); // todo: show modals instead of alerts
+      return; // todo: strange bug where I can't click on input without first clicking somewhere else
     }
 
     fetch(`/api/todays-song/check?id=${guessedId}`)
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           return res.json() as unknown as CheckApiResponse;
         } else {
           throw new Error(`Status ${res.status} | ${res.statusText}`);
         }
       })
-      .then(({isCorrect, songData}) => {
+      .then(({ isCorrect, songData }) => {
         // console.log(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
@@ -40,12 +39,12 @@ export default function GuessBar(props: GuessInfoProps) {
         if (isCorrect) {
           newHistory[props.current.value] = {
             song: songData,
-            result: guessResult.CORRECT
+            result: guessResult.CORRECT,
           };
         } else {
           newHistory[props.current.value] = {
             song: songData,
-            result: guessResult.INCORRECT
+            result: guessResult.INCORRECT,
           };
         }
         props.history.value = newHistory;
@@ -56,10 +55,10 @@ export default function GuessBar(props: GuessInfoProps) {
         if (footerEl) {
           const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
           footerEl.classList.add(colorFlash);
-          if (!isCorrect) {  // Only flash red if incorrect; stay green on correct guess
+          if (!isCorrect) { // Only flash red if incorrect; stay green on correct guess
             setTimeout(() => {
               footerEl.classList.remove(colorFlash);
-            }, 1000)
+            }, 1000);
           }
         }
 
@@ -68,7 +67,7 @@ export default function GuessBar(props: GuessInfoProps) {
           alert(`Well Done! Come back tomorrow (UTC) for a new song!`);
         }
       })
-      .catch(err => console.error(`Error while verifying guess: ${err}.`));
+      .catch((err) => console.error(`Error while verifying guess: ${err}.`));
   }
 
   return (
@@ -82,7 +81,12 @@ export default function GuessBar(props: GuessInfoProps) {
             disabled={hasWon}
           />
         </div>
-        <Button type="button" class="rounded" onClick={handleGuess} disabled={hasWon}>
+        <Button
+          type="button"
+          class="rounded"
+          onClick={handleGuess}
+          disabled={hasWon}
+        >
           Guess!
         </Button>
       </div>
