@@ -4,22 +4,38 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
-import * as $api_joke from "./routes/api/joke.ts";
-import * as $greet_name_ from "./routes/greet/[name].tsx";
+import * as $api_middleware from "./routes/api/_middleware.ts";
+import * as $api_all_songs from "./routes/api/all-songs.ts";
+import * as $api_list from "./routes/api/list.ts";
+import * as $api_todays_song_middleware from "./routes/api/todays-song/_middleware.ts";
+import * as $api_todays_song_check from "./routes/api/todays-song/check.ts";
+import * as $api_todays_song_preview_url from "./routes/api/todays-song/preview-url.ts";
 import * as $index from "./routes/index.tsx";
-import * as $Counter from "./islands/Counter.tsx";
+import * as $guess_bar from "./islands/guess-bar.tsx";
+import * as $islandProps_d from "./islands/islandProps.d.ts";
+import * as $islandProps from "./islands/islandProps.ts";
+import * as $progress_block from "./islands/progress-block.tsx";
+import * as $song_bar from "./islands/song-bar.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
-    "./routes/api/joke.ts": $api_joke,
-    "./routes/greet/[name].tsx": $greet_name_,
+    "./routes/api/_middleware.ts": $api_middleware,
+    "./routes/api/all-songs.ts": $api_all_songs,
+    "./routes/api/list.ts": $api_list,
+    "./routes/api/todays-song/_middleware.ts": $api_todays_song_middleware,
+    "./routes/api/todays-song/check.ts": $api_todays_song_check,
+    "./routes/api/todays-song/preview-url.ts": $api_todays_song_preview_url,
     "./routes/index.tsx": $index,
   },
   islands: {
-    "./islands/Counter.tsx": $Counter,
+    "./islands/guess-bar.tsx": $guess_bar,
+    "./islands/islandProps.d.ts": $islandProps_d,
+    "./islands/islandProps.ts": $islandProps,
+    "./islands/progress-block.tsx": $progress_block,
+    "./islands/song-bar.tsx": $song_bar,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
