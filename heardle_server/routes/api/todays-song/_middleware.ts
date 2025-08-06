@@ -7,7 +7,7 @@ const START_DATE = new Date(Date.UTC(2025, 7, 25)); // when adding a new song, s
 
 
 function randomDateIndex(max: number) {
-  const todaysDate = new Date();
+  const todaysDate = new Date();  // getTime is in UTC, so no need to convert
 
   const daysDiff = Math.ceil(
     Math.abs(todaysDate.getTime() - START_DATE.getTime()) / MS_PER_DAY,

@@ -16,7 +16,7 @@ const GuessStatusComponent = (
       if (props.correctIndex !== -1 && props.componentIndex >= props.correctIndex) {  // If the guess is after a correct one
         classStyle += "bg-gray-300";
       } else if (props.componentIndex === props.activeIndex) {
-        classStyle += "bg-sky-500";
+        classStyle += "bg-sky-500 border-2 border-black";
       } else {
         classStyle += "bg-sky-200";
       }
@@ -40,8 +40,8 @@ const GuessStatusComponent = (
     // todo: add album art
     // todo: fix resizing glitch when text is loaded?
     <div {...props} class={classStyle}>
-      <div class="font-medium">{resultText}</div>
-      {guessedSong && (<div class="text-xs">{guessedSong.name} by {getSubtitleForSong(guessedSong)}</div>)}
+      {guessedSong && (<div class=""><span class="font-semibold">{guessedSong.name}</span> by {getSubtitleForSong(guessedSong)}</div>)}
+      <div class="text-xs">{resultText}</div>
     </div>
   );
 };
