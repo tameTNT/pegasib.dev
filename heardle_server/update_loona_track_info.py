@@ -14,16 +14,15 @@ import re
 import requests
 
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 
 from dotenv import load_dotenv
 
 load_dotenv()  # Loads SPOTIFY_CLIENT_ID, and SPOTIFY_CLIENT_SECRET
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
     client_id=os.getenv("SPOTIFY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
-    redirect_uri="http://127.0.0.1:9990"
 ))
 
 

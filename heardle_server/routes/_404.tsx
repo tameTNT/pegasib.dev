@@ -1,7 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 
 export default function Error404() {
-  return (
+  return ( // todo: update 404 for heardle
     <>
       <Head>
         <title>404 - Page not found</title>
