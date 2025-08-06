@@ -6,6 +6,7 @@ import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $api_middleware from "./routes/api/_middleware.ts";
 import * as $api_all_songs from "./routes/api/all-songs.ts";
+import * as $api_list from "./routes/api/list.ts";
 import * as $api_todays_song_middleware from "./routes/api/todays-song/_middleware.ts";
 import * as $api_todays_song_check from "./routes/api/todays-song/check.ts";
 import * as $api_todays_song_preview_url from "./routes/api/todays-song/preview-url.ts";
@@ -23,6 +24,7 @@ const manifest = {
     "./routes/_app.tsx": $_app,
     "./routes/api/_middleware.ts": $api_middleware,
     "./routes/api/all-songs.ts": $api_all_songs,
+    "./routes/api/list.ts": $api_list,
     "./routes/api/todays-song/_middleware.ts": $api_todays_song_middleware,
     "./routes/api/todays-song/check.ts": $api_todays_song_check,
     "./routes/api/todays-song/preview-url.ts": $api_todays_song_preview_url,

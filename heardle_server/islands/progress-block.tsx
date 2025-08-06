@@ -2,7 +2,7 @@ import { JSX } from "preact";
 
 import {GuessInfoProps, PastGuess} from "./islandProps.d.ts";
 import {guessResult} from "./islandProps.ts";
-import {subtitleForSong} from "../helpers.tsx";
+import {getSubtitleForSong} from "../helpers.tsx";
 
 const GuessStatusComponent = (
   props: JSX.IntrinsicAttributes & { guess: PastGuess, componentIndex: number, activeIndex: number, correctIndex: number }
@@ -41,7 +41,7 @@ const GuessStatusComponent = (
     // todo: fix resizing glitch when text is loaded?
     <div {...props} class={classStyle}>
       <div class="font-medium">{resultText}</div>
-      {guessedSong && (<div class="text-xs">{guessedSong.name} by {subtitleForSong(guessedSong)}</div>)}
+      {guessedSong && (<div class="text-xs">{guessedSong.name} by {getSubtitleForSong(guessedSong)}</div>)}
     </div>
   );
 };

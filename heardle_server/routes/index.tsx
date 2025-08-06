@@ -22,7 +22,10 @@ export default function Home() {
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           <h1 class="text-4xl">LOOΠ∆ Heardle</h1>
-          <p class="">Includes solo, subunit, and all post-BBC tracks.</p>
+          <p>Includes solo, subunit, and all post-BBC tracks.</p>
+          <p>
+            <a href="/api/list" target="_blank" class="italic max-md:underline md:hover:underline">See all tracks.</a>
+          </p>
           <p class="italic text-xs">All audio courtesy of Spotify.</p>
           <ProgressBlock max={MAX_GUESSES} current={currentGuess} history={guessHistory}/>
         </main>
