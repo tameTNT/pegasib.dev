@@ -10,7 +10,13 @@ export const handler = {
     const respObj = {
       isCorrect: correctSong.id === guessedId,
       songData: ctx.state.songData.find((song) => song.id === guessedId),
+      correctSong: undefined as Song | undefined, // will be filled in if this is the final guess
     };
+
+    const isFinal = requestParams.get("isFinal") === "true";
+    if (isFinal) {
+      respObj.correctSong = correctSong; // include the correct song data if this is the final guess
+    }
     return new Response(JSON.stringify(respObj));
   },
 };

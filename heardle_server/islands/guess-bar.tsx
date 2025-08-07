@@ -5,9 +5,10 @@ import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
+import {makeArtistString} from "../helpers.tsx";
 
 export default function GuessBar(props: GuessInfoProps) {
-  const [hasWon, setHasWon] = useState(false);
+  const [isOver, setIsOver] = useState(false);
 
   function handleGuess() {
     // Handle the guess submission logic here
@@ -22,7 +23,7 @@ export default function GuessBar(props: GuessInfoProps) {
       return; // todo: strange bug where I can't click on input without first clicking somewhere else
     }
 
-    fetch(`/api/todays-song/check?id=${guessedId}`)
+    fetch(`/api/todays-song/check?id=${guessedId}&isFinal=${props.current.value + 1 == props.max}`)
       .then((res) => {
         if (res.ok) {
           return res.json() as unknown as CheckApiResponse;
@@ -30,7 +31,7 @@ export default function GuessBar(props: GuessInfoProps) {
           throw new Error(`Status ${res.status} | ${res.statusText}`);
         }
       })
-      .then(({ isCorrect, songData }) => {
+      .then(({ isCorrect, songData, correctSong }) => {
         // console.log(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
@@ -63,11 +64,13 @@ export default function GuessBar(props: GuessInfoProps) {
         }
 
         if (isCorrect) {
-          setHasWon(true);
+          setIsOver(true);
           alert(`🥳 Well Done! See you tomorrow 👋`);
-        }  // todo: handle fail, i.e. use up all guesses
-      })
-      .catch((err) => console.error(`Error while verifying guess: ${err}.`));
+        }  else if (props.current.value >= props.max) {
+          if (!correctSong) throw new Error("No correctSong returned by API, but max guesses reached.");
+          alert(`😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${makeArtistString(correctSong.artists)} on ${correctSong.album.name}.`);
+        } // todo: add answer to page permanently, so it can be seen after the game is over
+      }).catch((err) => console.error(`Error while verifying guess: ${err}.`));
   }
 
   return ( // todo: this is too wide and overflows on tall phones (to the left) - make sure both are right aligned
@@ -78,14 +81,14 @@ export default function GuessBar(props: GuessInfoProps) {
             placeholder="Search by title, album, or artist"
             size={25}
             guessCount={props.current}
-            disabled={hasWon}
+            disabled={isOver}
           />
         </div>
         <Button
           type="button"
           class="rounded"
           onClick={handleGuess}
-          disabled={hasWon}
+          disabled={isOver}
         >
           Guess!
         </Button>

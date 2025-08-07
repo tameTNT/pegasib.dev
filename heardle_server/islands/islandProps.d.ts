@@ -16,4 +16,5 @@ interface PastGuess {
 interface CheckApiResponse {
   isCorrect: boolean;
   songData: Song;
+  correctSong?: Song;
 }

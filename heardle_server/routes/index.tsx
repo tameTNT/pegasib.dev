@@ -70,5 +70,5 @@ export default function Home() {
         </footer>
       </div>
     </>
-  );
+  ); // todo: add share button to share/copy results text
 }
