@@ -13,7 +13,7 @@ export default function SongBar(props: GuessInfoProps) {
   // Refs to track the play timeout and progress bar update interval tasks and clear them early if needed
   const playIdRef = useRef(0);
   const currentPBIdRef = useRef(0);
-  const snippetLengthsRef = useRef([0.5, 1.5, 3, 5, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
+  const snippetLengthsRef = useRef([0.5, 1.5, 3, 6, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
 
   function getAllowedMilliseconds() {
     let lengthInSeconds: number;

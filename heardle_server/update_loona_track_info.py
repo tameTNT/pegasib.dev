@@ -5,6 +5,8 @@
 # ]
 # ///
 
+# Run via `uv run heardle_server/update_loona_track_info.py`
+
 import json
 import os
 from pathlib import Path
@@ -36,6 +38,7 @@ def extract_track_from_playlist_item(item: dict):
 
 
 # Get tracks from playlist at https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn
+print("Loading tracks from https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn")
 PLAYLIST_URI = "05bRCDfqjNVnysz17hocZn"
 INITIAL_OFFSET = 0
 tracks_got = []
@@ -67,4 +70,4 @@ for i, track in enumerate(tracks_got):
 
 output_file = Path("~/loona_track_info.json").expanduser()
 json.dump(full_track_info, output_file.open("w+"), indent=2)
-print(f"Done. Song info dumped to {output_file}.")
+print(f"Done. Dumped info of {len(full_track_info)} songs to to {output_file}.")

@@ -13,6 +13,16 @@ export default function Home() {
     Array(MAX_GUESSES).fill({ song: undefined, result: guessResult.NONE }),
   );
 
+  const now = new Date();
+  let nextDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())); // Midnight UTC
+  nextDay = new Date(nextDay.getTime() + 24 * 60 * 60 * 1000); // Add one day
+  // const dateFormatter = new Intl.DateTimeFormat(undefined, { // undefined uses user's locale
+  //   timeStyle: "short",
+  //   dateStyle: "medium",
+  //   hour12: false
+  // });
+  const timeOptions: Intl.DateTimeFormatOptions = { hour12: false, hour: "2-digit", minute: "2-digit" }
+
   // todo: auto dark theme
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
@@ -31,17 +41,12 @@ export default function Home() {
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           <h1 class="text-4xl">LOOΠ∆ Heardle</h1>
-          <p>Includes solo, subunit, and all post-BBC tracks.</p>
-          <p>
-            <a
-              href="/api/list"
-              target="_blank"
-              class="italic max-md:underline md:hover:underline"
-            >
-              See all tracks.
-            </a>
+          <h2 class="text-lg">New song every day at {nextDay.toLocaleTimeString([], timeOptions)}!</h2>
+          <p>Includes solo, subunit, and all post-BBC tracks (up to Soft Error).</p>
+          <p class="italic text-xs">
+            <a href="/api/list" target="_blank">List of tracks. </a>
+            All audio courtesy of <a href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn" target="_blank">Spotify</a>.
           </p>
-          <p class="italic text-xs">All audio courtesy of Spotify.</p>
           <ProgressBlock
             max={MAX_GUESSES}
             current={currentGuess}

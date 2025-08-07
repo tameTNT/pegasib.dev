@@ -64,8 +64,8 @@ export default function GuessBar(props: GuessInfoProps) {
 
         if (isCorrect) {
           setHasWon(true);
-          alert(`Well Done! Come back tomorrow (UTC) for a new song!`);
-        }
+          alert(`🥳 Well Done! See you tomorrow 👋`);
+        }  // todo: handle fail, i.e. use up all guesses
       })
       .catch((err) => console.error(`Error while verifying guess: ${err}.`));
   }
