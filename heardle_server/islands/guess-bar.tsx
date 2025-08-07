@@ -69,6 +69,7 @@ export default function GuessBar(props: GuessInfoProps) {
           setIsOver(true);
           alert(`🥳 Well Done! See you tomorrow 👋`);
         }  else if (props.current.value >= props.max) {
+          setIsOver(true);
           if (!correctSong) throw new Error("No correctSong returned by API, but max guesses reached.");
           alert(`😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${makeArtistString(correctSong.artists)} on ${correctSong.album.name}.`);
         } // todo: add answer to page permanently, so it can be seen after the game is over

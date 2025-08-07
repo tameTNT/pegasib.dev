@@ -17,10 +17,11 @@ export default function SongBar(props: GuessInfoProps) {
 
   function getAllowedMilliseconds() {
     let lengthInSeconds: number;
-    if (hasWon(props.history.value)) {
+    if (hasWon(props.history.value) || props.current.value >= props.max) {
+      // If the user has won or reached the maximum number of guesses, play the full song
       lengthInSeconds =
         snippetLengthsRef.current[snippetLengthsRef.current.length - 1]; // Play the full song if a correct guess has been made
-    } else { // todo: can return NaN once over max guesses
+    } else {
       lengthInSeconds = snippetLengthsRef.current[props.current.value]; // Convert seconds to milliseconds
     }
     return lengthInSeconds * 1000; // Convert seconds to milliseconds
@@ -52,7 +53,7 @@ export default function SongBar(props: GuessInfoProps) {
 
       audioElement.addEventListener("canplaythrough", () => {
         // duration is not defined until the audio is loaded and can play through
-        // console.log(`Audio duration is ${audioElement.duration} seconds.`);
+        // console.log(`Set max audio duration to ${audioElement.duration} seconds.`);
         snippetLengthsRef.current[snippetLengthsRef.current.length - 1] =
           audioElement.duration;
       });
