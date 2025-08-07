@@ -9,6 +9,7 @@ import {makeArtistString} from "../helpers.tsx";
 
 export default function GuessBar(props: GuessInfoProps) {
   const [isOver, setIsOver] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   function handleGuess() {
     // Handle the guess submission logic here
@@ -19,7 +20,8 @@ export default function GuessBar(props: GuessInfoProps) {
     if (!guessedId) return; // No song selected, do nothing
 
     if (props.history.value.some((guess) => guess.song?.id === guessedId)) {
-      alert("You have already guessed this song!"); // todo: show modals instead of alerts
+      alert("You have already guessed that song!"); // todo: show modals instead of alerts
+      setInputValue(""); // Clear input field
       return; // todo: strange bug where I can't click on input without first clicking somewhere else
     }
 
@@ -82,6 +84,8 @@ export default function GuessBar(props: GuessInfoProps) {
             size={25}
             guessCount={props.current}
             disabled={isOver}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
           />
         </div>
         <Button

@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { getSubtitleForSong, makeArtistString } from "../helpers.tsx";
 
 export default function SearchBar(
-  props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> },
+  props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number>, inputValue: string, setInputValue: (value: string) => void },
 ) {
-  const [inputValue, setInputValue] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [allSongs, setAllSongs] = useState<Song[]>([]);
@@ -32,8 +31,8 @@ export default function SearchBar(
   }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => { // runs whenever inputValue or allSongs changes
-    const query = inputValue.toLowerCase();
-    if (inputValue.length > 0) {
+    const query = props.inputValue.toLowerCase();
+    if (props.inputValue.length > 0) {
       const filteredSuggestions = allSongs.filter((song) =>
         song.name.toLowerCase().includes(query) ||
         makeArtistString(song.artists).toLowerCase().includes(query) ||
@@ -45,12 +44,12 @@ export default function SearchBar(
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [inputValue, allSongs]);
+  }, [props.inputValue, allSongs]);
 
   useSignalEffect(() => { // Runs whenever guessCount Signal changes
     if (props.guessCount.value > 0) {
       // Reset the input and selected song when a guess is made
-      setInputValue("");
+      props.setInputValue("");
       setSelectedSong(null);
       setSuggestions([]);
       setShowSuggestions(false);
@@ -58,18 +57,18 @@ export default function SearchBar(
   });
 
   function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>) {
-    setInputValue(event.currentTarget.value);
+    props.setInputValue(event.currentTarget.value);
     setSelectedSong(null);
   }
 
   function handleSuggestionClick(song: Song) {
-    setInputValue(song.name);
+    props.setInputValue(song.name);
     setSelectedSong(song);
     setShowSuggestions(false);
   }
 
   function handleFocus() {
-    if (inputValue.length > 0) {
+    if (props.inputValue.length > 0) {
       setShowSuggestions(true);
     }
   }
@@ -110,14 +109,14 @@ export default function SearchBar(
       )}
       <input
         {...props}
-        type="text"
+        type="search"
         tabindex={0}
         class="border border-gray-300 rounded text-xl p-2"
-        value={inputValue}
+        value={props.inputValue}
         onInput={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-      /> {/* todo: add inline clear/reset button */}
+      />
       <div class="text-xs text-right py-1 pe-1">
         {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || (
           <i>Type a valid guess above ⬆️</i>
