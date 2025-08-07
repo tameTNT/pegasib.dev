@@ -7,7 +7,7 @@ import { PastGuess } from "../islands/islandProps.d.ts";
 import { guessResult } from "../islands/islandProps.ts";
 
 export default function Home() {
-  const MAX_GUESSES = 6; // 6 guesses in total (guess number 0-5)
+  const MAX_GUESSES = 6; // total number of guesses allowed
   const currentGuess = signal(0); // todo: save local state with cookies to preserve on reload
   const guessHistory = signal<PastGuess[]>(
     Array(MAX_GUESSES).fill({ song: undefined, result: guessResult.NONE }),
@@ -27,17 +27,20 @@ export default function Home() {
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
     <>
-      <a
-        href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
-        target="_blank"
-        class="cursor-pointer"
-      >
-        <img
-          src="github_icon.svg"
-          alt="The GitHub Icon"
-          class="absolute top-1 left-1 h-5"
-        />
-      </a>
+      <div class="absolute top-1 left-1 flex flex-col items-center">
+        <a
+          href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
+          target="_blank"
+          class="cursor-pointer"
+        >
+          <img
+            src="github_icon.svg"
+            alt="The GitHub Icon"
+            class="h-5"
+          />
+        </a>
+        <p class="text-gray-900 text-xs italic">v1.1.0</p>
+      </div>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           <h1 class="text-4xl">LOOΠ∆ Heardle</h1>
@@ -67,5 +70,5 @@ export default function Home() {
         </footer>
       </div>
     </>
-  ); // todo: add version number to header (this branch will be v1.0)
+  );
 }
