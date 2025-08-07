@@ -67,5 +67,5 @@ export default function Home() {
         </footer>
       </div>
     </>
-  );
+  ); // todo: add version number to header (this branch will be v1.0)
 }

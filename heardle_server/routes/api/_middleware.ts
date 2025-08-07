@@ -7,9 +7,9 @@ function loadSongData(): Array<Song> {
   const decoder = new TextDecoder("utf-8");
 
   const dataPath = pathTools.resolve(os.homedir(), "loona_track_info.json");
-  const rawData = Deno.readFileSync(dataPath);
-  const jsonData = decoder.decode(rawData);
+  const rawData = Deno.readFileSync(dataPath); // todo: handle errors if file does not exist or is not readable
 
+  const jsonData = decoder.decode(rawData);
   return JSON.parse(jsonData);
 }
 

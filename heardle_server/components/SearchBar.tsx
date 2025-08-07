@@ -117,7 +117,7 @@ export default function SearchBar(
         onInput={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-      />
+      /> {/* todo: add inline clear/reset button */}
       <div class="text-xs text-right py-1 pe-1">
         {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || (
           <i>Type a valid guess above ⬆️</i>

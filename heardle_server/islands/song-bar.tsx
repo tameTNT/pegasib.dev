@@ -125,7 +125,7 @@ export default function SongBar(props: GuessInfoProps) {
     }
   }
 
-  return ( // todo: add skip button
+  return ( // todo: add skip button (shows interval until next guess)
     <div class="flex justify-center w-3/4 md:w-1/2">
       <div class="w-full relative isolate overflow-hidden rounded-full">
         <div
@@ -142,7 +142,7 @@ export default function SongBar(props: GuessInfoProps) {
               `Play (${(getAllowedMilliseconds() / 1000).toFixed(1)}s)`)}
         </Button>
       </div>
-      {songPreviewUrl && (
+      {songPreviewUrl && ( // todo: use src and preload to avoid fetching on every play? (see Network tab in *Firefox* DevTools)
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg" />
         </audio>
