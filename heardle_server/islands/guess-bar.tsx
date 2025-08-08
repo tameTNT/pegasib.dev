@@ -76,19 +76,18 @@ export default function GuessBar(props: GuessInfoProps) {
       }).catch((err) => console.error(`Error while verifying guess: ${err}.`));
   }
 
-  return ( // todo: this is too wide and overflows on tall phones (to the left) - make sure both are right aligned
-    <div class="flex justify-center w-80">
-      <div class="flex flex-row align-center gap-1">
-        <div class="flex-1">
-          <SearchBar
-            placeholder="Search by title, album, or artist"
-            size={25}
-            guessCount={props.current}
-            disabled={isOver}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-          />
-        </div>
+  return (
+    <div class="flex flex-row align-middle justify-center gap-1 w-4/5 md:w-1/2">
+      <div class="w-4/5 md:w-full">
+        <SearchBar
+          placeholder="Search by title, album or artist"
+          guessCount={props.current}
+          disabled={isOver}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
+      </div>
+      <div class="">
         <Button
           type="button"
           class="rounded"

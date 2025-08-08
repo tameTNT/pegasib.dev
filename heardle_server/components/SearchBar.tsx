@@ -86,7 +86,7 @@ export default function SearchBar(
   }
 
   return (
-    <div class="relative">
+    <div class="relative text-sm w-full">
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
@@ -111,19 +111,18 @@ export default function SearchBar(
         {...props}
         type="search"
         tabindex={0}
-        class="border border-gray-300 rounded text-xl p-2"
+        class="w-full border border-gray-300 rounded p-2"
         value={props.inputValue}
         onInput={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      <div class="text-xs text-right py-1 pe-1">
-        {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || (
+      <p class="p-1 text-xs truncate text-right">
+        {selectedSong ? (<>By {getSubtitleForSong(selectedSong)}</>) : (
           <i>Type a valid guess above ⬆️</i>
         )}
-      </div>
-      {/* todo: handle text overflow (rather than new line) for long song/artists names (e.g. Sweet Crazy Love Eng) */}
-      <span class="hidden" id="songId">
+      </p>
+      <span hidden id="songId">
         {selectedSong ? selectedSong.id : ""}
       </span>
     </div>
