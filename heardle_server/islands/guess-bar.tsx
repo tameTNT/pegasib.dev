@@ -99,4 +99,4 @@ export default function GuessBar(props: GuessInfoProps) {
       </div>
     </div>
   );
-} // todo: still breaks on very narrow viewports like Fold due to fixed input width
+}

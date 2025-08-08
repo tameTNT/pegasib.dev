@@ -1,4 +1,5 @@
 import { JSX } from "preact";
+import { useSignalEffect } from "@preact/signals";
 
 import { GuessInfoProps, PastGuess } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
@@ -17,7 +18,7 @@ const GuessStatusComponent = (
   const guessedSong = props.guess.song;
   let resultText: string;
 
-  switch (props.guess.result) { // todo: make current guess bigger (shrink others)
+  switch (props.guess.result) {
     case guessResult.NONE:
       if (
         props.correctIndex !== -1 && props.componentIndex >= props.correctIndex
@@ -46,8 +47,7 @@ const GuessStatusComponent = (
 
   return (
     // todo: add album art
-    // todo: fix resizing glitch when text is loaded?
-    <div {...props} class={classStyle}>
+    <div {...props} class={classStyle} id={`guess-${props.componentIndex}`}>
       {guessedSong && (
         <div class="">
           <span class="font-bold">{guessedSong.name}</span> by{" "}
@@ -63,16 +63,25 @@ export default function ProgressBlock(props: GuessInfoProps) {
   const correctIndex = props.history.value.findIndex((item) =>
     item.result === guessResult.CORRECT
   );
-  const activeGuess = props.current.value;
 
-  return ( // todo: stop width resizing when new guess is added
+  useSignalEffect(() => { // Runs whenever current Signal changes
+    if (props.current.value > 0) {
+      const activeGuessEl = document.getElementById(`guess-${props.current.value}`);
+
+      if (activeGuessEl) {
+        activeGuessEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  });
+
+  return (
     <div class="m-2 flex flex-col items-center gap-2">
       {props.history.value.map((item, index) => (
         <GuessStatusComponent
           key={index}
           guess={item}
           componentIndex={index}
-          activeIndex={activeGuess}
+          activeIndex={props.current.value}
           correctIndex={correctIndex}
         />
       ))}

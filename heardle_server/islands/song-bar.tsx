@@ -159,6 +159,7 @@ export default function SongBar(props: GuessInfoProps) {
           id="audioProgress"
           class="absolute h-full top-0 left-0 pointer-events-none bg-black/50 mix-blend-overlay transition-width duration-100 ease-linear"
         />
+        {/* todo: fix no focus outline on play button when tabbing */}
         <Button
           id="playButton"
           class="w-full rounded-full font-bold"
@@ -177,7 +178,7 @@ export default function SongBar(props: GuessInfoProps) {
       >
         +{(snippetLengthsRef.current[props.current.value+1] - snippetLengthsRef.current[props.current.value]).toFixed()}s
       </Button>
-      {songPreviewUrl && ( // todo: use src and preload to avoid fetching on every play? (see Network tab in *Firefox* DevTools)
+      {songPreviewUrl && (
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg" />
         </audio>
