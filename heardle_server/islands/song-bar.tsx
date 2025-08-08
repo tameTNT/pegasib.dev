@@ -15,10 +15,13 @@ export default function SongBar(props: GuessInfoProps) {
   const currentPBIdRef = useRef(0);
   const snippetLengthsRef = useRef([0.5, 1.5, 3, 6, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
 
+  function canPlayWholeSong() {
+    // If the user has won or reached the maximum number of guesses, play the full song
+    return hasWon(props.history.value) || props.current.value >= props.max
+  }
   function getAllowedMilliseconds() {
     let lengthInSeconds: number;
-    if (hasWon(props.history.value) || props.current.value >= props.max) {
-      // If the user has won or reached the maximum number of guesses, play the full song
+    if (canPlayWholeSong()) {
       lengthInSeconds =
         snippetLengthsRef.current[snippetLengthsRef.current.length - 1]; // Play the full song if a correct guess has been made
     } else {
@@ -140,7 +143,7 @@ export default function SongBar(props: GuessInfoProps) {
         >
           {(isPlaying && "Stop") ||
             (!isPlaying &&
-              `Play (${(getAllowedMilliseconds() / 1000).toFixed(1)}s)`)}
+              `Play (${(canPlayWholeSong() && 'full') || (getAllowedMilliseconds() / 1000).toFixed(1) + 's'})`)}
         </Button>
       </div>
       {songPreviewUrl && ( // todo: use src and preload to avoid fetching on every play? (see Network tab in *Firefox* DevTools)

@@ -50,7 +50,7 @@ const GuessStatusComponent = (
     <div {...props} class={classStyle}>
       {guessedSong && (
         <div class="">
-          <span class="font-semibold">{guessedSong.name}</span> by{" "}
+          <span class="font-bold">{guessedSong.name}</span> by{" "}
           {getSubtitleForSong(guessedSong)}
         </div>
       )}
