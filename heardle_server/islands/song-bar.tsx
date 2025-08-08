@@ -1,24 +1,29 @@
 import { useEffect, useRef, useState } from "preact/hooks";
+import { useSignalEffect } from "@preact/signals";
 
 import Button from "../components/Button.tsx";
 
 import { GuessInfoProps } from "./islandProps.d.ts";
 import { hasWon } from "../helpers.tsx";
+import {guessResult} from "./islandProps.ts";
 
 export default function SongBar(props: GuessInfoProps) {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [skipHidden, setSkipHidden] = useState(false);
 
   const legalStartRef = useRef(false); // Track if the user has started the song legally via the play button
   // Refs to track the play timeout and progress bar update interval tasks and clear them early if needed
   const playIdRef = useRef(0);
   const currentPBIdRef = useRef(0);
+
   const snippetLengthsRef = useRef([0.5, 1.5, 3, 6, 10, 30]); // Store the snippet lengths in a ref to avoid re-creating the array on every render
 
   function canPlayWholeSong() {
-    // If the user has won or reached the maximum number of guesses, play the full song
-    return hasWon(props.history.value) || props.current.value >= props.max
+    // Check if the user has won or reached/exceeded the final guess, so we can play the full song
+    return hasWon(props.history.value) || props.current.value >= (props.max - 1);
   }
+
   function getAllowedMilliseconds() {
     let lengthInSeconds: number;
     if (canPlayWholeSong()) {
@@ -129,8 +134,26 @@ export default function SongBar(props: GuessInfoProps) {
     }
   }
 
-  return ( // todo: add skip button (shows interval until next guess)
-    <div class="flex justify-center w-3/4 md:w-1/2">
+  function handleSkipButtonClick() {
+    resetAudio();
+
+    // Update the history by redefining array to trigger reactivity signal
+    const newHistory = [...props.history.value];
+    newHistory[props.current.value] = {
+      song: undefined,
+      result: guessResult.SKIPPED,
+    };
+    props.history.value = newHistory;
+
+    props.current.value++; // Increment the current guess count
+  }
+
+  useSignalEffect(() => { // Runs whenever current Signal changes
+    if (props.current.value > 0 && canPlayWholeSong()) setSkipHidden(true);
+  });
+
+  return (
+    <div class="flex justify-center w-4/5 md:w-1/2 gap-1">
       <div class="w-full relative isolate overflow-hidden rounded-full">
         <div
           id="audioProgress"
@@ -146,6 +169,14 @@ export default function SongBar(props: GuessInfoProps) {
               `Play (${(canPlayWholeSong() && 'full') || (getAllowedMilliseconds() / 1000).toFixed(1) + 's'})`)}
         </Button>
       </div>
+      <Button
+        id="skipButton"
+        class="w-1/4 md:w-auto rounded-full font-bold"
+        onClick={handleSkipButtonClick}
+        hidden={skipHidden}
+      >
+        +{(snippetLengthsRef.current[props.current.value+1] - snippetLengthsRef.current[props.current.value]).toFixed()}s
+      </Button>
       {songPreviewUrl && ( // todo: use src and preload to avoid fetching on every play? (see Network tab in *Firefox* DevTools)
         <audio class="">
           <source src={songPreviewUrl} type="audio/mpeg" />

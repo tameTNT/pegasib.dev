@@ -35,7 +35,7 @@ const GuessStatusComponent = (
       resultText = "Incorrect";
       break;
     case guessResult.SKIPPED:
-      classStyle += "bg-orange-400 text-black";
+      classStyle += "bg-orange-300 text-black";
       resultText = "Skipped";
       break;
     case guessResult.CORRECT:
