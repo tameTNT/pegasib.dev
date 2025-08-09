@@ -54,11 +54,11 @@ export default function SongBar(props: GuessInfoProps) {
 
         audioElement.volume = 0.1;
         audioElement.currentTime = 0; // Reset to the start
-        // console.log(`Set volume to ${audioElement.volume}`);
+        // console.debug(`Set volume to ${audioElement.volume}`);
 
         audioElement.addEventListener("canplaythrough", () => {
           // duration is not defined until the audio is loaded and can play through
-          // console.log(`Set max audio duration to ${audioElement.duration} seconds.`);
+          // console.debug(`Set max audio duration to ${audioElement.duration} seconds.`);
           snippetLengthsRef.current[snippetLengthsRef.current.length - 1] =
             audioElement.duration;
         });

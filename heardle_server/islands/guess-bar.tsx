@@ -5,11 +5,9 @@ import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
-import { hasWon, makeArtistString, makeErrorMessage } from "../helpers.tsx";
-import { useSignalEffect } from "@preact/signals";
+import { makeArtistString, makeErrorMessage } from "../helpers.tsx";
 
-export default function GuessBar(props: GuessInfoProps) {
-  const [isOver, setIsOver] = useState(false);
+export default function GuessBar(props: GuessInfoProps & { isGameOver: boolean}) {
   const [inputValue, setInputValue] = useState("");
 
   function handleGuess() {
@@ -34,7 +32,7 @@ export default function GuessBar(props: GuessInfoProps) {
           throw new Error(makeErrorMessage(response));
         }
       }).then(({ isCorrect, songData, correctSong }) => {
-        // console.log(`guess count=${props.current.value}`, isCorrect);
+        // console.debug(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
         // Update the history by redefining array to trigger reactivity signal
@@ -79,12 +77,6 @@ export default function GuessBar(props: GuessInfoProps) {
       });
   }
 
-  useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
-    if (hasWon(props.history.value) || props.current.value >= props.max) {
-      setIsOver(true); // Disable guessing if max guesses reached
-    }
-  })
-
   return (
     <div class="flex flex-row align-middle justify-center gap-1 w-4/5 md:w-1/2">
       <div class="w-4/5 md:w-full">
@@ -92,7 +84,7 @@ export default function GuessBar(props: GuessInfoProps) {
           placeholder="Search by title, album or artist"
           name="songName"
           guessCount={props.current}
-          disabled={isOver}
+          disabled={props.isGameOver}
           inputValue={inputValue}
           setInputValue={setInputValue}
         />
@@ -102,7 +94,7 @@ export default function GuessBar(props: GuessInfoProps) {
           type="button"
           class="rounded"
           onClick={handleGuess}
-          disabled={isOver}
+          disabled={props.isGameOver}
         >
           Guess!
         </Button>

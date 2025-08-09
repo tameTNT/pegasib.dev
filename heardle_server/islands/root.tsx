@@ -1,17 +1,21 @@
 import { signal, useSignalEffect } from "@preact/signals";
+import { useState } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
 import { PastGuess } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
-import { checkStorageAvailable } from "../helpers.tsx";
+import {checkStorageAvailable, hasWon} from "../helpers.tsx";
+import ShareButton from "./share-button.tsx";
 
 export default function Root({ version, gameTitle, maxGuesses }: { version: string, gameTitle: string, maxGuesses: number  }) {
+  const [isGameOver, setIsGameOver] = useState(false);
+
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
-  const currentDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())); // Midnight UTC
-  const nextDay = new Date(currentDay.getTime() + 24 * 60 * 60 * 1000); // Add one day
+  const currentDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())); // Midnight UTC
+  const tmrwDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000); // Add one day
   // const dateFormatter = new Intl.DateTimeFormat(undefined, { // undefined uses user's locale
   //   timeStyle: "short",
   //   dateStyle: "medium",
@@ -28,18 +32,24 @@ export default function Root({ version, gameTitle, maxGuesses }: { version: stri
   if (checkStorageAvailable("localStorage")) {
     const storedDate = Number(localStorage.getItem("gameDate"));
     const storedCurrentGuess = Number(localStorage.getItem("currentGuess"));
-    if (storedDate == currentDay.getTime() && storedCurrentGuess > 0) {
+    if (storedDate == currentDate.getTime() && storedCurrentGuess > 0) {
       currentGuess.value = storedCurrentGuess;
       guessHistory.value = JSON.parse(localStorage.getItem("guessHistory") || "[]");
-      console.log("Loaded previous game state from localStorage.");
+      console.debug("Loaded previous game state from localStorage.");
     }
   }
 
   useSignalEffect(() => { // Runs whenever currentGuess or guessHistory changes
     if (checkStorageAvailable("localStorage")) {
-      localStorage.setItem("gameDate", String(currentDay.getTime()));
+      localStorage.setItem("gameDate", String(currentDate.getTime()));
       localStorage.setItem("currentGuess", String(currentGuess.value));
       localStorage.setItem("guessHistory", JSON.stringify(guessHistory.value));
+    }
+  })
+
+  useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
+    if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
+      setIsGameOver(true); // Disable guessing if max guesses reached
     }
   })
 
@@ -62,7 +72,9 @@ export default function Root({ version, gameTitle, maxGuesses }: { version: stri
         <main class="text-center w-3/4 md:w-1/2">
           <h1 class="text-5xl">{gameTitle}</h1>
           <h2 class="">Includes solo, subunit, and all post-BBC tracks (up to Soft Error)</h2>
-          <p class="italic text-xs">Next new song at <abbr title={nextDay.toLocaleString()}>{nextDay.toLocaleTimeString([], timeOptions)}</abbr>.</p>
+          <p class="italic text-xs">
+            Next new song at <abbr title={tmrwDate.toLocaleString([])}>{tmrwDate.toLocaleTimeString([], timeOptions)}</abbr>.
+          </p>
           <p class="italic text-xs">
             <a href="/api/list" target="_blank">List of tracks.</a>{" "}
             All audio courtesy of <a href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn" target="_blank">Spotify</a>.
@@ -72,6 +84,7 @@ export default function Root({ version, gameTitle, maxGuesses }: { version: stri
             current={currentGuess}
             history={guessHistory}
           />
+          <ShareButton gameIsOver={isGameOver} gameTitle={gameTitle} currentDate={currentDate} history={guessHistory} />
         </main>
         <footer class="sticky bottom-0 w-full bg-gray-500/40 dark:bg-sky-200/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
           <SongBar
@@ -83,9 +96,10 @@ export default function Root({ version, gameTitle, maxGuesses }: { version: stri
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            isGameOver={isGameOver}
           />
         </footer>
       </div>
     </>
-  ); // todo: add share button to share/copy results text
+  );
 }
