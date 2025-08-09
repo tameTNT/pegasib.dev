@@ -7,7 +7,8 @@ import { PastGuess } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
 import { checkStorageAvailable } from "../helpers.tsx";
 
-export default function Index() {
+export default function Root({ gameTitle, maxGuesses }: { gameTitle: string, maxGuesses: number }) {
+  // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
   const currentDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())); // Midnight UTC
   const nextDay = new Date(currentDay.getTime() + 24 * 60 * 60 * 1000); // Add one day
@@ -18,11 +19,10 @@ export default function Index() {
   // });
   const timeOptions: Intl.DateTimeFormatOptions = { hour12: false, hour: "2-digit", minute: "2-digit" }
 
-  const MAX_GUESSES = 6; // total number of guesses allowed
-
+  // Set up the starting game state
   const currentGuess = signal(0);
   const guessHistory = signal<PastGuess[]>(
-    Array(MAX_GUESSES).fill({ song: undefined, result: guessResult.NONE }),
+    Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE }),
   );
   // Load previous game state from localStorage if available
   if (checkStorageAvailable("localStorage")) {
@@ -37,8 +37,6 @@ export default function Index() {
 
   useSignalEffect(() => { // Runs whenever currentGuess or guessHistory changes
     if (checkStorageAvailable("localStorage")) {
-      const now = new Date();
-      const currentDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
       localStorage.setItem("gameDate", String(currentDay.getTime()));
       localStorage.setItem("currentGuess", String(currentGuess.value));
       localStorage.setItem("guessHistory", JSON.stringify(guessHistory.value));
@@ -64,7 +62,7 @@ export default function Index() {
       </div>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <h1 class="text-5xl">LOONA Heardle</h1>
+          <h1 class="text-5xl">{gameTitle}</h1>
           <h2 class="">Includes solo, subunit, and all post-BBC tracks (up to Soft Error)</h2>
           <p class="italic text-xs">Next new song at <abbr title={nextDay.toLocaleString()}>{nextDay.toLocaleTimeString([], timeOptions)}</abbr>.</p>
           <p class="italic text-xs">
@@ -72,19 +70,19 @@ export default function Index() {
             All audio courtesy of <a href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn" target="_blank">Spotify</a>.
           </p>
           <ProgressBlock
-            max={MAX_GUESSES}
+            max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
           />
         </main>
         <footer class="sticky bottom-0 w-full bg-gray-500/40 dark:bg-sky-200/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
           <SongBar
-            max={MAX_GUESSES}
+            max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
           />
           <GuessBar
-            max={MAX_GUESSES}
+            max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
           />

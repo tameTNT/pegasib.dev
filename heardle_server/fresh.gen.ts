@@ -12,10 +12,10 @@ import * as $api_todays_song_check from "./routes/api/todays-song/check.ts";
 import * as $api_todays_song_preview_url from "./routes/api/todays-song/preview-url.ts";
 import * as $index from "./routes/index.tsx";
 import * as $guess_bar from "./islands/guess-bar.tsx";
-import * as $index_1 from "./islands/index.tsx";
 import * as $islandProps_d from "./islands/islandProps.d.ts";
 import * as $islandProps from "./islands/islandProps.ts";
 import * as $progress_block from "./islands/progress-block.tsx";
+import * as $root from "./islands/root.tsx";
 import * as $song_bar from "./islands/song-bar.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
@@ -33,10 +33,10 @@ const manifest = {
   },
   islands: {
     "./islands/guess-bar.tsx": $guess_bar,
-    "./islands/index.tsx": $index_1,
     "./islands/islandProps.d.ts": $islandProps_d,
     "./islands/islandProps.ts": $islandProps,
     "./islands/progress-block.tsx": $progress_block,
+    "./islands/root.tsx": $root,
     "./islands/song-bar.tsx": $song_bar,
   },
   baseUrl: import.meta.url,
