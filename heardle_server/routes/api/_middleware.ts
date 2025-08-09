@@ -6,7 +6,7 @@ import os from "node:os";
 function loadSongData(): Array<Song> {
   const decoder = new TextDecoder("utf-8");
 
-  const dataPath = pathTools.resolve(os.homedir(), "loona_track_info.json");
+  const dataPath = pathTools.resolve(os.homedir(), "heardle_track_info.json");
   try {
     const rawData = Deno.readFileSync(dataPath);
     const jsonData = decoder.decode(rawData);

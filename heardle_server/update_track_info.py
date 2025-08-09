@@ -5,7 +5,7 @@
 # ]
 # ///
 
-# Run via `uv run heardle_server/update_loona_track_info.py`
+# Run via `uv run heardle_server/update_track_info.py`
 
 import json
 import os
@@ -68,6 +68,6 @@ for i, track in enumerate(tracks_got):
 
     time.sleep(random.random() / 2)  # to avoid spamming the page/avoid rate limiting
 
-output_file = Path("~/loona_track_info.json").expanduser()
+output_file = Path("~/heardle_track_info.json").expanduser()
 json.dump(full_track_info, output_file.open("w+"), indent=2)
 print(f"Done. Dumped info of {len(full_track_info)} songs to to {output_file}.")
