@@ -43,7 +43,7 @@ export default function Home() {
       </div>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <h1 class="text-4xl">LOOΠ∆ Heardle</h1>
+          <h1 class="text-5xl">LOONA Heardle</h1>
           <h2 class="">Includes solo, subunit, and all post-BBC tracks (up to Soft Error)</h2>
           <p class="italic text-xs">Next new song at <abbr title={nextDay.toLocaleString()}>{nextDay.toLocaleTimeString([], timeOptions)}</abbr>.</p>
           <p class="italic text-xs">
