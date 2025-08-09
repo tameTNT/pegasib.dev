@@ -51,8 +51,9 @@ export default function GuessBar(props: GuessInfoProps) {
         }
         props.history.value = newHistory;
 
-        props.current.value++;
+        props.current.value++; // Increment the current guess count
 
+        // Flash the footer background color based on the guess result
         const footerEl = document.querySelector("footer");
         if (footerEl) {
           const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
@@ -64,10 +65,11 @@ export default function GuessBar(props: GuessInfoProps) {
           }
         }
 
+        // Show an alert if the guess is correct or if the max guesses have been reached
         if (isCorrect) {
           setIsOver(true);
           alert(`🥳 Well Done! See you tomorrow 👋`);
-        }  else if (props.current.value >= props.max) {
+        } else if (props.current.value >= props.max) {
           setIsOver(true);
           if (!correctSong) throw new Error("No correctSong returned by API, but max guesses reached.");
           alert(`😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${makeArtistString(correctSong.artists)} on ${correctSong.album.name}.`);
@@ -83,6 +85,7 @@ export default function GuessBar(props: GuessInfoProps) {
       <div class="w-4/5 md:w-full">
         <SearchBar
           placeholder="Search by title, album or artist"
+          name="songName"
           guessCount={props.current}
           disabled={isOver}
           inputValue={inputValue}
