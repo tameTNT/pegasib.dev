@@ -1,5 +1,4 @@
-import { PastGuess } from "./islands/islandProps.d.ts";
-import { guessResult } from "./enums.ts";
+import { PastGuess, guessResult } from "./enums.ts";
 
 export function makeArtistString(artists: { name: string }[]): string {
   return artists.map((artist) => artist.name).join(", ");

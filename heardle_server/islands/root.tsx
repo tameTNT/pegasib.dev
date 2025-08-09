@@ -4,8 +4,7 @@ import { useState } from "preact/hooks";
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import { PastGuess } from "./islandProps.d.ts";
-import { guessResult } from "../enums.ts";
+import { PastGuess, guessResult } from "../enums.ts";
 import {checkStorageAvailable, hasWon} from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
 

@@ -2,8 +2,7 @@ import { Signal } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import Button from "../components/Button.tsx";
-import {PastGuess} from "./islandProps.d.ts";
-import {guessResult} from "../enums.ts";
+import { PastGuess, guessResult } from "../enums.ts";
 
 export default function ShareButton({ gameIsOver, gameTitle, currentDate, history } : { gameIsOver: boolean, gameTitle: string, currentDate: Date, history: Signal<PastGuess[]> }) {
   const [successfulCopy, setSuccessfulCopy] = useState(false);
