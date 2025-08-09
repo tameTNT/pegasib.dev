@@ -3,13 +3,19 @@ import { FreshContext } from "$fresh/server.ts";
 export const handler = {
   GET(req: Request, ctx: FreshContext<SongDataWithIndexState>) {
     const requestParams = new URL(req.url).searchParams;
-    const guessedId = requestParams.get("id"); // todo: validate this is a valid song ID, return error status if not
-    // console.log(ctx.state.songData[ctx.state.selectedIndex].name);
+    const guessedId = requestParams.get("id");
+
+    const songDataForId = ctx.state.songData.find((song) => song.id === guessedId);
+    // Validate this is a valid song ID, return an error if not
+    if (guessedId === undefined || songDataForId === undefined) {
+      return new Response("Invalid/Missing song ID", { status: 400 }); // Bad Request
+    }
+
     const correctSong = ctx.state.songData[ctx.state.selectedIndex];
 
     const respObj = {
       isCorrect: correctSong.id === guessedId,
-      songData: ctx.state.songData.find((song) => song.id === guessedId),
+      songData: songDataForId,
       correctSong: undefined as Song | undefined, // will be filled in if this is the final guess
     };
 
