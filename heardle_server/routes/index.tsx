@@ -23,11 +23,10 @@ export default function Home() {
   // });
   const timeOptions: Intl.DateTimeFormatOptions = { hour12: false, hour: "2-digit", minute: "2-digit" }
 
-  // todo: auto dark theme
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
     <>
-      <div class="absolute top-1 left-1 flex flex-col items-center">
+      <div class="absolute top-1 left-1 flex flex-col items-center dark:invert">
         <a
           href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
           target="_blank"
@@ -56,7 +55,7 @@ export default function Home() {
             history={guessHistory}
           />
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
+        <footer class="sticky bottom-0 w-full bg-gray-500/40 dark:bg-sky-200/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
           <SongBar
             max={MAX_GUESSES}
             current={currentGuess}

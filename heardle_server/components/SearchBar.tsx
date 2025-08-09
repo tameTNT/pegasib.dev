@@ -90,18 +90,18 @@ export default function SearchBar(
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          class="bg-gray-100 border border-gray-300 rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
+          class="bg-gray-100 dark:bg-slate-500 border border-gray-300 dark:border-white rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
         >
           {suggestions.map((song) => (
             <div
               key={song}
               tabindex={0}
-              class="z-10 p-2 border border-gray-300 hover:bg-cyan-200"
+              class="z-10 p-2 border border-gray-300 dark:border-white hover:bg-cyan-200 hover:dark:bg-gray-600 text-black dark:text-white"
               onClick={() => handleSuggestionClick(song)}
               onKeyDown={(e) =>
                 e.key === "Enter" ? handleSuggestionClick(song) : undefined}
             >
-              <p>{song.name}</p>
+              <p class="font-semibold">{song.name}</p>
               <p>By {getSubtitleForSong(song)}</p>
             </div>
           ))}
@@ -111,7 +111,7 @@ export default function SearchBar(
         {...props}
         type="search"
         tabindex={0}
-        class="w-full border border-gray-300 rounded p-2"
+        class="w-full border border-gray-300 text-black rounded p-2"
         value={props.inputValue}
         onInput={handleInputChange}
         onFocus={handleFocus}

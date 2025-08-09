@@ -14,7 +14,7 @@ const GuessStatusComponent = (
   },
 ) => {
   let classStyle =
-    "p-2 w-full text-center rounded transition-color duration-500 ";
+    "p-2 w-full text-center rounded transition-color transition-border duration-500 ";
   const guessedSong = props.guess.song;
   let resultText: string;
 
@@ -23,11 +23,11 @@ const GuessStatusComponent = (
       if (
         props.correctIndex !== -1 && props.componentIndex >= props.correctIndex
       ) { // If the guess is after a correct one
-        classStyle += "bg-gray-300";
+        classStyle += "bg-gray-400";
       } else if (props.componentIndex === props.activeIndex) {
-        classStyle += "bg-sky-500 border-2 border-black";
+        classStyle += "bg-sky-500 border-2 border-black dark:border-white";
       } else {
-        classStyle += "bg-sky-200";
+        classStyle += "bg-sky-300";
       }
       resultText = "\u00A0"; // Non-breaking space for empty state
       break;
