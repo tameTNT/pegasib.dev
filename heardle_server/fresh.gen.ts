@@ -12,7 +12,6 @@ import * as $api_todays_song_check from "./routes/api/todays-song/check.ts";
 import * as $api_todays_song_preview_url from "./routes/api/todays-song/preview-url.ts";
 import * as $index from "./routes/index.tsx";
 import * as $guess_bar from "./islands/guess-bar.tsx";
-import * as $islandProps_d from "./islands/islandProps.d.ts";
 import * as $progress_block from "./islands/progress-block.tsx";
 import * as $root from "./islands/root.tsx";
 import * as $share_button from "./islands/share-button.tsx";
@@ -33,7 +32,6 @@ const manifest = {
   },
   islands: {
     "./islands/guess-bar.tsx": $guess_bar,
-    "./islands/islandProps.d.ts": $islandProps_d,
     "./islands/progress-block.tsx": $progress_block,
     "./islands/root.tsx": $root,
     "./islands/share-button.tsx": $share_button,
