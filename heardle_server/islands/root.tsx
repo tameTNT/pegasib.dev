@@ -83,7 +83,7 @@ export default function Root(
       </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <h1 class="text-5xl">{gameTitle}</h1>
+          <h1 class="text-5xl/[1.2]">{gameTitle}</h1>
           <h2 class="">
             Includes solo, subunit, and all post-BBC tracks (up to Soft Error)
           </h2>
@@ -115,7 +115,7 @@ export default function Root(
             history={guessHistory}
           />
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/40 dark:bg-sky-200/40 transition-color duration-300 flex flex-col items-center p-2 gap-1">
+        <footer class="sticky bottom-0 w-full bg-gray-500/60 dark:bg-sky-200/60 transition-color duration-300 flex flex-col items-center p-2 gap-2">
           <SongBar
             max={maxGuesses}
             current={currentGuess}

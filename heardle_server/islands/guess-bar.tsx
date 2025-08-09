@@ -92,7 +92,7 @@ export default function GuessBar(
   }
 
   return (
-    <div class="flex flex-row align-middle justify-center gap-1 w-4/5 md:w-1/2">
+    <div class="flex flex-row align-middle justify-center gap-2 w-4/5 md:w-1/2">
       <div class="w-4/5 md:w-full">
         <SearchBar
           placeholder="Search by title, album or artist"
