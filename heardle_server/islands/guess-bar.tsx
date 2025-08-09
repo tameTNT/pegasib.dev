@@ -4,7 +4,7 @@ import SearchBar from "../components/SearchBar.tsx";
 import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
-import { guessResult } from "./islandProps.ts";
+import { guessResult } from "../enums.ts";
 import { makeArtistString, makeErrorMessage } from "../helpers.tsx";
 
 export default function GuessBar(props: GuessInfoProps & { isGameOver: boolean}) {

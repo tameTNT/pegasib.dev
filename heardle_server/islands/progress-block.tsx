@@ -2,7 +2,7 @@ import { JSX } from "preact";
 import { useSignalEffect } from "@preact/signals";
 
 import { GuessInfoProps, PastGuess } from "./islandProps.d.ts";
-import { guessResult } from "./islandProps.ts";
+import { guessResult } from "../enums.ts";
 import { getSubtitleForSong } from "../helpers.tsx";
 
 const GuessStatusComponent = (

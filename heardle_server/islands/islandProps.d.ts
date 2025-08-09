@@ -1,6 +1,6 @@
 import { Signal } from "@preact/signals";
 
-import { guessResult } from "./islandProps.ts";
+import { guessResult } from "../enums.ts";
 
 interface GuessInfoProps {
   max: number;

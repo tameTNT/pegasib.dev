@@ -5,7 +5,7 @@ import Button from "../components/Button.tsx";
 
 import { GuessInfoProps } from "./islandProps.d.ts";
 import {hasWon, makeErrorMessage} from "../helpers.tsx";
-import {guessResult} from "./islandProps.ts";
+import {guessResult} from "../enums.ts";
 
 export default function SongBar(props: GuessInfoProps) {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
