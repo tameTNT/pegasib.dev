@@ -7,7 +7,7 @@ import { PastGuess } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
 import { checkStorageAvailable } from "../helpers.tsx";
 
-export default function Root({ gameTitle, maxGuesses }: { gameTitle: string, maxGuesses: number }) {
+export default function Root({ version, gameTitle, maxGuesses }: { version: string, gameTitle: string, maxGuesses: number  }) {
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
   const currentDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())); // Midnight UTC
@@ -46,20 +46,18 @@ export default function Root({ gameTitle, maxGuesses }: { gameTitle: string, max
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
     <>
-      <div class="absolute top-1 left-1 flex flex-col items-center dark:invert">
-        <a
-          href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
-          target="_blank"
-          class="cursor-pointer"
-        >
-          <img
-            src="github_icon.svg"
-            alt="The GitHub Icon"
-            class="h-5"
-          />
-        </a>
-        <p class="text-gray-900 text-xs italic">v1.1.0</p>
-      </div>
+      <a
+        href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
+        target="_blank"
+        class="cursor-pointer absolute top-1 left-1 flex flex-col items-center dark:invert"
+      >
+        <img
+          src="github_icon.svg"
+          alt="The GitHub Icon"
+          class="h-5"
+        />
+        <p class="text-gray-900 text-xs italic">{version}</p>
+      </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           <h1 class="text-5xl">{gameTitle}</h1>

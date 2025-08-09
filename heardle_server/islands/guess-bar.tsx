@@ -21,7 +21,7 @@ export default function GuessBar(props: GuessInfoProps) {
     if (!guessedId) return; // No song selected, do nothing
 
     if (props.history.value.some((guess) => guess.song?.id === guessedId)) {
-      alert("You have already guessed that song!"); // todo: show modals instead of alerts
+      alert("You have already guessed that song!"); // todo: show modals instead of alerts (easier now that root is an island)
       setInputValue(""); // Clear input field
       return; // todo: strange bug where I can't click on input without first clicking somewhere else
     }
@@ -72,7 +72,7 @@ export default function GuessBar(props: GuessInfoProps) {
         } else if (props.current.value >= props.max) {
           if (!correctSong) throw new Error("No correctSong returned by API, but max guesses reached.");
           alert(`😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${makeArtistString(correctSong.artists)} on ${correctSong.album.name}.`);
-        } // todo: add answer to page permanently, so it can be seen after the game is over
+        } // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
       }).catch((err) => {
         alert("Unable to verify guess on the server. Please try again later.");
         console.error(`Error while verifying guess: ${err}.`);
