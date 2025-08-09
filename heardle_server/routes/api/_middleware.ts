@@ -22,6 +22,6 @@ export const handler = (_req: Request, ctx: FreshContext<SongDataState>) => {
     ctx.state.songData = loadSongData();
     return ctx.next();
   } catch (_error) {
-    return new Response("Failed to load song data.", {status: 500}); // Return an Internal Server Error
+    return new Response("Failed to load song data.", { status: 500 }); // Return an Internal Server Error
   }
 };

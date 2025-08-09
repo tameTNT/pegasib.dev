@@ -2,10 +2,18 @@ import { JSX } from "preact";
 import { Signal, useSignalEffect } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 
-import {getSubtitleForSong, makeArtistString, makeErrorMessage} from "../helpers.tsx";
+import {
+  getSubtitleForSong,
+  makeArtistString,
+  makeErrorMessage,
+} from "../helpers.tsx";
 
 export default function SearchBar(
-  props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number>, inputValue: string, setInputValue: (value: string) => void },
+  props: JSX.HTMLAttributes<HTMLInputElement> & {
+    guessCount: Signal<number>;
+    inputValue: string;
+    setInputValue: (value: string) => void;
+  },
 ) {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
@@ -20,12 +28,12 @@ export default function SearchBar(
         const data: Song[] = await response.json();
         setAllSongs(data);
       } else {
-        throw new Error(makeErrorMessage(response))
+        throw new Error(makeErrorMessage(response));
       }
     }
     fetchSongs()
       .then(() => {
-        console.debug("Songs fetched successfully.")
+        console.debug("Songs fetched successfully.");
       }).catch((error) => {
         // This is the only place we alert the user that connection failed
         alert("Unable to load song data. Please try again later.");
@@ -121,9 +129,9 @@ export default function SearchBar(
         onBlur={handleBlur}
       />
       <p class="p-1 text-xs truncate text-right">
-        {selectedSong ? (<>By {getSubtitleForSong(selectedSong)}</>) : (
-          <i>Type a valid guess above ⬆️</i>
-        )}
+        {selectedSong
+          ? <>By {getSubtitleForSong(selectedSong)}</>
+          : <i>Type a valid guess above ⬆️</i>}
       </p>
       <span hidden id="songId">
         {selectedSong ? selectedSong.id : ""}

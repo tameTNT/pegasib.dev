@@ -4,8 +4,8 @@ import { useSignalEffect } from "@preact/signals";
 import Button from "../components/Button.tsx";
 
 import { GuessInfoProps } from "./islandProps.d.ts";
-import {hasWon, makeErrorMessage} from "../helpers.tsx";
-import {guessResult} from "../enums.ts";
+import { hasWon, makeErrorMessage } from "../helpers.tsx";
+import { guessResult } from "../enums.ts";
 
 export default function SongBar(props: GuessInfoProps) {
   const [songPreviewUrl, setSongPreviewUrl] = useState("");
@@ -21,7 +21,8 @@ export default function SongBar(props: GuessInfoProps) {
 
   function canPlayWholeSong() {
     // Check if the user has won or reached/exceeded the final guess, so we can play the full song
-    return hasWon(props.history.value) || props.current.value >= (props.max - 1);
+    return hasWon(props.history.value) ||
+      props.current.value >= (props.max - 1);
   }
 
   function getAllowedMilliseconds() {
@@ -42,7 +43,7 @@ export default function SongBar(props: GuessInfoProps) {
         const urlString = await response.text();
         setSongPreviewUrl(urlString);
       } else {
-        throw new Error(makeErrorMessage(response))
+        throw new Error(makeErrorMessage(response));
       }
     }
     fetchSongPreview()
@@ -72,9 +73,9 @@ export default function SongBar(props: GuessInfoProps) {
         audioElement.addEventListener("pause", () => {
           legalStartRef.current = false; // Reset legal start when the audio is paused
         });
-    }).catch((error) => {
-      console.error(`Error while fetching preview url: ${error}.`);
-    });
+      }).catch((error) => {
+        console.error(`Error while fetching preview url: ${error}.`);
+      });
   }, []);
 
   function resetAudio() {
@@ -166,7 +167,10 @@ export default function SongBar(props: GuessInfoProps) {
         >
           {(isPlaying && "Stop") ||
             (!isPlaying &&
-              `Play (${(canPlayWholeSong() && 'full') || (getAllowedMilliseconds() / 1000).toFixed(1) + 's'})`)}
+              `Play (${
+                (canPlayWholeSong() && "full") ||
+                (getAllowedMilliseconds() / 1000).toFixed(1) + "s"
+              })`)}
         </Button>
       </div>
       <Button
@@ -175,7 +179,8 @@ export default function SongBar(props: GuessInfoProps) {
         onClick={handleSkipButtonClick}
         hidden={skipHidden}
       >
-        +{(snippetLengthsRef.current[props.current.value+1] - snippetLengthsRef.current[props.current.value]).toFixed()}s
+        +{(snippetLengthsRef.current[props.current.value + 1] -
+          snippetLengthsRef.current[props.current.value]).toFixed()}s
       </Button>
       {songPreviewUrl && (
         <audio class="">

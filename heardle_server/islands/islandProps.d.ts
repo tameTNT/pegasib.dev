@@ -1,6 +1,6 @@
-import {Signal} from "@preact/signals";
+import { Signal } from "@preact/signals";
 
-import {PastGuess} from "../enums.ts";
+import { PastGuess } from "../enums.ts";
 
 interface GuessInfoProps {
   max: number;

@@ -5,7 +5,9 @@ export const handler = {
     const requestParams = new URL(req.url).searchParams;
     const guessedId = requestParams.get("id");
 
-    const songDataForId = ctx.state.songData.find((song) => song.id === guessedId);
+    const songDataForId = ctx.state.songData.find((song) => {
+      return song.id == guessedId
+    });
     // Validate this is a valid song ID, return an error if not
     if (guessedId === undefined || songDataForId === undefined) {
       return new Response("Invalid/Missing song ID", { status: 400 }); // Bad Request

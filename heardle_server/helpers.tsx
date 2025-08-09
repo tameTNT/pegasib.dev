@@ -1,4 +1,4 @@
-import { PastGuess, guessResult } from "./enums.ts";
+import { guessResult, PastGuess } from "./enums.ts";
 
 export function makeArtistString(artists: { name: string }[]): string {
   return artists.map((artist) => artist.name).join(", ");
@@ -21,7 +21,9 @@ export function makeErrorMessage(response: Response): string {
   return `status ${response.status} (${response.statusText})`;
 }
 
-export function checkStorageAvailable(storageType: "localStorage" | "sessionStorage"): boolean | undefined {
+export function checkStorageAvailable(
+  storageType: "localStorage" | "sessionStorage",
+): boolean | undefined {
   // Check if the storage type is supported and available
   // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
   let storage;

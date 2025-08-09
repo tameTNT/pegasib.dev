@@ -2,9 +2,16 @@ import { Signal } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import Button from "../components/Button.tsx";
-import { PastGuess, guessResult } from "../enums.ts";
+import { guessResult, PastGuess } from "../enums.ts";
 
-export default function ShareButton({ gameIsOver, gameTitle, currentDate, history } : { gameIsOver: boolean, gameTitle: string, currentDate: Date, history: Signal<PastGuess[]> }) {
+export default function ShareButton(
+  { gameIsOver, gameTitle, currentDate, history }: {
+    gameIsOver: boolean;
+    gameTitle: string;
+    currentDate: Date;
+    history: Signal<PastGuess[]>;
+  },
+) {
   const [successfulCopy, setSuccessfulCopy] = useState(false);
 
   function handleButtonClick() {
@@ -27,7 +34,7 @@ export default function ShareButton({ gameIsOver, gameTitle, currentDate, histor
           shareMessage += "⬜"; // White square
           break;
       }
-    })
+    });
     shareMessage += `\nTry and beat my score: ${globalThis.location.href}`;
 
     // Copy message to clipboard
@@ -43,9 +50,13 @@ export default function ShareButton({ gameIsOver, gameTitle, currentDate, histor
   return (
     <div class="flex flex-row items-center justify-center gap-2 duration-1s mb-4">
       Share score:
-      <Button class={`rounded-full italic${successfulCopy ? " !bg-green-400" : ""}`} onClick={handleButtonClick} disabled={!gameIsOver}>
-        <img src="share_icon.svg" alt="Share icon"/>
+      <Button
+        class={`rounded-full italic${successfulCopy ? " !bg-green-400" : ""}`}
+        onClick={handleButtonClick}
+        disabled={!gameIsOver}
+      >
+        <img src="share_icon.svg" alt="Share icon" />
       </Button>
     </div>
-  )
+  );
 }
