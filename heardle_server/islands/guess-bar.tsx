@@ -5,7 +5,7 @@ import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult } from "./islandProps.ts";
-import {makeArtistString} from "../helpers.tsx";
+import {makeArtistString, makeErrorMessage} from "../helpers.tsx";
 
 export default function GuessBar(props: GuessInfoProps) {
   const [isOver, setIsOver] = useState(false);
@@ -26,14 +26,13 @@ export default function GuessBar(props: GuessInfoProps) {
     }
 
     fetch(`/api/todays-song/check?id=${guessedId}&isFinal=${props.current.value + 1 == props.max}`)
-      .then((res) => {
-        if (res.ok) {
-          return res.json() as unknown as CheckApiResponse;
+      .then((response) => {
+        if (response.ok) {
+          return response.json() as unknown as CheckApiResponse;
         } else {
-          throw new Error(`Status ${res.status} | ${res.statusText}`);
+          throw new Error(makeErrorMessage(response));
         }
-      })
-      .then(({ isCorrect, songData, correctSong }) => {
+      }).then(({ isCorrect, songData, correctSong }) => {
         // console.log(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
@@ -73,7 +72,10 @@ export default function GuessBar(props: GuessInfoProps) {
           if (!correctSong) throw new Error("No correctSong returned by API, but max guesses reached.");
           alert(`😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${makeArtistString(correctSong.artists)} on ${correctSong.album.name}.`);
         } // todo: add answer to page permanently, so it can be seen after the game is over
-      }).catch((err) => console.error(`Error while verifying guess: ${err}.`));
+      }).catch((err) => {
+        alert("Unable to verify guess on the server. Please try again later.");
+        console.error(`Error while verifying guess: ${err}.`);
+      });
   }
 
   return (

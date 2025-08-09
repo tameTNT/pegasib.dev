@@ -2,7 +2,7 @@ import { JSX } from "preact";
 import { Signal, useSignalEffect } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 
-import { getSubtitleForSong, makeArtistString } from "../helpers.tsx";
+import {getSubtitleForSong, makeArtistString, makeErrorMessage} from "../helpers.tsx";
 
 export default function SearchBar(
   props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number>, inputValue: string, setInputValue: (value: string) => void },
@@ -15,19 +15,22 @@ export default function SearchBar(
 
   useEffect(() => { // Fetch all songs when the component mounts
     async function fetchSongs() {
-      try {
-        const response = await fetch("/api/all-songs");
-        if (response.ok) {
-          const data: Song[] = await response.json();
-          setAllSongs(data);
-        } else {
-          console.error("Failed to fetch songs:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching songs:", error);
+      const response = await fetch("/api/all-songs");
+      if (response.ok) {
+        const data: Song[] = await response.json();
+        setAllSongs(data);
+      } else {
+        throw new Error(makeErrorMessage(response))
       }
     }
-    fetchSongs().then(() => console.log("Songs fetched successfully"));
+    fetchSongs()
+      .then(() => {
+        console.log("Songs fetched successfully.")
+      }).catch((error) => {
+        // This is the only place we alert the user that connection failed
+        alert("Unable to load song data. Please try again later.");
+        console.error(`Error while fetching songs: ${error}.`);
+      });
   }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => { // runs whenever inputValue or allSongs changes

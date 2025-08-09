@@ -4,7 +4,7 @@ import { useSignalEffect } from "@preact/signals";
 import Button from "../components/Button.tsx";
 
 import { GuessInfoProps } from "./islandProps.d.ts";
-import { hasWon } from "../helpers.tsx";
+import {hasWon, makeErrorMessage} from "../helpers.tsx";
 import {guessResult} from "./islandProps.ts";
 
 export default function SongBar(props: GuessInfoProps) {
@@ -37,44 +37,43 @@ export default function SongBar(props: GuessInfoProps) {
 
   useEffect(() => {
     async function fetchSongPreview() {
-      try {
-        const response = await fetch("/api/todays-song/preview-url");
-        if (response.ok) {
-          const urlString = await response.text();
-          setSongPreviewUrl(urlString);
-        } else {
-          throw new Error(response.statusText);
-        }
-      } catch (error) {
-        throw new Error(`Error fetching song preview url: ${error}`);
+      const response = await fetch("/api/todays-song/preview-url");
+      if (response.ok) {
+        const urlString = await response.text();
+        setSongPreviewUrl(urlString);
+      } else {
+        throw new Error(makeErrorMessage(response))
       }
     }
-    fetchSongPreview().then(() => {
-      const audioElement = document.querySelector("audio");
-      if (!audioElement) {
-        throw new Error("No audio HTML element found on page.");
-      }
+    fetchSongPreview()
+      .then(() => {
+        const audioElement = document.querySelector("audio");
+        if (!audioElement) {
+          throw new Error("No audio HTML element found on page.");
+        }
 
-      audioElement.volume = 0.1;
-      audioElement.currentTime = 0; // Reset to the start
-      // console.log(`Set volume to ${audioElement.volume}`);
+        audioElement.volume = 0.1;
+        audioElement.currentTime = 0; // Reset to the start
+        // console.log(`Set volume to ${audioElement.volume}`);
 
-      audioElement.addEventListener("canplaythrough", () => {
-        // duration is not defined until the audio is loaded and can play through
-        // console.log(`Set max audio duration to ${audioElement.duration} seconds.`);
-        snippetLengthsRef.current[snippetLengthsRef.current.length - 1] =
-          audioElement.duration;
-      });
+        audioElement.addEventListener("canplaythrough", () => {
+          // duration is not defined until the audio is loaded and can play through
+          // console.log(`Set max audio duration to ${audioElement.duration} seconds.`);
+          snippetLengthsRef.current[snippetLengthsRef.current.length - 1] =
+            audioElement.duration;
+        });
 
-      audioElement.addEventListener("play", () => {
-        if (legalStartRef.current) return;
-        // The user used external controls to play/pause the audio!
-        resetAudio();
-        alert("Please only use the on-page play/pause button.");
-      });
-      audioElement.addEventListener("pause", () => {
-        legalStartRef.current = false; // Reset legal start when the audio is paused
-      });
+        audioElement.addEventListener("play", () => {
+          if (legalStartRef.current) return;
+          // The user used external controls to play/pause the audio!
+          resetAudio();
+          alert("Please only use the on-page play/pause button.");
+        });
+        audioElement.addEventListener("pause", () => {
+          legalStartRef.current = false; // Reset legal start when the audio is paused
+        });
+    }).catch((error) => {
+      console.error(`Error while fetching preview url: ${error}.`);
     });
   }, []);
 

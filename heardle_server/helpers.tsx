@@ -16,3 +16,8 @@ export function getSubtitleForSong(song: Song) {
 export function hasWon(history: PastGuess[]): boolean {
   return history.some((guess) => guess.result === guessResult.CORRECT);
 }
+
+export function makeErrorMessage(response: Response): string {
+  // Return the status and statusText, and the response body as text
+  return `status ${response.status} (${response.statusText})`;
+}
