@@ -15,7 +15,7 @@ export default function App({ Component }: PageProps) {
       <meta property="og:title" content="🎧 LOONA Heardle 🌌" />
       <meta property="og:description"
             content="Guess the LOONA song (including all solo, subunit, and post-BBC songs – up to Soft Error) from as short an audio clip as possible. New song every day." />
-      <meta property="og:image" content="preview_poster.png" />
+      <meta property="og:image" content="https://loona-heardle.pegasib.dev/preview_poster.png" />
       {/*<meta name="twitter:card" content="summary_large_image"/>*/}
     </head>
     <body>
