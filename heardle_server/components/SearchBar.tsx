@@ -103,7 +103,7 @@ export default function SearchBar(
           ref={suggestionsRef}
           class="bg-gray-100 dark:bg-slate-500 border border-gray-300 dark:border-white rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
         >
-          {suggestions.map((song) => (
+          {suggestions.map((song) => ( // todo: interacts weirdly with keyboards on mobile (can't be scrolled)
             <div
               key={song}
               tabindex={0}

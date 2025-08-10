@@ -92,6 +92,7 @@ export default function Root(
             <abbr title={tmrwDate.toLocaleString([])}>
               {tmrwDate.toLocaleTimeString([], timeOptions)}
             </abbr>.
+          {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
             <a href="/api/list" target="_blank">List of tracks.</a>{" "}
