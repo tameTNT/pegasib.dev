@@ -18,7 +18,7 @@ export default function ShareButton(
     if (!gameIsOver) return; // Do nothing if the game is not over
 
     // Create the share message (in dd/mm/yyyy format)
-    let shareMessage = `${gameTitle} ${currentDate.toLocaleDateString("en-GB")}\n`;
+    let shareMessage = `${gameTitle} ${currentDate.toLocaleDateString("en-GB")}\n🎧 `;
     history.value.forEach((guess) => {
       switch (guess.result) {
         case guessResult.CORRECT:
