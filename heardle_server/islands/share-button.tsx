@@ -55,7 +55,7 @@ export default function ShareButton(
         onClick={handleButtonClick}
         disabled={!gameIsOver}
       >
-        <img src="share_icon.svg" alt="Share icon" />
+        <img src="copy_icon.svg" alt="Copy icon" />
       </Button>
     </div>
   );
