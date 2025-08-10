@@ -4,3 +4,8 @@ export enum guessResult {
   SKIPPED = "skipped",
   CORRECT = "correct",
 }
+
+export interface PastGuess {
+  song?: Song;
+  result: guessResult;
+}

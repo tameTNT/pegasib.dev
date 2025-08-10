@@ -4,10 +4,13 @@ import SearchBar from "../components/SearchBar.tsx";
 import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
-import { guessResult } from "./islandProps.ts";
+import { guessResult } from "../enums.ts";
+import { makeArtistString, makeErrorMessage } from "../helpers.tsx";
 
-export default function GuessBar(props: GuessInfoProps) {
-  const [hasWon, setHasWon] = useState(false);
+export default function GuessBar(
+  props: GuessInfoProps & { isGameOver: boolean },
+) {
+  const [inputValue, setInputValue] = useState("");
 
   function handleGuess() {
     // Handle the guess submission logic here
@@ -18,20 +21,24 @@ export default function GuessBar(props: GuessInfoProps) {
     if (!guessedId) return; // No song selected, do nothing
 
     if (props.history.value.some((guess) => guess.song?.id === guessedId)) {
-      alert("You have already guessed this song!"); // todo: show modals instead of alerts
+      alert("You have already guessed that song!"); // todo: show modals instead of alerts (easier now that root is an island)
+      setInputValue(""); // Clear input field
       return; // todo: strange bug where I can't click on input without first clicking somewhere else
     }
 
-    fetch(`/api/todays-song/check?id=${guessedId}`)
-      .then((res) => {
-        if (res.ok) {
-          return res.json() as unknown as CheckApiResponse;
+    fetch(
+      `/api/todays-song/check?id=${guessedId}&isFinal=${
+        props.current.value + 1 == props.max
+      }`,
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json() as unknown as CheckApiResponse;
         } else {
-          throw new Error(`Status ${res.status} | ${res.statusText}`);
+          throw new Error(makeErrorMessage(response));
         }
-      })
-      .then(({ isCorrect, songData }) => {
-        // console.log(`guess count=${props.current.value}`, isCorrect);
+      }).then(({ isCorrect, songData, correctSong }) => {
+        // console.debug(`guess count=${props.current.value}`, isCorrect);
         if (props.current.value >= props.max) return;
 
         // Update the history by redefining array to trigger reactivity signal
@@ -49,8 +56,9 @@ export default function GuessBar(props: GuessInfoProps) {
         }
         props.history.value = newHistory;
 
-        props.current.value++;
+        props.current.value++; // Increment the current guess count
 
+        // Flash the footer background color based on the guess result
         const footerEl = document.querySelector("footer");
         if (footerEl) {
           const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
@@ -62,34 +70,49 @@ export default function GuessBar(props: GuessInfoProps) {
           }
         }
 
+        // Show an alert if the guess is correct or if the max guesses have been reached
         if (isCorrect) {
-          setHasWon(true);
-          alert(`Well Done! Come back tomorrow (UTC) for a new song!`);
-        }
-      })
-      .catch((err) => console.error(`Error while verifying guess: ${err}.`));
+          alert(`🥳 Well Done! See you tomorrow 👋`);
+        } else if (props.current.value >= props.max) {
+          if (!correctSong) {
+            throw new Error(
+              "No correctSong returned by API, but max guesses reached.",
+            );
+          }
+          alert(
+            `😢 You have used all ${props.max} guesses. Better luck tomorrow!\nThe answer was ${correctSong.name} by ${
+              makeArtistString(correctSong.artists)
+            } on ${correctSong.album.name}.`,
+          );
+        } // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
+      }).catch((err) => {
+        alert("Unable to verify guess on the server. Please try again later.");
+        console.error(`Error while verifying guess: ${err}.`);
+      });
   }
 
   return (
-    <div class="flex justify-center w-80">
-      <div class="flex flex-row align-center gap-1">
-        <div class="flex-1">
-          <SearchBar
-            placeholder="Search by title, album, or artist"
-            size={25}
-            guessCount={props.current}
-            disabled={hasWon}
-          />
-        </div>
+    <div class="flex flex-row align-middle justify-center gap-2 w-4/5 md:w-1/2">
+      <div class="w-4/5 md:w-full">
+        <SearchBar
+          placeholder="Search by title, album or artist"
+          name="songName"
+          guessCount={props.current}
+          disabled={props.isGameOver}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
+      </div>
+      <div class="">
         <Button
           type="button"
           class="rounded"
           onClick={handleGuess}
-          disabled={hasWon}
+          disabled={props.isGameOver}
         >
           Guess!
         </Button>
       </div>
     </div>
   );
-} // todo: still breaks on very narrow viewports like Fold due to fixed input width
+}

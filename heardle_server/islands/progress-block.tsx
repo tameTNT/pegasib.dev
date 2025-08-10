@@ -1,7 +1,8 @@
 import { JSX } from "preact";
+import { useSignalEffect } from "@preact/signals";
 
-import { GuessInfoProps, PastGuess } from "./islandProps.d.ts";
-import { guessResult } from "./islandProps.ts";
+import { GuessInfoProps } from "./islandProps.d.ts";
+import { guessResult, PastGuess } from "../enums.ts";
 import { getSubtitleForSong } from "../helpers.tsx";
 
 const GuessStatusComponent = (
@@ -13,20 +14,20 @@ const GuessStatusComponent = (
   },
 ) => {
   let classStyle =
-    "p-2 w-full text-center rounded transition-color duration-500 ";
+    "p-2 w-full text-center rounded transition-color transition-border duration-500 ";
   const guessedSong = props.guess.song;
   let resultText: string;
 
-  switch (props.guess.result) { // todo: make current guess bigger (shrink others)
+  switch (props.guess.result) {
     case guessResult.NONE:
       if (
         props.correctIndex !== -1 && props.componentIndex >= props.correctIndex
       ) { // If the guess is after a correct one
-        classStyle += "bg-gray-300";
+        classStyle += "bg-gray-400";
       } else if (props.componentIndex === props.activeIndex) {
-        classStyle += "bg-sky-500 border-2 border-black";
+        classStyle += "bg-sky-500 border-2 border-black dark:border-white";
       } else {
-        classStyle += "bg-sky-200";
+        classStyle += "bg-sky-300";
       }
       resultText = "\u00A0"; // Non-breaking space for empty state
       break;
@@ -35,7 +36,7 @@ const GuessStatusComponent = (
       resultText = "Incorrect";
       break;
     case guessResult.SKIPPED:
-      classStyle += "bg-orange-400 text-black";
+      classStyle += "bg-orange-300 text-black";
       resultText = "Skipped";
       break;
     case guessResult.CORRECT:
@@ -46,11 +47,10 @@ const GuessStatusComponent = (
 
   return (
     // todo: add album art
-    // todo: fix resizing glitch when text is loaded?
-    <div {...props} class={classStyle}>
+    <div {...props} class={classStyle} id={`guess-${props.componentIndex}`}>
       {guessedSong && (
         <div class="">
-          <span class="font-semibold">{guessedSong.name}</span> by{" "}
+          <span class="font-bold">{guessedSong.name}</span> by{" "}
           {getSubtitleForSong(guessedSong)}
         </div>
       )}
@@ -63,16 +63,27 @@ export default function ProgressBlock(props: GuessInfoProps) {
   const correctIndex = props.history.value.findIndex((item) =>
     item.result === guessResult.CORRECT
   );
-  const activeGuess = props.current.value;
 
-  return ( // todo: stop width resizing when new guess is added
+  useSignalEffect(() => { // Runs whenever current Signal changes
+    if (props.current.value > 0) {
+      const activeGuessEl = document.getElementById(
+        `guess-${props.current.value}`,
+      );
+
+      if (activeGuessEl) {
+        activeGuessEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  });
+
+  return (
     <div class="m-2 flex flex-col items-center gap-2">
       {props.history.value.map((item, index) => (
         <GuessStatusComponent
           key={index}
           guess={item}
           componentIndex={index}
-          activeIndex={activeGuess}
+          activeIndex={props.current.value}
           correctIndex={correctIndex}
         />
       ))}

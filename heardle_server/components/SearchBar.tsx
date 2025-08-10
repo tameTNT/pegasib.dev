@@ -2,12 +2,19 @@ import { JSX } from "preact";
 import { Signal, useSignalEffect } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
 
-import { getSubtitleForSong, makeArtistString } from "../helpers.tsx";
+import {
+  getSubtitleForSong,
+  makeArtistString,
+  makeErrorMessage,
+} from "../helpers.tsx";
 
 export default function SearchBar(
-  props: JSX.HTMLAttributes<HTMLInputElement> & { guessCount: Signal<number> },
+  props: JSX.HTMLAttributes<HTMLInputElement> & {
+    guessCount: Signal<number>;
+    inputValue: string;
+    setInputValue: (value: string) => void;
+  },
 ) {
-  const [inputValue, setInputValue] = useState("");
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [allSongs, setAllSongs] = useState<Song[]>([]);
@@ -16,24 +23,27 @@ export default function SearchBar(
 
   useEffect(() => { // Fetch all songs when the component mounts
     async function fetchSongs() {
-      try {
-        const response = await fetch("/api/all-songs");
-        if (response.ok) {
-          const data: Song[] = await response.json();
-          setAllSongs(data);
-        } else {
-          console.error("Failed to fetch songs:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching songs:", error);
+      const response = await fetch("/api/all-songs");
+      if (response.ok) {
+        const data: Song[] = await response.json();
+        setAllSongs(data);
+      } else {
+        throw new Error(makeErrorMessage(response));
       }
     }
-    fetchSongs().then(() => console.log("Songs fetched successfully"));
+    fetchSongs()
+      .then(() => {
+        console.debug("Songs fetched successfully.");
+      }).catch((error) => {
+        // This is the only place we alert the user that connection failed
+        alert("Unable to load song data. Please try again later.");
+        console.error(`Error while fetching songs: ${error}.`);
+      });
   }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => { // runs whenever inputValue or allSongs changes
-    const query = inputValue.toLowerCase();
-    if (inputValue.length > 0) {
+    const query = props.inputValue.toLowerCase();
+    if (props.inputValue.length > 0) {
       const filteredSuggestions = allSongs.filter((song) =>
         song.name.toLowerCase().includes(query) ||
         makeArtistString(song.artists).toLowerCase().includes(query) ||
@@ -45,12 +55,12 @@ export default function SearchBar(
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [inputValue, allSongs]);
+  }, [props.inputValue, allSongs]);
 
   useSignalEffect(() => { // Runs whenever guessCount Signal changes
     if (props.guessCount.value > 0) {
       // Reset the input and selected song when a guess is made
-      setInputValue("");
+      props.setInputValue("");
       setSelectedSong(null);
       setSuggestions([]);
       setShowSuggestions(false);
@@ -58,18 +68,18 @@ export default function SearchBar(
   });
 
   function handleInputChange(event: JSX.TargetedEvent<HTMLInputElement>) {
-    setInputValue(event.currentTarget.value);
+    props.setInputValue(event.currentTarget.value);
     setSelectedSong(null);
   }
 
   function handleSuggestionClick(song: Song) {
-    setInputValue(song.name);
+    props.setInputValue(song.name);
     setSelectedSong(song);
     setShowSuggestions(false);
   }
 
   function handleFocus() {
-    if (inputValue.length > 0) {
+    if (props.inputValue.length > 0) {
       setShowSuggestions(true);
     }
   }
@@ -87,22 +97,22 @@ export default function SearchBar(
   }
 
   return (
-    <div class="relative">
+    <div class="relative text-sm w-full">
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          class="bg-gray-100 border border-gray-300 rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
+          class="bg-gray-100 dark:bg-slate-500 border border-gray-300 dark:border-white rounded absolute z-10 mb-2 w-full max-h-40 bottom-full overflow-y-auto"
         >
           {suggestions.map((song) => (
             <div
               key={song}
               tabindex={0}
-              class="z-10 p-2 border border-gray-300 hover:bg-cyan-200"
+              class="z-10 p-2 border border-gray-300 dark:border-white hover:bg-cyan-200 hover:dark:bg-gray-600 text-black dark:text-white"
               onClick={() => handleSuggestionClick(song)}
               onKeyDown={(e) =>
                 e.key === "Enter" ? handleSuggestionClick(song) : undefined}
             >
-              <p>{song.name}</p>
+              <p class="font-semibold">{song.name}</p>
               <p>By {getSubtitleForSong(song)}</p>
             </div>
           ))}
@@ -110,21 +120,20 @@ export default function SearchBar(
       )}
       <input
         {...props}
-        type="text"
+        type="search"
         tabindex={0}
-        class="border border-gray-300 rounded text-xl p-2"
-        value={inputValue}
+        class="w-full border border-gray-300 text-black rounded p-2"
+        value={props.inputValue}
         onInput={handleInputChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      <div class="text-xs text-right py-1 pe-1">
-        {(selectedSong && <p>By {getSubtitleForSong(selectedSong)}</p>) || (
-          <i>Type a valid guess above ⬆️</i>
-        )}
-      </div>
-      {/* todo: handle text overflow (rather than new line) for long song/artists names (e.g. Sweet Crazy Love Eng) */}
-      <span class="hidden" id="songId">
+      <p class="p-1 text-xs truncate text-right">
+        {selectedSong
+          ? <>By {getSubtitleForSong(selectedSong)}</>
+          : <i>Type a valid guess above ⬆️</i>}
+      </p>
+      <span hidden id="songId">
         {selectedSong ? selectedSong.id : ""}
       </span>
     </div>
