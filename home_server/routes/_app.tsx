@@ -13,7 +13,6 @@ export default function App({ Component }: PageProps) {
         />
         <title>51 Pegasi b</title>
         <link rel="stylesheet" href="/styles.css" />
-        <script type="text/javascript" src="/bg_cursor_move.js" defer></script>
       </head>
       <body>
         <Component />

@@ -1,7 +1,6 @@
 export default function Home() {
   return (
     <div class="text-white">
-      <script type="text/javascript" src="/home_icon_swell.js" defer></script>
       <div id="spaceScene"></div>
       <div class="flex flex-row min-h-screen justify-center items-center">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center px-5 md:w-2/3">

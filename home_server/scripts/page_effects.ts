@@ -1,5 +1,6 @@
 import { isVPSmallerThanmd } from "./common.ts";
 
+// == Background movement and gradient angle effect ==
 const scene = document.getElementById("spaceScene");
 const title = document.querySelector("h1");
 const root = document.documentElement;
@@ -72,3 +73,34 @@ if (scene !== null && title !== null) {
     }, 1000); // todo: fix snapping to new position after 'resting' ends
   });
 }
+
+// == Icon grow effect on cursor proximity ==
+const icons: NodeListOf<HTMLDivElement> = document.querySelectorAll("div.icon");
+
+document.addEventListener("mousemove", (e) => {
+  for (const icon of icons) {
+    const bounds = icon.getBoundingClientRect();
+    const midX = bounds.right - (bounds.right - bounds.left) / 2;
+    const midY = bounds.bottom - (bounds.bottom - bounds.top) / 2;
+
+    let maxScale: number;
+    let scaleFactor: number;
+    if (isVPSmallerThanmd()) { // small screens stack icons in column
+      maxScale = 1.3;
+      scaleFactor = 100;
+    } else { // large screens have icons in a row
+      maxScale = 1.5; // sets maximum size icons grow to (1.5)
+      scaleFactor = 200; // higher number activates icons from further away (200)
+    }
+    const xtoCursor = Math.abs(midX - e.pageX);
+    const ytoCursor = Math.abs(midY - e.pageY);
+    const distance = Math.sqrt(xtoCursor ** 2 + ytoCursor ** 2);
+    icon.style.scale = Math.max(maxScale - distance / scaleFactor, 1).toFixed(
+      3,
+    );
+  }
+});
+
+// Required default export to let this be a Fresh plugin (see docs)
+// deno-lint-ignore no-explicit-any
+export default function (_foo: any) {};
