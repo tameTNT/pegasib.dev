@@ -46,7 +46,7 @@ if (scene !== null && title !== null) {
       },angle=${angleDeg}`;
     }
 
-    const offsetSeverity = 0.01; // higher number for more background movement (0.01)
+    const offsetSeverity = 0.005; // higher number for more background movement (0.01)
     const ratioAdjustment = 3 * window_width / window_height; // tune width/height movement (3)
     const xOffset = relativeX * ratioAdjustment * window_width * offsetSeverity;
     const yOffset = relativeY * window_height * offsetSeverity;
