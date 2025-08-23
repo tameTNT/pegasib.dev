@@ -12,6 +12,10 @@ body {
   font-style: normal;
 }
 
+a {
+  @apply max-md:underline md:hover:underline;
+}
+
 @property --xPos {
   syntax: "<percentage>";
   initial-value: 50%;
