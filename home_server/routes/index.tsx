@@ -4,30 +4,30 @@ export default function Home() {
       <script type="text/javascript" src="/home_icon_swell.js" defer></script>
       <div id="spaceScene"></div>
       <div class="flex flex-row min-h-screen justify-center items-center">
-        <div class="md:grid md:grid-cols-4 gap-4 justify-items-center px-10 md:w-2/3">
-          <h1 class="col-span-4 -mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center px-5 md:w-2/3">
+          <h1 class="col-span-2 md:col-span-4 -mb-4">
             51<br class="md:hidden" /> Pegasi b
           </h1>
-          <div class="max-md:my-10 md:col-span-2 md:col-end-4 text-lg text-center">
-            <p>Personal site of Luca Huelle</p>
+          <div class="col-span-2 md:col-end-4 text-lg text-center">
+            <p>Personal site of Luca&nbsp;Huelle</p>
             <p>Programming & Applied Mathematics Graduate</p>
           </div>
-          <div class="max-md:my-10 h-12 md:h-9 icon md:col-start-1">
+          <div class="h-9 icon col-start-1">
             <a href="/links/linkedin" target="_blank">
               <object data="icons/linkedin.svg" />
             </a>
           </div>
-          <div class="max-md:my-10 h-12 md:h-9 icon">
+          <div class="h-9 icon">
             <a href="/links/github" target="_blank">
               <object data="icons/github.svg" />
             </a>
           </div>
-          <div class="max-md:my-10 h-12 md:h-9 icon">
+          <div class="h-9 icon">
             <a href="mailto:wave@pegasib.dev">
               <object data="icons/email.svg" />
             </a>
           </div>
-          <div class="max-md:my-10 h-12 md:h-9 icon">
+          <div class="h-9 icon">
             <a href="/links/wikipedia" target="_blank">
               <object data="icons/wikipedia.svg" />
             </a>
@@ -38,13 +38,13 @@ export default function Home() {
         <p>
           Background by ESO/Digitized Sky Survey
           2:<br className="md:hidden" />
-          <a
+          {" "}<a
             rel="nofollow"
             class="external text"
             target="_blank"
             href="https://www.eso.org/public/images/eso1517c/"
           >
-            {" "}ESO website
+            ESO website
           </a>,{" "}
           <a
             href="https://commons.wikimedia.org/w/index.php?curid=39719449"
@@ -61,7 +61,7 @@ export default function Home() {
           </a>
         </p>
         <p>
-          Planet favicon by Vicons Design from{" "}
+          Planet favicon by Vicons Design from <br className="md:hidden" />
           <a
             href="https://thenounproject.com/browse/icons/term/planet/"
             target="_blank"
