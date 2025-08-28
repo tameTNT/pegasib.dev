@@ -71,3 +71,7 @@ Then follow the following steps:
    deno task start
    ```
    The local server will start on port [9989](http://localhost:9989).
+
+## Changelog
+
+- **v2.0.3** – 🐛 Fix song cycle start date

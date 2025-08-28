@@ -5,6 +5,6 @@ export default function Home() {
   const MAX_GUESSES = 6; // total number of guesses allowed set on server side
 
   return ( // todo: Korean localisation/translation of home page
-    <Root version="v2.0.2" gameTitle={GAME_TITLE} maxGuesses={MAX_GUESSES} />
+    <Root version="v2.0.3" gameTitle={GAME_TITLE} maxGuesses={MAX_GUESSES} />
   );
 }
