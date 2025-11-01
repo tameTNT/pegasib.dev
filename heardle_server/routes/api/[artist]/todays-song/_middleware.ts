@@ -23,5 +23,6 @@ export const handler = (
   ctx: FreshContext<SongDataWithIndexState>,
 ) => {
   ctx.state.selectedIndex = randomDateIndex(ctx.state.songData.length);
+  // todo: add logs to server side
   return ctx.next();
 };
