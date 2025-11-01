@@ -1,6 +1,7 @@
 import { JSX } from "preact";
 import { Signal, useSignalEffect } from "@preact/signals";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { supportedArtist } from "../enums.ts";
 
 import {
   getSubtitleForSong,
@@ -13,6 +14,7 @@ export default function SearchBar(
     guessCount: Signal<number>;
     inputValue: string;
     setInputValue: (value: string) => void;
+    artistVariant: supportedArtist;
   },
 ) {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
@@ -23,7 +25,7 @@ export default function SearchBar(
 
   useEffect(() => { // Fetch all songs when the component mounts
     async function fetchSongs() {
-      const response = await fetch("/api/all-songs");
+      const response = await fetch(`/api/${props.artistVariant}/all-songs`);
       if (response.ok) {
         const data: Song[] = await response.json();
         setAllSongs(data);

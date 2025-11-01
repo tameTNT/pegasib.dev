@@ -27,7 +27,7 @@ export default function GuessBar(
     }
 
     fetch(
-      `/api/todays-song/check?id=${guessedId}&isFinal=${
+      `/api/${props.artistVariant}/todays-song/check?id=${guessedId}&isFinal=${
         props.current.value + 1 == props.max
       }`,
     )
@@ -101,6 +101,7 @@ export default function GuessBar(
           disabled={props.isGameOver}
           inputValue={inputValue}
           setInputValue={setInputValue}
+          artistVariant={props.artistVariant}
         />
       </div>
       <div class="">

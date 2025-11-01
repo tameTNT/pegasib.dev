@@ -5,6 +5,11 @@ export enum guessResult {
   CORRECT = "correct",
 }
 
+export enum supportedArtist {
+  LOONA = "loona",
+  GFRIEND = "gfriend",
+}
+
 export interface PastGuess {
   song?: Song;
   result: guessResult;

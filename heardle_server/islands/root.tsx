@@ -4,7 +4,7 @@ import { useState } from "preact/hooks";
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import { guessResult, PastGuess } from "../enums.ts";
+import {guessResult, PastGuess, supportedArtist} from "../enums.ts";
 import { checkStorageAvailable, hasWon } from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
 
@@ -16,6 +16,7 @@ export default function Root(
   },
 ) {
   const [isGameOver, setIsGameOver] = useState(false);
+  const [artistVariant, setArtistVariant] = useState<supportedArtist>(supportedArtist.LOONA);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
@@ -95,7 +96,7 @@ export default function Root(
           {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href="/api/list" target="_blank">List of tracks.</a>{" "}
+            <a href={`/api/${artistVariant}/list`} target="_blank">List of tracks.</a>{" "}
             All audio courtesy of{" "}
             <a
               href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn"
@@ -104,10 +105,12 @@ export default function Root(
               Spotify
             </a>.
           </p>
+          {/* todo: update props of these to just pass one sturct? */}
           <ProgressBlock
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            artistVariant={artistVariant}
           />
           <ShareButton
             gameIsOver={isGameOver}
@@ -121,12 +124,14 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            artistVariant={artistVariant}
           />
           <GuessBar
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
             isGameOver={isGameOver}
+            artistVariant={artistVariant}
           />
         </footer>
       </div>

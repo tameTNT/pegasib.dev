@@ -38,7 +38,7 @@ export default function SongBar(props: GuessInfoProps) {
 
   useEffect(() => {
     async function fetchSongPreview() {
-      const response = await fetch("/api/todays-song/preview-url");
+      const response = await fetch(`/api/${props.artistVariant}/todays-song/preview-url`);
       if (response.ok) {
         const urlString = await response.text();
         setSongPreviewUrl(urlString);

@@ -1,5 +1,5 @@
 import { FreshContext } from "$fresh/server.ts";
-import { makeArtistString } from "../../helpers.tsx";
+import { makeArtistString } from "../../../helpers.tsx";
 
 export const handler = (_req: Request, ctx: FreshContext<SongDataState>) => {
   const songsAsArray: [string, string, string][] = [];
