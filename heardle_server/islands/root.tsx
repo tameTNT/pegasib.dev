@@ -4,19 +4,20 @@ import { useState } from "preact/hooks";
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import {guessResult, PastGuess, supportedArtist} from "../enums.ts";
+import {guessResult, PastGuess} from "../enums.ts";
 import { checkStorageAvailable, hasWon } from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
+import ToggleSelect from "../components/Toggle.tsx";
 
 export default function Root(
-  { version, gameTitle, maxGuesses }: {
+  { version, availableArtists, maxGuesses }: {
     version: string;
-    gameTitle: string;
+    availableArtists: string[];
     maxGuesses: number;
   },
 ) {
   const [isGameOver, setIsGameOver] = useState(false);
-  const [artistVariant, setArtistVariant] = useState<supportedArtist>(supportedArtist.LOONA);
+  const [artistIndex, setArtistIndex] = useState(0);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
@@ -84,7 +85,8 @@ export default function Root(
       </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <h1 class="text-5xl/[1.2]">{gameTitle}</h1>
+          <ToggleSelect currentIndex={artistIndex} setIndex={setArtistIndex} options={availableArtists} />
+          <h1 class="text-5xl/[1.2]">{availableArtists[artistIndex]} Heardle</h1>
           <h2 class="">
             Includes solo, subunit, and all post-BBC tracks (up to Soft Error)
           </h2>
@@ -96,7 +98,7 @@ export default function Root(
           {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href={`/api/${artistVariant}/list`} target="_blank">List of tracks.</a>{" "}
+            <a href={`/api/${availableArtists[artistIndex]}/list`} target="_blank">List of tracks.</a>{" "}
             All audio courtesy of{" "}
             <a
               href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn"
@@ -110,11 +112,11 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistVariant={artistVariant}
+            artistVariant={availableArtists[artistIndex]}
           />
           <ShareButton
             gameIsOver={isGameOver}
-            gameTitle={gameTitle}
+            gameTitle={`${availableArtists[artistIndex]} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
           />
@@ -124,14 +126,14 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistVariant={artistVariant}
+            artistVariant={availableArtists[artistIndex]}
           />
           <GuessBar
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
             isGameOver={isGameOver}
-            artistVariant={artistVariant}
+            artistVariant={availableArtists[artistIndex]}
           />
         </footer>
       </div>

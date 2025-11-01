@@ -18,7 +18,7 @@ function loadSongData(artist: string): Array<Song> {
 }
 
 export const handler = (_req: Request, ctx: FreshContext<SongDataState>) => {
-  if (["loona", "gfriend"].indexOf(ctx.params.artist) < 0) {
+  if (["LOONA", "GFriend"].indexOf(ctx.params.artist) < 0) {
     return new Response(`Invalid artist name: '${ctx.params.artist}'.`, { status: 400 }); // Return Bad Request status
   }
   try {
