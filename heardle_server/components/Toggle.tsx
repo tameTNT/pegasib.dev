@@ -24,7 +24,7 @@ export default function ToggleSelect(props: JSX.HTMLAttributes<HTMLButtonElement
   return (
     // Main container acts as the clickable surface.
     <div
-      className="inline-flex relative my-4 rounded-full bg-gray-200 shadow-inner cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
+      className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
       onClick={handleClick}
     >
       {/* The Moving Slider Element (Highlight)
