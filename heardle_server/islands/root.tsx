@@ -1,23 +1,24 @@
-import { signal, useSignalEffect } from "@preact/signals";
+import { signal, useSignal, useSignalEffect } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import {guessResult, PastGuess} from "../enums.ts";
+import {guessResult, PastGuess, gameArtistInfo} from "../enums.ts";
 import { checkStorageAvailable, hasWon } from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
-import ToggleSelect from "../components/Toggle.tsx";
+import ToggleSelect from "../components/ToggleSelect.tsx";
 
 export default function Root(
   { version, availableArtists, maxGuesses }: {
     version: string;
-    availableArtists: string[];
+    availableArtists: gameArtistInfo[];
     maxGuesses: number;
   },
 ) {
   const [isGameOver, setIsGameOver] = useState(false);
-  const [artistIndex, setArtistIndex] = useState(0);
+
+  const artistIndex = useSignal(0);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
@@ -68,6 +69,8 @@ export default function Root(
     }
   });
 
+  const currentArtist = availableArtists[artistIndex.value];
+
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
     <>
@@ -85,11 +88,9 @@ export default function Root(
       </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <ToggleSelect currentIndex={artistIndex} setIndex={setArtistIndex} options={availableArtists} />
-          <h1 class="text-5xl/[1.2]">{availableArtists[artistIndex]} Heardle</h1>
-          <h2 class="">
-            Includes solo, subunit, and all post-BBC tracks (up to Soft Error)
-          </h2>
+          <ToggleSelect currentIndex={artistIndex} options={availableArtists.map(a => a.name)} />
+          <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
+          <h2 class="">{currentArtist.blurb}</h2>
           <p class="italic text-xs">
             Next new song at{" "}
             <abbr title={tmrwDate.toLocaleString([])}>
@@ -98,25 +99,25 @@ export default function Root(
           {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href={`/api/${availableArtists[artistIndex]}/list`} target="_blank">List of tracks.</a>{" "}
+            <a href={`/api/${currentArtist.name}/list`} target="_blank">List of tracks.</a>{" "}
             All audio courtesy of{" "}
             <a
-              href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn"
+              href={currentArtist.playlist_url}
               target="_blank"
             >
               Spotify
             </a>.
           </p>
-          {/* todo: update props of these to just pass one sturct? */}
+          {/* todo: update props of these to just pass one struct? */}
           <ProgressBlock
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistVariant={availableArtists[artistIndex]}
+            artistForGame={currentArtist}
           />
           <ShareButton
             gameIsOver={isGameOver}
-            gameTitle={`${availableArtists[artistIndex]} Heardle`}
+            gameTitle={`${currentArtist.name} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
           />
@@ -126,14 +127,14 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistVariant={availableArtists[artistIndex]}
+            artistForGame={currentArtist}
           />
           <GuessBar
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
             isGameOver={isGameOver}
-            artistVariant={availableArtists[artistIndex]}
+            artistForGame={currentArtist}
           />
         </footer>
       </div>

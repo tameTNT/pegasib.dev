@@ -1,12 +1,12 @@
 import { Signal } from "@preact/signals";
 
-import {PastGuess, supportedArtist} from "../enums.ts";
+import {PastGuess, gameArtistInfo} from "../enums.ts";
 
 interface GuessInfoProps {
   max: number;
   current: Signal<number>;
   history: Signal<PastGuess[]>;
-  artistVariant: supportedArtist;
+  artistForGame: gameArtistInfo;
 }
 
 interface CheckApiResponse {
