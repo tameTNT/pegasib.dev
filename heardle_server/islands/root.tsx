@@ -1,4 +1,4 @@
-import { signal, useSignal, useSignalEffect } from "@preact/signals";
+import { useSignal, useSignalEffect } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
@@ -38,8 +38,8 @@ export default function Root(
   };
 
   // Set up the starting game state
-  const currentGuess = signal(0);
-  const guessHistory = signal<PastGuess[]>(
+  const currentGuess = useSignal(0);
+  const guessHistory = useSignal<PastGuess[]>(
     Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE }),
   );
   // Load previous game state from localStorage if available
@@ -88,7 +88,10 @@ export default function Root(
       </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <ToggleSelect currentIndex={artistIndex} options={availableArtists.map(a => a.name)} />
+          {availableArtists.length > 1 && (
+            <ToggleSelect currentIndex={artistIndex} options={availableArtists.map(a => a.name)}
+                          disabled={currentGuess.value > 0 && !isGameOver} />
+          )}
           <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
           <h2 class="">{currentArtist.blurb}</h2>
           <p class="italic text-xs">

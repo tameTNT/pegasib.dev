@@ -13,14 +13,16 @@ export default function ToggleSelect(props: JSX.HTMLAttributes<HTMLButtonElement
     <div
       className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
       onClick={() => {
+        if (props.disabled) return;
         props.currentIndex.value = (props.currentIndex.value + 1) % numOptions;
       }}
+      title={(props.disabled && "Complete your current game to switch artist.") || ""}
     >
       {/* The Moving Slider Element (Highlight)
         It uses the CSS variables set on the parent for positioning and size.
       */}
       <div
-        className="absolute h-full top-0 left-0 bg-sky-500 rounded-full shadow-md transition-all duration-300 ease-in-out"
+        className={`absolute h-full top-0 left-0 ${!props.disabled && "bg-sky-500"} ${props.disabled && "bg-gray-400"} rounded-full shadow-md transition-all duration-300 ease-in-out`}
         style={{
           width: `${sliderWidthPercent}%`,
           transform: `translateX(${props.currentIndex.value * 2 * sliderWidthPercent}%)`,
