@@ -4,7 +4,7 @@ import { useState } from "preact/hooks";
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import {guessResult, PastGuess, gameArtistInfo} from "../enums.ts";
+import { gameArtistInfo, guessResult, PastGuess } from "../enums.ts";
 import { checkStorageAvailable, hasWon } from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
 import ToggleSelect from "../components/ToggleSelect.tsx";
@@ -89,8 +89,11 @@ export default function Root(
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           {availableArtists.length > 1 && (
-            <ToggleSelect currentIndex={artistIndex} options={availableArtists.map(a => a.name)}
-                          disabled={currentGuess.value > 0 && !isGameOver} />
+            <ToggleSelect
+              currentIndex={artistIndex}
+              options={availableArtists.map((a) => a.name)}
+              disabled={currentGuess.value > 0 && !isGameOver}
+            />
           )}
           <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
           <h2 class="">{currentArtist.blurb}</h2>
@@ -99,10 +102,12 @@ export default function Root(
             <abbr title={tmrwDate.toLocaleString([])}>
               {tmrwDate.toLocaleTimeString([], timeOptions)}
             </abbr>.
-          {/* todo: fix abbr no hover display on mobile devices */}
+            {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href={`/api/${currentArtist.name}/list`} target="_blank">List of tracks.</a>{" "}
+            <a href={`/api/${currentArtist.name}/list`} target="_blank">
+              List of tracks.
+            </a>{" "}
             All audio courtesy of{" "}
             <a
               href={currentArtist.playlist_url}

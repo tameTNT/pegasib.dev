@@ -7,7 +7,7 @@ import {
   makeArtistString,
   makeErrorMessage,
 } from "../helpers.tsx";
-import {gameArtistInfo} from "../enums.ts";
+import { gameArtistInfo } from "../enums.ts";
 
 export default function SearchBar(
   props: JSX.HTMLAttributes<HTMLInputElement> & {
@@ -25,7 +25,9 @@ export default function SearchBar(
 
   useEffect(() => { // Fetch all songs when the selected artist name changes
     async function fetchSongs() {
-      const response = await fetch(`/api/${props.artistVariant.name}/all-songs`);
+      const response = await fetch(
+        `/api/${props.artistVariant.name}/all-songs`,
+      );
       if (response.ok) {
         const data: Song[] = await response.json();
         setAllSongs(data);

@@ -38,7 +38,9 @@ export default function SongBar(props: GuessInfoProps) {
 
   useEffect(() => {
     async function fetchSongPreview() {
-      const response = await fetch(`/api/${props.artistForGame.name}/todays-song/preview-url`);
+      const response = await fetch(
+        `/api/${props.artistForGame.name}/todays-song/preview-url`,
+      );
       if (response.ok) {
         const urlString = await response.text();
         setSongPreviewUrl(urlString);
@@ -57,7 +59,7 @@ export default function SongBar(props: GuessInfoProps) {
         audioElement.currentTime = 0; // Reset to the start
         // console.debug(`Set volume to ${audioElement.volume}`);
 
-        audioElement.load() // reset audio element to load potentially new url
+        audioElement.load(); // reset audio element to load potentially new url
 
         audioElement.addEventListener("canplaythrough", () => {
           // duration is not defined until the audio is loaded and can play through

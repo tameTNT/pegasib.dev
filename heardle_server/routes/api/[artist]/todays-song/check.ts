@@ -6,7 +6,7 @@ export const handler = {
     const guessedId = requestParams.get("id");
 
     const songDataForId = ctx.state.songData.find((song) => {
-      return song.id == guessedId
+      return song.id == guessedId;
     });
     // Validate this is a valid song ID, return an error if not
     if (guessedId === undefined || songDataForId === undefined) {

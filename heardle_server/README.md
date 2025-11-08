@@ -56,11 +56,13 @@ Then follow the following steps:
    git clone "URL" heardle_server # todo: insert dedicated repository URL here (after splitting)
    cd heardle_server
    ```
-2. You will need to create a [Spotify application](https://developer.spotify.com/documentation/web-api)
-   and obtain a client ID and secret to use the script. These values should be 
+2. You will need to create a
+   [Spotify application](https://developer.spotify.com/documentation/web-api)
+   and obtain a client ID and secret to use the script. These values should be
    saved in a `.env` file in the same or parent directory of the script.
-   Download song data by running the python script `update_track_info.py` via,
-   e.g. [uv](https://docs.astral.sh/uv/) (which automatically handles script dependencies):
+   Download song data by running the python script `update_track_info.py --help`
+   via, e.g. [uv](https://docs.astral.sh/uv/) (which automatically handles
+   script dependencies):
    ```bash
    uv run update_track_info.py
    ```
