@@ -26,7 +26,7 @@ client = Cloudflare()
 zone_id = os.getenv("CLOUDFLARE_ZONE_ID")
 
 DOMAIN_NAME = "pegasib.dev"
-subdomains_to_update = ["51", "kpop-heardle"]
+subdomains_to_update = ["51", "kpop-heardle", "loona-heardle"]
 for subdomain in subdomains_to_update:
     full_name = f"{subdomain}.{DOMAIN_NAME}"
 
