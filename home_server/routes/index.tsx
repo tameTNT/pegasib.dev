@@ -72,7 +72,7 @@ export default function Home() {
         </p>
       </div>
       <div class="absolute left-1 top-1 text-xs text-gray-500 italic hover:underline">
-        <a href="/links/heardle">LOONA Heardle game</a>
+        <a href="/links/heardle">Heardle</a>
       </div>
       <div class="hidden absolute left-1 bottom-1" id="debug">
         x=0.000,y=0.000,angle=0.000

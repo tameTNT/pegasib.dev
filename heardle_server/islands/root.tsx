@@ -1,21 +1,24 @@
-import { signal, useSignalEffect } from "@preact/signals";
-import { useState } from "preact/hooks";
+import { useSignal, useSignalEffect } from "@preact/signals";
+import { useState, useEffect } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
 import ProgressBlock from "./progress-block.tsx";
-import { guessResult, PastGuess } from "../enums.ts";
+import { gameArtistInfo, guessResult, PastGuess } from "../enums.ts";
 import { checkStorageAvailable, hasWon } from "../helpers.tsx";
 import ShareButton from "./share-button.tsx";
+import ToggleSelect from "../components/ToggleSelect.tsx";
 
 export default function Root(
-  { version, gameTitle, maxGuesses }: {
+  { version, availableArtists, maxGuesses }: {
     version: string;
-    gameTitle: string;
+    availableArtists: gameArtistInfo[];
     maxGuesses: number;
   },
 ) {
   const [isGameOver, setIsGameOver] = useState(false);
+
+  const artistIndex = useSignal(0);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
   const now = new Date();
@@ -35,34 +38,47 @@ export default function Root(
   };
 
   // Set up the starting game state
-  const currentGuess = signal(0);
-  const guessHistory = signal<PastGuess[]>(
-    Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE }),
-  );
-  // Load previous game state from localStorage if available
-  if (checkStorageAvailable("localStorage")) {
-    const storedDate = Number(localStorage.getItem("gameDate"));
-    const storedCurrentGuess = Number(localStorage.getItem("currentGuess"));
-    if (storedDate == currentDate.getTime() && storedCurrentGuess > 0) {
-      currentGuess.value = storedCurrentGuess;
-      guessHistory.value = JSON.parse(
-        localStorage.getItem("guessHistory") || "[]",
-      );
-      console.debug("Loaded previous game state from localStorage.");
+  const emptyHistory = Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE })
+  const currentGuess = useSignal(0);
+  const guessHistory = useSignal<PastGuess[]>(emptyHistory);
+
+  const currentArtist = availableArtists[artistIndex.value];
+
+  function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
+    console.debug(`Attempting to load game state (${artistName})...`);
+    if (checkStorageAvailable("localStorage")) {
+      const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`));
+      const storedCurrentGuess = localStorage.getItem(`${artistName}-currentGuess`);
+      if (storedCurrentGuess !== null) {
+        if (storedDate == currentDate.getTime()) {
+          currentGuess.value = Number(storedCurrentGuess);
+          guessHistory.value = JSON.parse(
+            localStorage.getItem(`${artistName}-guessHistory`) || JSON.stringify(emptyHistory),
+          );
+          console.debug(`Loaded previous game state (${artistName}) from localStorage.`);
+        }
+      }
+      else {
+        localStorage.setItem(`${artistName}-gameDate`, String(currentDate.getTime()));
+        localStorage.setItem(`${artistName}-currentGuess`, String(0));
+        localStorage.setItem(`${artistName}-guessHistory`, JSON.stringify(emptyHistory));
+        console.debug(`No existing data; saved empty game state (${artistName}) to localStorage.`);
+        // Reset page data also
+        currentGuess.value = 0;
+        guessHistory.value = emptyHistory;
+      }
     }
   }
-
-  useSignalEffect(() => { // Runs whenever currentGuess or guessHistory changes
-    if (checkStorageAvailable("localStorage")) {
-      localStorage.setItem("gameDate", String(currentDate.getTime()));
-      localStorage.setItem("currentGuess", String(currentGuess.value));
-      localStorage.setItem("guessHistory", JSON.stringify(guessHistory.value));
-    }
-  });
+  useEffect(() => {
+    loadGameState(currentArtist.name);
+  }, [])  // Load once on mount
 
   useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
+    console.debug("Game over check triggered");
     if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
       setIsGameOver(true); // Disable guessing if max guesses reached
+    } else {
+      setIsGameOver(false);
     }
   });
 
@@ -83,35 +99,45 @@ export default function Root(
       </a>
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
-          <h1 class="text-5xl/[1.2]">{gameTitle}</h1>
-          <h2 class="">
-            Includes solo, subunit, and all post-BBC tracks (up to Soft Error)
-          </h2>
+          {availableArtists.length > 1 && (
+            <ToggleSelect
+              currentIndex={artistIndex}
+              options={availableArtists.map((a) => a.name)}
+              disabled={currentGuess.value > 0 && !isGameOver}
+              extraOnClickFunction={loadGameState}
+            />
+          )}
+          <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
+          <h2 class="">{currentArtist.blurb}</h2>
           <p class="italic text-xs">
             Next new song at{" "}
             <abbr title={tmrwDate.toLocaleString([])}>
               {tmrwDate.toLocaleTimeString([], timeOptions)}
             </abbr>.
-          {/* todo: fix abbr no hover display on mobile devices */}
+            {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href="/api/list" target="_blank">List of tracks.</a>{" "}
+            <a href={`/api/${currentArtist.name}/list`} target="_blank">
+              List of tracks.
+            </a>{" "}
             All audio courtesy of{" "}
             <a
-              href="https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn"
+              href={currentArtist.playlist_url}
               target="_blank"
             >
               Spotify
             </a>.
           </p>
+          {/* todo: update props of these to just pass one struct? */}
           <ProgressBlock
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            artistForGame={currentArtist}
           />
           <ShareButton
             gameIsOver={isGameOver}
-            gameTitle={gameTitle}
+            gameTitle={`${currentArtist.name} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
           />
@@ -121,12 +147,15 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            artistForGame={currentArtist}
           />
           <GuessBar
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
+            artistForGame={currentArtist}
             isGameOver={isGameOver}
+            currentDate={currentDate}
           />
         </footer>
       </div>

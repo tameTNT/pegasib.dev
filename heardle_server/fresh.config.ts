@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [tailwind()],
   server: { port: 9989 },
   router: {
-    ignoreFilePattern: /^.*.d.ts$/
-  }
+    ignoreFilePattern: /^.*.d.ts$/,
+  },
 });

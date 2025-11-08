@@ -9,3 +9,9 @@ export interface PastGuess {
   song?: Song;
   result: guessResult;
 }
+
+export interface gameArtistInfo {
+  name: string;
+  blurb: string;
+  playlist_url: string;
+}

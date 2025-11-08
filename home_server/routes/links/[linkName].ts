@@ -4,7 +4,7 @@ const redirects: Record<string, string> = {
   github: "https://github.com/tameTNT",
   linkedin: "https://www.linkedin.com/in/luca-huelle",
   wikipedia: "https://en.wikipedia.org/wiki/51_Pegasi_b",
-  heardle: "https://loona-heardle.pegasib.dev",
+  heardle: "https://kpop-heardle.pegasib.dev",
 };
 
 export function handler(_req: Request, ctx: FreshContext): Response {

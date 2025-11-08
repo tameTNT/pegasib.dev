@@ -7,12 +7,14 @@ import {
   makeArtistString,
   makeErrorMessage,
 } from "../helpers.tsx";
+import { gameArtistInfo } from "../enums.ts";
 
 export default function SearchBar(
   props: JSX.HTMLAttributes<HTMLInputElement> & {
     guessCount: Signal<number>;
     inputValue: string;
     setInputValue: (value: string) => void;
+    artistVariant: gameArtistInfo;
   },
 ) {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
@@ -21,9 +23,11 @@ export default function SearchBar(
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { // Fetch all songs when the component mounts
+  useEffect(() => { // Fetch all songs when the selected artist name changes
     async function fetchSongs() {
-      const response = await fetch("/api/all-songs");
+      const response = await fetch(
+        `/api/${props.artistVariant.name}/all-songs`,
+      );
       if (response.ok) {
         const data: Song[] = await response.json();
         setAllSongs(data);
@@ -33,13 +37,13 @@ export default function SearchBar(
     }
     fetchSongs()
       .then(() => {
-        console.debug("Songs fetched successfully.");
+        console.debug(`${props.artistVariant.name} songs fetched successfully.`);
       }).catch((error) => {
         // This is the only place we alert the user that connection failed
         alert("Unable to load song data. Please try again later.");
         console.error(`Error while fetching songs: ${error}.`);
       });
-  }, []); // Empty dependency array means this runs once on mount
+  }, [props.artistVariant.name]);
 
   useEffect(() => { // runs whenever inputValue or allSongs changes
     const query = props.inputValue.toLowerCase();
