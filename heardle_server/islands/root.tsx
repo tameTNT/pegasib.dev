@@ -1,5 +1,5 @@
 import { useSignal, useSignalEffect } from "@preact/signals";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
@@ -38,38 +38,49 @@ export default function Root(
   };
 
   // Set up the starting game state
+  const emptyHistory = Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE })
   const currentGuess = useSignal(0);
-  const guessHistory = useSignal<PastGuess[]>(
-    Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE }),
-  );
-  // Load previous game state from localStorage if available
-  if (checkStorageAvailable("localStorage")) {
-    const storedDate = Number(localStorage.getItem("gameDate"));
-    const storedCurrentGuess = Number(localStorage.getItem("currentGuess"));
-    if (storedDate == currentDate.getTime() && storedCurrentGuess > 0) {
-      currentGuess.value = storedCurrentGuess;
-      guessHistory.value = JSON.parse(
-        localStorage.getItem("guessHistory") || "[]",
-      );
-      console.debug("Loaded previous game state from localStorage.");
-    }
-  }
-
-  useSignalEffect(() => { // Runs whenever currentGuess or guessHistory changes
-    if (checkStorageAvailable("localStorage")) {
-      localStorage.setItem("gameDate", String(currentDate.getTime()));
-      localStorage.setItem("currentGuess", String(currentGuess.value));
-      localStorage.setItem("guessHistory", JSON.stringify(guessHistory.value));
-    }
-  });
-
-  useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
-    if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
-      setIsGameOver(true); // Disable guessing if max guesses reached
-    }
-  });
+  const guessHistory = useSignal<PastGuess[]>(emptyHistory);
 
   const currentArtist = availableArtists[artistIndex.value];
+
+  function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
+    console.debug(`Attempting to load game state (${artistName})...`);
+    if (checkStorageAvailable("localStorage")) {
+      const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`));
+      const storedCurrentGuess = localStorage.getItem(`${artistName}-currentGuess`);
+      if (storedCurrentGuess !== null) {
+        if (storedDate == currentDate.getTime()) {
+          currentGuess.value = Number(storedCurrentGuess);
+          guessHistory.value = JSON.parse(
+            localStorage.getItem(`${artistName}-guessHistory`) || JSON.stringify(emptyHistory),
+          );
+          console.debug(`Loaded previous game state (${artistName}) from localStorage.`);
+        }
+      }
+      else {
+        localStorage.setItem(`${artistName}-gameDate`, String(currentDate.getTime()));
+        localStorage.setItem(`${artistName}-currentGuess`, String(0));
+        localStorage.setItem(`${artistName}-guessHistory`, JSON.stringify(emptyHistory));
+        console.debug(`No existing data; saved empty game state (${artistName}) to localStorage.`);
+        // Reset page data also
+        currentGuess.value = 0;
+        guessHistory.value = emptyHistory;
+      }
+    }
+  }
+  useEffect(() => {
+    loadGameState(currentArtist.name);
+  }, [])  // Load once on mount
+
+  useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
+    console.debug("Game over check triggered");
+    if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
+      setIsGameOver(true); // Disable guessing if max guesses reached
+    } else {
+      setIsGameOver(false);
+    }
+  });
 
   // todo: LOONA background/styling
   return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
@@ -93,6 +104,7 @@ export default function Root(
               currentIndex={artistIndex}
               options={availableArtists.map((a) => a.name)}
               disabled={currentGuess.value > 0 && !isGameOver}
+              extraOnClickFunction={loadGameState}
             />
           )}
           <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
@@ -141,8 +153,9 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            isGameOver={isGameOver}
             artistForGame={currentArtist}
+            isGameOver={isGameOver}
+            currentDate={currentDate}
           />
         </footer>
       </div>

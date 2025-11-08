@@ -5,10 +5,10 @@ import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult } from "../enums.ts";
-import { makeArtistString, makeErrorMessage } from "../helpers.tsx";
+import {checkStorageAvailable, makeArtistString, makeErrorMessage} from "../helpers.tsx";
 
 export default function GuessBar(
-  props: GuessInfoProps & { isGameOver: boolean },
+  props: GuessInfoProps & { isGameOver: boolean, currentDate: Date },
 ) {
   const [inputValue, setInputValue] = useState("");
 
@@ -85,6 +85,14 @@ export default function GuessBar(
             } on ${correctSong.album.name}.`,
           );
         } // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
+
+        // Save progress to local storage
+        if (checkStorageAvailable("localStorage")) {
+          localStorage.setItem(`${props.artistForGame.name}-gameDate`, String(props.currentDate.getTime()));
+          localStorage.setItem(`${props.artistForGame.name}-currentGuess`, String(props.current.value));
+          localStorage.setItem(`${props.artistForGame.name}-guessHistory`, JSON.stringify(props.history.value));
+          console.debug(`Saved game state (${props.artistForGame.name}) to localStorage.`);
+        }
       }).catch((err) => {
         alert("Unable to verify guess on the server. Please try again later.");
         console.error(`Error while verifying guess: ${err}.`);
