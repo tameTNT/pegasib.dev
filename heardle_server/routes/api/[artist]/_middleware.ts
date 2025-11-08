@@ -25,7 +25,7 @@ export const handler = (_req: Request, ctx: FreshContext<SongDataState>) => {
     return new Response(`Invalid artist name: '${ctx.params.artist}'.`, { status: 400 }); // Return Bad Request status
   }
   try {
-    ctx.state.songData = loadSongData(ctx.params.artist);
+    ctx.state.songData = loadSongData(ctx.params.artist.toLowerCase());
     return ctx.next();
   } catch (_error) {
     return new Response("Failed to load song data.", { status: 500 }); // Return an Internal Server Error
