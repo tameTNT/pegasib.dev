@@ -57,6 +57,8 @@ export default function SongBar(props: GuessInfoProps) {
         audioElement.currentTime = 0; // Reset to the start
         // console.debug(`Set volume to ${audioElement.volume}`);
 
+        audioElement.load() // reset audio element to load potentially new url
+
         audioElement.addEventListener("canplaythrough", () => {
           // duration is not defined until the audio is loaded and can play through
           // console.debug(`Set max audio duration to ${audioElement.duration} seconds.`);
@@ -76,7 +78,7 @@ export default function SongBar(props: GuessInfoProps) {
       }).catch((error) => {
         console.error(`Error while fetching preview url: ${error}.`);
       });
-  }, []);
+  }, [props.artistForGame.name]);
 
   function resetAudio() {
     const audioElement = document.querySelector("audio");

@@ -23,7 +23,7 @@ export default function SearchBar(
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { // Fetch all songs when the component mounts
+  useEffect(() => { // Fetch all songs when the selected artist name changes
     async function fetchSongs() {
       const response = await fetch(`/api/${props.artistVariant.name}/all-songs`);
       if (response.ok) {
@@ -41,7 +41,7 @@ export default function SearchBar(
         alert("Unable to load song data. Please try again later.");
         console.error(`Error while fetching songs: ${error}.`);
       });
-  }, []); // Empty dependency array means this runs once on mount
+  }, [props.artistVariant.name]);
 
   useEffect(() => { // runs whenever inputValue or allSongs changes
     const query = props.inputValue.toLowerCase();
