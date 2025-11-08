@@ -75,6 +75,7 @@ jobs:
             pup enable-service
             pup restart home_server
             pup restart heardle_server
+            echo "⚠️ Don't forget to reload nginx if necessary: sudo nginx -s reload"
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
         run: |
