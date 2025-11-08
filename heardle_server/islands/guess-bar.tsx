@@ -84,7 +84,9 @@ export default function GuessBar(
               makeArtistString(correctSong.artists)
             } on ${correctSong.album.name}.`,
           );
-        } // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
+        }
+        // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
+        //  show embed and artwork of correct song on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
 
         // Save progress to local storage
         if (checkStorageAvailable("localStorage")) {

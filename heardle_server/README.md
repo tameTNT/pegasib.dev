@@ -10,6 +10,9 @@ songs from the **K-Pop group [LOONA](https://en.wikipedia.org/wiki/Loona)**
 (including all subunits, solo, and drama OST tracks). A different song is
 selected each day at midnight UTC.
 
+It now also supports an identical mode but for GFriend songs.
+This is defined in `routes/api/config.json`.
+
 The page is optimised for mobile and desktop devices and includes light and dark
 modes for comfortable use.
 
@@ -26,7 +29,7 @@ The songs used for the game are extracted from
 by the script `update_track_info.py` which should be run whenever the original
 playlist is updated. This script uses the Spotify API (via
 [`spotipy`](https://spotipy.readthedocs.io/en/master/)) to fetch information for
-each track and stores it in a JSON file (`heardle_track_info.json`) alongside
+each track and stores it in a JSON file (`heardle_track_info.json` by default) alongside
 the additionally collected preview url of the track (not provided by the API).
 
 ### Frameworks
@@ -76,4 +79,5 @@ Then follow the following steps:
 
 ## Changelog
 
+- **v3.0.3** - ✨ Add GFriend game option!
 - **v2.0.3** – 🐛 Fix song cycle start date

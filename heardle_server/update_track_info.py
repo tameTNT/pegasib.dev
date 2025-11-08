@@ -34,6 +34,7 @@ def extract_track_from_playlist_item(item: dict):
 def download_playlist(uri: str, output_file_name: str, initial_offset: int = 0, sp_obj: spotipy.Spotify = None):
     print(f"Loading tracks from https://open.spotify.com/playlist/{uri}")
     tracks_got = []
+    # todo: support load from existing file first if initial_offset non-zero
     playlist_resp = sp.playlist_items(uri, offset=initial_offset)
     tracks_got += map(extract_track_from_playlist_item, playlist_resp["items"])
     while len(tracks_got) + initial_offset < playlist_resp["total"]:

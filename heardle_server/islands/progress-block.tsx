@@ -46,7 +46,7 @@ const GuessStatusComponent = (
   }
 
   return (
-    // todo: add album art
+    // todo: add album art on side for each guess?
     <div {...props} class={classStyle} id={`guess-${props.componentIndex}`}>
       {guessedSong && (
         <div class="">

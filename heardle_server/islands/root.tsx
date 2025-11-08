@@ -44,10 +44,11 @@ export default function Root(
 
   const currentArtist = availableArtists[artistIndex.value];
 
+  // todo: force reload if stale song data detected
   function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
     console.debug(`Attempting to load game state (${artistName})...`);
     if (checkStorageAvailable("localStorage")) {
-      const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`));
+      const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`)); // todo: bug: can save a stale date
       const storedCurrentGuess = localStorage.getItem(`${artistName}-currentGuess`);
       if (storedCurrentGuess !== null) {
         if (storedDate == currentDate.getTime()) {
@@ -82,8 +83,8 @@ export default function Root(
     }
   });
 
-  // todo: LOONA background/styling
-  return ( // todo: show spotify embed on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
+  // todo: LOONA/GFriend background/styling (use config.json)
+  return (
     <>
       <a
         href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
@@ -97,6 +98,7 @@ export default function Root(
         />
         <p class="text-gray-900 text-xs italic">{version}</p>
       </a>
+      {/*  todo: add reddit user link  */}
       <div class="mx-auto flex flex-col h-screen justify-between items-center">
         <main class="text-center w-3/4 md:w-1/2">
           {availableArtists.length > 1 && (
@@ -128,7 +130,7 @@ export default function Root(
               Spotify
             </a>.
           </p>
-          {/* todo: update props of these to just pass one struct? */}
+          {/* todo: update the props of these components to just pass one detailed struct? */}
           <ProgressBlock
             max={maxGuesses}
             current={currentGuess}
@@ -159,6 +161,8 @@ export default function Root(
           />
         </footer>
       </div>
+    {/*  todo: add donate button? Calculate annual EC2 cost  */}
+    {/*  todo: add a local stats screen/history  */}
     </>
   );
 }

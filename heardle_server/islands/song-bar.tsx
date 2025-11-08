@@ -36,18 +36,20 @@ export default function SongBar(props: GuessInfoProps) {
     return lengthInSeconds * 1000; // Convert seconds to milliseconds
   }
 
-  useEffect(() => {
-    async function fetchSongPreview() {
-      const response = await fetch(
-        `/api/${props.artistForGame.name}/todays-song/preview-url`,
-      );
-      if (response.ok) {
-        const urlString = await response.text();
-        setSongPreviewUrl(urlString);
-      } else {
-        throw new Error(makeErrorMessage(response));
-      }
+  async function fetchSongPreview() {
+    console.debug("Fetching song preview URL from server...");
+    const response = await fetch(
+      `/api/${props.artistForGame.name}/todays-song/preview-url`,
+    );
+    if (response.ok) {
+      const urlString = await response.text();
+      setSongPreviewUrl(urlString);
+    } else {
+      throw new Error(makeErrorMessage(response));
     }
+  }
+
+  useEffect(() => {
     fetchSongPreview()
       .then(() => {
         const audioElement = document.querySelector("audio");
@@ -80,7 +82,7 @@ export default function SongBar(props: GuessInfoProps) {
       }).catch((error) => {
         console.error(`Error while fetching preview url: ${error}.`);
       });
-  }, [props.artistForGame.name]);
+  }, [props.artistForGame.name]); // todo: this does not automatically refresh on new day
 
   function resetAudio() {
     const audioElement = document.querySelector("audio");
