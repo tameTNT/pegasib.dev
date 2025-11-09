@@ -44,26 +44,24 @@ export default function Root(
 
   const currentArtist = availableArtists[artistIndex.value];
 
-  // todo: force reload if stale song data detected
+  // todo: force song reload if stale song data detected
   function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
     console.debug(`Attempting to load game state (${artistName})...`);
     if (checkStorageAvailable("localStorage")) {
       const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`)); // todo: bug: can save a stale date
       const storedCurrentGuess = localStorage.getItem(`${artistName}-currentGuess`);
-      if (storedCurrentGuess !== null) {
-        if (storedDate == currentDate.getTime()) {
+      if (storedCurrentGuess !== null && storedDate == currentDate.getTime()) {
           currentGuess.value = Number(storedCurrentGuess);
           guessHistory.value = JSON.parse(
             localStorage.getItem(`${artistName}-guessHistory`) || JSON.stringify(emptyHistory),
           );
           console.debug(`Loaded previous game state (${artistName}) from localStorage.`);
-        }
       }
-      else {
+      else {  // Resets saved data if no data found or outdated
         localStorage.setItem(`${artistName}-gameDate`, String(currentDate.getTime()));
         localStorage.setItem(`${artistName}-currentGuess`, String(0));
         localStorage.setItem(`${artistName}-guessHistory`, JSON.stringify(emptyHistory));
-        console.debug(`No existing data; saved empty game state (${artistName}) to localStorage.`);
+        console.debug(`No existing data for today; saved empty game state (${artistName}) to localStorage.`);
         // Reset page data also
         currentGuess.value = 0;
         guessHistory.value = emptyHistory;
