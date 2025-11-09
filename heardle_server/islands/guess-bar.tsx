@@ -5,10 +5,14 @@ import Button from "../components/Button.tsx";
 
 import { CheckApiResponse, GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult } from "../enums.ts";
-import {checkStorageAvailable, makeArtistString, makeErrorMessage} from "../helpers.tsx";
+import {
+  checkStorageAvailable,
+  makeArtistString,
+  makeErrorMessage,
+} from "../helpers.tsx";
 
 export default function GuessBar(
-  props: GuessInfoProps & { isGameOver: boolean, currentDate: Date },
+  props: GuessInfoProps & { isGameOver: boolean; currentDate: Date },
 ) {
   const [inputValue, setInputValue] = useState("");
 
@@ -71,6 +75,7 @@ export default function GuessBar(
         }
 
         // Show an alert if the guess is correct or if the max guesses have been reached
+        // todo: show different text depending on mode + special if both completed
         if (isCorrect) {
           alert(`🥳 Well Done! See you tomorrow 👋`);
         } else if (props.current.value >= props.max) {
@@ -91,10 +96,21 @@ export default function GuessBar(
 
         // Save progress to local storage
         if (checkStorageAvailable("localStorage")) {
-          localStorage.setItem(`${props.artistForGame.value.name}-gameDate`, String(props.currentDate.getTime()));
-          localStorage.setItem(`${props.artistForGame.value.name}-currentGuess`, String(props.current.value));
-          localStorage.setItem(`${props.artistForGame.value.name}-guessHistory`, JSON.stringify(props.history.value));
-          console.debug(`Saved game state (${props.artistForGame.value.name}) to localStorage.`);
+          localStorage.setItem(
+            `${props.artistForGame.value.name}-gameDate`,
+            String(props.currentDate.getTime()),
+          );
+          localStorage.setItem(
+            `${props.artistForGame.value.name}-currentGuess`,
+            String(props.current.value),
+          );
+          localStorage.setItem(
+            `${props.artistForGame.value.name}-guessHistory`,
+            JSON.stringify(props.history.value),
+          );
+          console.debug(
+            `Saved game state (${props.artistForGame.value.name}) to localStorage.`,
+          );
         }
       }).catch((err) => {
         alert("Unable to verify guess on the server. Please try again later.");

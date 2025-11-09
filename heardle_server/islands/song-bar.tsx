@@ -156,7 +156,7 @@ export default function SongBar(props: GuessInfoProps) {
 
   useSignalEffect(() => { // Runs whenever current Signal changes
     if (props.current.value > 0 && canPlayWholeSong()) {
-      setSkipHidden(true)
+      setSkipHidden(true);
     } else {
       setSkipHidden(false);
     }

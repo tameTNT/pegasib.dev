@@ -37,7 +37,9 @@ export default function SearchBar(
     }
     fetchSongs()
       .then(() => {
-        console.debug(`${props.artistVariant.value.name} songs fetched successfully.`);
+        console.debug(
+          `${props.artistVariant.value.name} songs fetched successfully.`,
+        );
       }).catch((error) => {
         // This is the only place we alert the user that connection failed
         alert("Unable to load song data. Please try again later.");

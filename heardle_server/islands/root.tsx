@@ -1,5 +1,5 @@
 import { useComputed, useSignal, useSignalEffect } from "@preact/signals";
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
@@ -38,34 +38,51 @@ export default function Root(
   };
 
   // Set up the starting game state
-  const emptyHistory = Array(maxGuesses).fill({ song: undefined, result: guessResult.NONE })
+  const emptyHistory = Array(maxGuesses).fill({
+    song: undefined,
+    result: guessResult.NONE,
+  });
   const currentGuess = useSignal(0);
   const guessHistory = useSignal<PastGuess[]>(emptyHistory);
 
-  const currentArtistObj = useComputed(() => availableArtists[artistIndex.value]);
+  const currentArtistObj = useComputed(() =>
+    availableArtists[artistIndex.value]
+  );
   const artistName = useComputed(() => currentArtistObj.value.name);
   useSignalEffect(() => {
     console.debug(`Current artist switched to ${artistName.value}.`);
-  })
+  });
 
   // todo: force song reload if stale song data detected
-  function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
+  function loadGameState(artistName: string) { // Load previous game state from localStorage if available
     console.debug(`Attempting to load game state (${artistName})...`);
     if (checkStorageAvailable("localStorage")) {
       const storedDate = Number(localStorage.getItem(`${artistName}-gameDate`)); // todo: bug: can save a stale date
-      const storedCurrentGuess = localStorage.getItem(`${artistName}-currentGuess`);
+      const storedCurrentGuess = localStorage.getItem(
+        `${artistName}-currentGuess`,
+      );
       if (storedCurrentGuess !== null && storedDate == currentDate.getTime()) {
-          currentGuess.value = Number(storedCurrentGuess);
-          guessHistory.value = JSON.parse(
-            localStorage.getItem(`${artistName}-guessHistory`) || JSON.stringify(emptyHistory),
-          );
-          console.debug(`Loaded previous game state (${artistName}) from localStorage.`);
-      }
-      else {  // Resets saved data if no data found or outdated
-        localStorage.setItem(`${artistName}-gameDate`, String(currentDate.getTime()));
+        currentGuess.value = Number(storedCurrentGuess);
+        guessHistory.value = JSON.parse(
+          localStorage.getItem(`${artistName}-guessHistory`) ||
+            JSON.stringify(emptyHistory),
+        );
+        console.debug(
+          `Loaded previous game state (${artistName}) from localStorage.`,
+        );
+      } else { // Resets saved data if no data found or outdated
+        localStorage.setItem(
+          `${artistName}-gameDate`,
+          String(currentDate.getTime()),
+        );
         localStorage.setItem(`${artistName}-currentGuess`, String(0));
-        localStorage.setItem(`${artistName}-guessHistory`, JSON.stringify(emptyHistory));
-        console.debug(`No existing data for today; saved empty game state (${artistName}) to localStorage.`);
+        localStorage.setItem(
+          `${artistName}-guessHistory`,
+          JSON.stringify(emptyHistory),
+        );
+        console.debug(
+          `No existing data for today; saved empty game state (${artistName}) to localStorage.`,
+        );
         // Reset page data also
         currentGuess.value = 0;
         guessHistory.value = emptyHistory;
@@ -74,7 +91,7 @@ export default function Root(
   }
   useEffect(() => {
     loadGameState(currentArtistObj.value.name);
-  }, [])  // Load once on mount
+  }, []); // Load once on mount
 
   useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
     console.debug("Game over check triggered");
@@ -121,7 +138,10 @@ export default function Root(
             {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href={useComputed(() => `/api/${artistName.value}/list`)} target="_blank">
+            <a
+              href={useComputed(() => `/api/${artistName.value}/list`)}
+              target="_blank"
+            >
               List of tracks.
             </a>{" "}
             All audio courtesy of{" "}
@@ -163,8 +183,8 @@ export default function Root(
           />
         </footer>
       </div>
-    {/*  todo: add donate button? Calculate annual EC2 cost  */}
-    {/*  todo: add a local stats screen/history  */}
+      {/*  todo: add donate button? Calculate annual EC2 cost  */}
+      {/*  todo: add a local stats screen/history  */}
     </>
   );
 }

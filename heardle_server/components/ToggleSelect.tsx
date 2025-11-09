@@ -13,7 +13,7 @@ export default function ToggleSelect(
 
   function switchArtist() {
     if (props.disabled) return;
-    console.debug("Switching artist...")
+    console.debug("Switching artist...");
     props.currentIndex.value = (props.currentIndex.value + 1) % numOptions;
     props.extraOnClickFunction(props.options[props.currentIndex.value]);
   }

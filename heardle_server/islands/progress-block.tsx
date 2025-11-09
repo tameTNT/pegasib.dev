@@ -52,30 +52,31 @@ const GuessStatusComponent = (
       largest_size = img.height;
       largest_idx = i;
     }
-  })
+  });
 
   return (
     <div {...props} class={classStyle} id={`guess-${props.componentIndex}`}>
       {guessedSong && (
-        <>
-          <div className="grid grid-cols-6 gap-4 items-center justify-between">
-            <div className="">
-              <img className="w-full h-auto rounded"
-                      src={guessedSong.album.images[largest_idx].url}
-                      alt={`Album art for ${guessedSong.album.name}`}/>
-            </div>
-            <div className="col-span-4 text-center">
-              <p>
-                <span className="font-bold">{guessedSong.name}</span> by{" "}
-                {getSubtitleForSong(guessedSong)}
-              </p>
-              <div class="text-xs">{resultText}</div>
-            </div>
-          </div>
-        </>
-      ) || (
-        <div class="text-xs">{resultText}</div>
-      )}
+            <>
+              <div className="grid grid-cols-6 gap-4 items-center justify-between">
+                <div className="">
+                  <img
+                    className="w-full h-auto rounded"
+                    src={guessedSong.album.images[largest_idx].url}
+                    alt={`Album art for ${guessedSong.album.name}`}
+                  />
+                </div>
+                <div className="col-span-4 text-center">
+                  <p>
+                    <span className="font-bold">{guessedSong.name}</span> by
+                    {" "}
+                    {getSubtitleForSong(guessedSong)}
+                  </p>
+                  <div class="text-xs">{resultText}</div>
+                </div>
+              </div>
+            </>
+          ) || <div class="text-xs">{resultText}</div>}
     </div>
   );
 };
