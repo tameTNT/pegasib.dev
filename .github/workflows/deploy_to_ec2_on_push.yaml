@@ -7,18 +7,14 @@ permissions:
   id-token: write
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths-ignore:
       - README.md
       - .gitignore
       - .github/workflows/*
       - .run/*
   workflow_dispatch:
-    inputs:
-      example:
-        description: 'Example on/off input'
-        required: false
-        type: boolean
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

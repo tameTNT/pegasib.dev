@@ -65,6 +65,8 @@ export default function GuessBar(
         // Flash the footer background color based on the guess result
         const footerEl = document.querySelector("footer");
         if (footerEl) {
+          // todo: turn off green bar when switching to different artist. Then on again when back.
+          //  fix flash not working on dark mode at all first
           const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
           footerEl.classList.add(colorFlash);
           if (!isCorrect) { // Only flash red if incorrect; stay green on correct guess
