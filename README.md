@@ -2,10 +2,10 @@
 
 This repository contains the source code for the websites 
 [51.pegasib.dev](https://51.pegasib.dev) 
-and [loona-heardle.pegasib.dev](https://51.pegasib.dev/links/heardle).
+and [kpop-heardle.pegasib.dev](https://51.pegasib.dev/links/heardle).
 
 The code for `51.pegasib.dev` is located in `/home_server/` 
-and the code for `loona-heardle.pegasib.dev` is located in 
+and the code for `kpop-heardle.pegasib.dev` is located in 
 `/heardle_server/`. The nginx configuration for the VPS the 
 servers are hosted on is located in `/nginx_config/`.
 
