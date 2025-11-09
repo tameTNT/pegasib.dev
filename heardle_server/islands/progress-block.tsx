@@ -14,7 +14,7 @@ const GuessStatusComponent = (
   },
 ) => {
   let classStyle =
-    "p-2 w-full text-center rounded transition-color transition-border duration-500 ";
+    "p-2 w-full rounded transition-color transition-border duration-500 overflow-hidden ";
   const guessedSong = props.guess.song;
   let resultText: string;
 
@@ -45,16 +45,37 @@ const GuessStatusComponent = (
       break;
   }
 
+  let largest_size = 0;
+  let largest_idx = -1;
+  guessedSong?.album.images.forEach((img, i) => {
+    if (img.height > largest_size) {
+      largest_size = img.height;
+      largest_idx = i;
+    }
+  })
+
   return (
-    // todo: add album art on side for each guess?
     <div {...props} class={classStyle} id={`guess-${props.componentIndex}`}>
       {guessedSong && (
-        <div class="">
-          <span class="font-bold">{guessedSong.name}</span> by{" "}
-          {getSubtitleForSong(guessedSong)}
-        </div>
+        <>
+          <div className="grid grid-cols-6 gap-4 items-center justify-between">
+            <div className="">
+              <img className="w-full h-auto rounded"
+                      src={guessedSong.album.images[largest_idx].url}
+                      alt={`Album art for ${guessedSong.album.name}`}/>
+            </div>
+            <div className="col-span-4 text-center">
+              <p>
+                <span className="font-bold">{guessedSong.name}</span> by{" "}
+                {getSubtitleForSong(guessedSong)}
+              </p>
+              <div class="text-xs">{resultText}</div>
+            </div>
+          </div>
+        </>
+      ) || (
+        <div class="text-xs py-2">{resultText}</div>
       )}
-      <div class="text-xs">{resultText}</div>
     </div>
   );
 };
