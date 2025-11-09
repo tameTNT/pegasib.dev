@@ -6,7 +6,7 @@ interface GuessInfoProps {
   max: number;
   current: Signal<number>;
   history: Signal<PastGuess[]>;
-  artistForGame: gameArtistInfo;
+  artistForGame: Signal<gameArtistInfo>;
 }
 
 interface CheckApiResponse {

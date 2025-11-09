@@ -14,7 +14,7 @@ export default function SearchBar(
     guessCount: Signal<number>;
     inputValue: string;
     setInputValue: (value: string) => void;
-    artistVariant: gameArtistInfo;
+    artistVariant: Signal<gameArtistInfo>;
   },
 ) {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
@@ -26,7 +26,7 @@ export default function SearchBar(
   useEffect(() => { // Fetch all songs when the selected artist name changes
     async function fetchSongs() {
       const response = await fetch(
-        `/api/${props.artistVariant.name}/all-songs`,
+        `/api/${props.artistVariant.value.name}/all-songs`,
       );
       if (response.ok) {
         const data: Song[] = await response.json();
@@ -37,13 +37,13 @@ export default function SearchBar(
     }
     fetchSongs()
       .then(() => {
-        console.debug(`${props.artistVariant.name} songs fetched successfully.`);
+        console.debug(`${props.artistVariant.value.name} songs fetched successfully.`);
       }).catch((error) => {
         // This is the only place we alert the user that connection failed
         alert("Unable to load song data. Please try again later.");
         console.error(`Error while fetching songs: ${error}.`);
       });
-  }, [props.artistVariant.name]);
+  }, [props.artistVariant.value.name]);
 
   useEffect(() => { // runs whenever inputValue or allSongs changes
     const query = props.inputValue.toLowerCase();

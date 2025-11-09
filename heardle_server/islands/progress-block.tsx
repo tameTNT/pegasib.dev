@@ -74,7 +74,7 @@ const GuessStatusComponent = (
           </div>
         </>
       ) || (
-        <div class="text-xs py-2">{resultText}</div>
+        <div class="text-xs">{resultText}</div>
       )}
     </div>
   );

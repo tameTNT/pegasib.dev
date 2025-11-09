@@ -27,7 +27,7 @@ export default function GuessBar(
     }
 
     fetch(
-      `/api/${props.artistForGame.name}/todays-song/check?id=${guessedId}&isFinal=${
+      `/api/${props.artistForGame.value.name}/todays-song/check?id=${guessedId}&isFinal=${
         props.current.value + 1 == props.max
       }`,
     )
@@ -85,15 +85,16 @@ export default function GuessBar(
             } on ${correctSong.album.name}.`,
           );
         }
-        // todo: add answer to page permanently, so it can be seen after the game is over (could be saved to localStorage?)
-        //  show embed and artwork of correct song on win (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
+        // todo: add answer to page permanently, so it can be seen after the game is over (save to localStorage)
+        //  Also show embed and artwork of correct song on win? (https://developer.spotify.com/documentation/embeds/tutorials/using-the-iframe-api)
+        //  Replace guess bar and guess button
 
         // Save progress to local storage
         if (checkStorageAvailable("localStorage")) {
-          localStorage.setItem(`${props.artistForGame.name}-gameDate`, String(props.currentDate.getTime()));
-          localStorage.setItem(`${props.artistForGame.name}-currentGuess`, String(props.current.value));
-          localStorage.setItem(`${props.artistForGame.name}-guessHistory`, JSON.stringify(props.history.value));
-          console.debug(`Saved game state (${props.artistForGame.name}) to localStorage.`);
+          localStorage.setItem(`${props.artistForGame.value.name}-gameDate`, String(props.currentDate.getTime()));
+          localStorage.setItem(`${props.artistForGame.value.name}-currentGuess`, String(props.current.value));
+          localStorage.setItem(`${props.artistForGame.value.name}-guessHistory`, JSON.stringify(props.history.value));
+          console.debug(`Saved game state (${props.artistForGame.value.name}) to localStorage.`);
         }
       }).catch((err) => {
         alert("Unable to verify guess on the server. Please try again later.");

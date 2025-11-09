@@ -1,4 +1,4 @@
-import { useSignal, useSignalEffect } from "@preact/signals";
+import { useComputed, useSignal, useSignalEffect } from "@preact/signals";
 import { useState, useEffect } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
@@ -42,7 +42,11 @@ export default function Root(
   const currentGuess = useSignal(0);
   const guessHistory = useSignal<PastGuess[]>(emptyHistory);
 
-  const currentArtist = availableArtists[artistIndex.value];
+  const currentArtistObj = useComputed(() => availableArtists[artistIndex.value]);
+  const artistName = useComputed(() => currentArtistObj.value.name);
+  useSignalEffect(() => {
+    console.debug(`Current artist switched to ${artistName.value}.`);
+  })
 
   // todo: force song reload if stale song data detected
   function loadGameState(artistName: string) {  // Load previous game state from localStorage if available
@@ -69,7 +73,7 @@ export default function Root(
     }
   }
   useEffect(() => {
-    loadGameState(currentArtist.name);
+    loadGameState(currentArtistObj.value.name);
   }, [])  // Load once on mount
 
   useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
@@ -107,8 +111,8 @@ export default function Root(
               extraOnClickFunction={loadGameState}
             />
           )}
-          <h1 class="text-5xl/[1.2]">{currentArtist.name} Heardle</h1>
-          <h2 class="">{currentArtist.blurb}</h2>
+          <h1 class="text-5xl/[1.2]">{artistName} Heardle</h1>
+          <h2 class="">{useComputed(() => currentArtistObj.value.blurb)}</h2>
           <p class="italic text-xs">
             Next new song at{" "}
             <abbr title={tmrwDate.toLocaleString([])}>
@@ -117,12 +121,12 @@ export default function Root(
             {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
-            <a href={`/api/${currentArtist.name}/list`} target="_blank">
+            <a href={useComputed(() => `/api/${artistName.value}/list`)} target="_blank">
               List of tracks.
             </a>{" "}
             All audio courtesy of{" "}
             <a
-              href={currentArtist.playlist_url}
+              href={useComputed(() => currentArtistObj.value.playlist_url)}
               target="_blank"
             >
               Spotify
@@ -133,11 +137,11 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistForGame={currentArtist}
+            artistForGame={currentArtistObj}
           />
           <ShareButton
             gameIsOver={isGameOver}
-            gameTitle={`${currentArtist.name} Heardle`}
+            gameTitle={`${artistName} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
           />
@@ -147,13 +151,13 @@ export default function Root(
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistForGame={currentArtist}
+            artistForGame={currentArtistObj}
           />
           <GuessBar
             max={maxGuesses}
             current={currentGuess}
             history={guessHistory}
-            artistForGame={currentArtist}
+            artistForGame={currentArtistObj}
             isGameOver={isGameOver}
             currentDate={currentDate}
           />
