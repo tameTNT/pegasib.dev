@@ -23,11 +23,18 @@ a {
   @apply decoration-white max-md:underline md:hover:underline;
 }
 
-.loona-bg {
-    background-image: url("hi_high_diving_board_crop.jpg");
+.background {
     background-color: rgba(0, 0, 0, 0.6);
     background-blend-mode: darken;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
+
+    &.loona {
+        background-image: url("hi_high_diving_board_crop.jpg");
+    }
+
+    &.gfriend {
+        background-image: url("https://www.allkpop.com/upload/2024/12/content/221146/web_data/allkpop_1734886093_gfriend.jpg");
+    }
 }

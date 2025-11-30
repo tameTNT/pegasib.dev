@@ -118,7 +118,8 @@ export default function Root(
         <p class="text-black text-xs italic">{version}</p>
       </a>
       {/*  todo: add reddit user link  */}
-      <div className={useComputed(() => `mx-auto flex flex-col h-screen justify-between items-center ${currentArtistObj.value.background}`)}>
+      <div className={useComputed(() => `mx-auto flex flex-col h-screen justify-between items-center 
+                                                background ${currentArtistObj.value.background}`)}>
         <main class="text-center w-3/4 md:w-1/2">
           {availableArtists.length > 1 && (
             <ToggleSelect

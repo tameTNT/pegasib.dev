@@ -4,12 +4,13 @@
       "name": "LOONA",
       "blurb": "Includes solo, subunit, and all post-BBC tracks (up to Soft Error).",
       "playlist_url": "https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn",
-      "background": "loona-bg"
+      "background": "loona"
     },
     {
       "name": "GFriend",
       "blurb": "Includes all Spotify-available group and solo/subgroup songs (inc. OSTs) up to Oct 2025.",
-      "playlist_url": "https://open.spotify.com/playlist/5qPzAE10vkPbaP5DkN7upp"
+      "playlist_url": "https://open.spotify.com/playlist/5qPzAE10vkPbaP5DkN7upp",
+      "background": "gfriend"
     }
   ]
 }
