@@ -3,7 +3,8 @@
     {
       "name": "LOONA",
       "blurb": "Includes solo, subunit, and all post-BBC tracks (up to Soft Error).",
-      "playlist_url": "https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn"
+      "playlist_url": "https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn",
+      "background": "loona-bg"
     },
     {
       "name": "GFriend",

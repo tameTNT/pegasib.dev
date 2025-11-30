@@ -108,17 +108,17 @@ export default function Root(
       <a
         href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
         target="_blank"
-        class="cursor-pointer absolute top-1 left-1 flex flex-col items-center dark:invert"
+        class="cursor-pointer absolute top-1 left-1 flex flex-col items-center invert decoration-black"
       >
         <img
           src="github_icon.svg"
           alt="The GitHub Icon"
           class="h-5"
         />
-        <p class="text-gray-900 text-xs italic">{version}</p>
+        <p class="text-black text-xs italic">{version}</p>
       </a>
       {/*  todo: add reddit user link  */}
-      <div class="mx-auto flex flex-col h-screen justify-between items-center">
+      <div className={useComputed(() => `mx-auto flex flex-col h-screen justify-between items-center ${currentArtistObj.value.background}`)}>
         <main class="text-center w-3/4 md:w-1/2">
           {availableArtists.length > 1 && (
             <ToggleSelect
@@ -166,7 +166,7 @@ export default function Root(
             history={guessHistory}
           />
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/60 dark:bg-sky-200/60 transition-color duration-300 flex flex-col items-center p-2 gap-2">
+        <footer class="sticky bottom-0 w-full bg-gray-500/60 transition-color duration-300 flex flex-col items-center p-2 gap-2">
           <SongBar
             max={maxGuesses}
             current={currentGuess}

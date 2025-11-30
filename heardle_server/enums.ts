@@ -14,4 +14,5 @@ export interface gameArtistInfo {
   name: string;
   blurb: string;
   playlist_url: string;
+  background: string;
 }

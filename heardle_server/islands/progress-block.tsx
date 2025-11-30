@@ -23,24 +23,24 @@ const GuessStatusComponent = (
       if (
         props.correctIndex !== -1 && props.componentIndex >= props.correctIndex
       ) { // If the guess is after a correct one
-        classStyle += "bg-gray-400";
+        classStyle += "bg-gray-400/50";
       } else if (props.componentIndex === props.activeIndex) {
-        classStyle += "bg-sky-500 border-2 border-black dark:border-white";
+        classStyle += "bg-sky-500 border-2 border-white";
       } else {
-        classStyle += "bg-sky-300";
+        classStyle += "bg-sky-300/80";
       }
       resultText = "\u00A0"; // Non-breaking space for empty state
       break;
     case guessResult.INCORRECT:
-      classStyle += "bg-red-400 text-white";
+      classStyle += "bg-red-400/90 text-white";
       resultText = "Incorrect";
       break;
     case guessResult.SKIPPED:
-      classStyle += "bg-orange-300 text-black";
+      classStyle += "bg-orange-300/90 text-black";
       resultText = "Skipped";
       break;
     case guessResult.CORRECT:
-      classStyle += "bg-green-400 text-white";
+      classStyle += "bg-green-400/90 text-white";
       resultText = "Correct!";
       break;
   }
