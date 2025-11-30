@@ -50,7 +50,7 @@ export default function ToggleSelect(
         <div
           key={option}
           // flex-1 ensures even distribution of space among options
-          className={"flex-1 px-4 py-2 text-center z-10 transition-colors duration-300 ease-in-out text-m whitespace-nowrap " +
+          className={"flex-1 px-4 py-2 text-center z-10 transition-colors duration-300 ease-in-out text-m whitespace-nowrap font-semibold " +
             (index === props.currentIndex.value ? "text-white" : "text-black")}
           // The label itself is not clickable to advance, only the parent container.
         >
