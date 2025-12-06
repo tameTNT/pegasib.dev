@@ -164,7 +164,10 @@ export default function Root(
             history={guessHistory}
           />
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/60 transition-color duration-300 flex flex-col items-center p-2 gap-2">
+        <footer className={useComputed(() =>
+          `sticky bottom-0 w-full transition-color duration-300 flex flex-col items-center p-2 gap-2 
+          ${hasWon(guessHistory.value) ? "bg-green-500/40" : (gameIsOver.value ? "bg-red-500/40" : "bg-gray-500/60")}`
+        )}>
           <SongBar
             max={maxGuesses}
             current={currentGuess}
