@@ -1,3 +1,4 @@
+import { Signal } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import SearchBar from "../components/SearchBar.tsx";
@@ -12,7 +13,7 @@ import {
 } from "../helpers.tsx";
 
 export default function GuessBar(
-  props: GuessInfoProps & { isGameOver: boolean; currentDate: Date },
+  props: GuessInfoProps & { gameIsOver: Signal<boolean>; currentDate: Date },
 ) {
   const [inputValue, setInputValue] = useState("");
 
@@ -127,7 +128,7 @@ export default function GuessBar(
           placeholder="Search by title, album or artist"
           name="songName"
           guessCount={props.current}
-          disabled={props.isGameOver}
+          disabled={props.gameIsOver}
           inputValue={inputValue}
           setInputValue={setInputValue}
           artistVariant={props.artistForGame}
@@ -138,7 +139,7 @@ export default function GuessBar(
           type="button"
           class="rounded"
           onClick={handleGuess}
-          disabled={props.isGameOver}
+          disabled={props.gameIsOver}
         >
           Guess!
         </Button>

@@ -1,5 +1,5 @@
 import { useComputed, useSignal, useSignalEffect } from "@preact/signals";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
@@ -16,8 +16,7 @@ export default function Root(
     maxGuesses: number;
   },
 ) {
-  const [isGameOver, setIsGameOver] = useState(false);
-
+  const gameIsOver = useSignal(false);
   const artistIndex = useSignal(0);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
@@ -95,11 +94,7 @@ export default function Root(
 
   useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
     console.debug("Game over check triggered");
-    if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
-      setIsGameOver(true); // Disable guessing if max guesses reached
-    } else {
-      setIsGameOver(false);
-    }
+    gameIsOver.value = hasWon(guessHistory.value) || currentGuess.value >= maxGuesses; // Disable guessing if max guesses reached
   });
 
   return (
@@ -127,7 +122,7 @@ export default function Root(
             <ToggleSelect
               currentIndex={artistIndex}
               options={availableArtists.map((a) => a.name)}
-              disabled={currentGuess.value > 0 && !isGameOver}
+              disabled={currentGuess.value > 0 && !gameIsOver.value}
               extraOnClickFunction={loadGameState}
             />
           )}
@@ -163,7 +158,7 @@ export default function Root(
             artistForGame={currentArtistObj}
           />
           <ShareButton
-            gameIsOver={isGameOver}
+            gameIsOver={gameIsOver}
             gameTitle={`${artistName} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
@@ -181,7 +176,7 @@ export default function Root(
             current={currentGuess}
             history={guessHistory}
             artistForGame={currentArtistObj}
-            isGameOver={isGameOver}
+            gameIsOver={gameIsOver}
             currentDate={currentDate}
           />
         </footer>

@@ -6,7 +6,7 @@ import { guessResult, PastGuess } from "../enums.ts";
 
 export default function ShareButton(
   { gameIsOver, gameTitle, currentDate, history }: {
-    gameIsOver: boolean;
+    gameIsOver: Signal<boolean>;
     gameTitle: string;
     currentDate: Date;
     history: Signal<PastGuess[]>;
@@ -15,7 +15,7 @@ export default function ShareButton(
   const [successfulCopy, setSuccessfulCopy] = useState(false);
 
   function handleButtonClick() {
-    if (!gameIsOver) return; // Do nothing if the game is not over
+    if (!gameIsOver.value) return; // Do nothing if the game is not over
 
     // Create the share message (in dd/mm/yyyy format)
     let shareMessage = `${gameTitle} ${
@@ -55,7 +55,7 @@ export default function ShareButton(
       <Button
         class={`rounded-full italic${successfulCopy ? " !bg-green-400" : ""}`}
         onClick={handleButtonClick}
-        disabled={!gameIsOver}
+        disabled={!gameIsOver.value}
       >
         <img src="copy_icon.svg" alt="Copy icon" />
       </Button>
