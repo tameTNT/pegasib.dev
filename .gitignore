@@ -5,12 +5,14 @@
 .env.production.local
 .env.local
 
-/.cache
+.cache
+
+/home_server/redirects.log
+
+.idea/
 
 # Fresh build directory
 _fresh/
 # npm dependencies
 node_modules/
-/.idea/
 
-/home_server/redirects.log

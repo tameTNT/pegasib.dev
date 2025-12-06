@@ -1,3 +1,4 @@
+import { Signal } from "@preact/signals";
 import { useState } from "preact/hooks";
 
 import SearchBar from "../components/SearchBar.tsx";
@@ -12,7 +13,7 @@ import {
 } from "../helpers.tsx";
 
 export default function GuessBar(
-  props: GuessInfoProps & { isGameOver: boolean; currentDate: Date },
+  props: GuessInfoProps & { gameIsOver: Signal<boolean>; currentDate: Date },
 ) {
   const [inputValue, setInputValue] = useState("");
 
@@ -64,9 +65,7 @@ export default function GuessBar(
 
         // Flash the footer background color based on the guess result
         const footerEl = document.querySelector("footer");
-        if (footerEl) {
-          // todo: turn off green bar when switching to different artist. Then on again when back.
-          //  fix flash not working on dark mode at all first
+        if (footerEl && props.current.value < props.max) {
           const colorFlash = isCorrect ? "bg-green-500/40" : "bg-red-500/40";
           footerEl.classList.add(colorFlash);
           if (!isCorrect) { // Only flash red if incorrect; stay green on correct guess
@@ -127,7 +126,7 @@ export default function GuessBar(
           placeholder="Search by title, album or artist"
           name="songName"
           guessCount={props.current}
-          disabled={props.isGameOver}
+          disabled={props.gameIsOver}
           inputValue={inputValue}
           setInputValue={setInputValue}
           artistVariant={props.artistForGame}
@@ -138,7 +137,7 @@ export default function GuessBar(
           type="button"
           class="rounded"
           onClick={handleGuess}
-          disabled={props.isGameOver}
+          disabled={props.gameIsOver}
         >
           Guess!
         </Button>

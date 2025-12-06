@@ -1,5 +1,5 @@
 import { useComputed, useSignal, useSignalEffect } from "@preact/signals";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 
 import GuessBar from "./guess-bar.tsx";
 import SongBar from "./song-bar.tsx";
@@ -16,8 +16,7 @@ export default function Root(
     maxGuesses: number;
   },
 ) {
-  const [isGameOver, setIsGameOver] = useState(false);
-
+  const gameIsOver = useSignal(false);
   const artistIndex = useSignal(0);
 
   // Work out the current date (and the next date) in UTC to avoid timezone issues
@@ -95,36 +94,36 @@ export default function Root(
 
   useSignalEffect(() => { // Runs whenever history or current guess changes (including on localStorage load)
     console.debug("Game over check triggered");
-    if (hasWon(guessHistory.value) || currentGuess.value >= maxGuesses) {
-      setIsGameOver(true); // Disable guessing if max guesses reached
-    } else {
-      setIsGameOver(false);
-    }
+    gameIsOver.value = hasWon(guessHistory.value) ||
+      currentGuess.value >= maxGuesses; // Disable guessing if max guesses reached
   });
 
-  // todo: LOONA/GFriend background/styling (use config.json)
   return (
     <>
       <a
         href="https://github.com/tameTNT/pegasib.dev/tree/main/heardle_server"
         target="_blank"
-        class="cursor-pointer absolute top-1 left-1 flex flex-col items-center dark:invert"
+        class="cursor-pointer absolute top-1 left-1 flex flex-col items-center invert decoration-black"
       >
         <img
           src="github_icon.svg"
           alt="The GitHub Icon"
           class="h-5"
         />
-        <p class="text-gray-900 text-xs italic">{version}</p>
+        <p class="text-black text-xs italic">{version}</p>
       </a>
       {/*  todo: add reddit user link  */}
-      <div class="mx-auto flex flex-col h-screen justify-between items-center">
+      <div
+        className={useComputed(() =>
+          `mx-auto flex flex-col min-h-screen justify-between items-center background ${currentArtistObj.value.background}`
+        )}
+      >
         <main class="text-center w-3/4 md:w-1/2">
           {availableArtists.length > 1 && (
             <ToggleSelect
               currentIndex={artistIndex}
               options={availableArtists.map((a) => a.name)}
-              disabled={currentGuess.value > 0 && !isGameOver}
+              disabled={currentGuess.value > 0 && !gameIsOver.value}
               extraOnClickFunction={loadGameState}
             />
           )}
@@ -132,10 +131,9 @@ export default function Root(
           <h2 class="">{useComputed(() => currentArtistObj.value.blurb)}</h2>
           <p class="italic text-xs">
             Next new song at{" "}
-            <abbr title={tmrwDate.toLocaleString([])}>
+            <abbr title={tmrwDate.toLocaleString([], {dateStyle: 'short'})}>
               {tmrwDate.toLocaleTimeString([], timeOptions)}
             </abbr>.
-            {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
             <a
@@ -155,18 +153,28 @@ export default function Root(
           {/* todo: update the props of these components to just pass one detailed struct? */}
           <ProgressBlock
             max={maxGuesses}
+            gameIsOver={gameIsOver}
             current={currentGuess}
             history={guessHistory}
             artistForGame={currentArtistObj}
           />
           <ShareButton
-            gameIsOver={isGameOver}
+            gameIsOver={gameIsOver}
             gameTitle={`${artistName} Heardle`}
             currentDate={currentDate}
             history={guessHistory}
           />
         </main>
-        <footer class="sticky bottom-0 w-full bg-gray-500/60 dark:bg-sky-200/60 transition-color duration-300 flex flex-col items-center p-2 gap-2">
+        <footer
+          className={useComputed(() =>
+            `sticky bottom-0 w-full transition-color duration-300 flex flex-col items-center p-2 gap-2 
+          ${
+              hasWon(guessHistory.value)
+                ? "bg-green-500/40"
+                : (gameIsOver.value ? "bg-red-500/40" : "bg-gray-500/60")
+            }`
+          )}
+        >
           <SongBar
             max={maxGuesses}
             current={currentGuess}
@@ -178,7 +186,7 @@ export default function Root(
             current={currentGuess}
             history={guessHistory}
             artistForGame={currentArtistObj}
-            isGameOver={isGameOver}
+            gameIsOver={gameIsOver}
             currentDate={currentDate}
           />
         </footer>

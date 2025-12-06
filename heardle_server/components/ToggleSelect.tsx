@@ -21,7 +21,7 @@ export default function ToggleSelect(
   return (
     // Main container acts as the clickable surface.
     <div
-      className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
+      className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner shadow-lg cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
       onClick={switchArtist}
       title={(props.disabled &&
         "Complete your current game to switch artist.") || ""}
@@ -50,7 +50,7 @@ export default function ToggleSelect(
         <div
           key={option}
           // flex-1 ensures even distribution of space among options
-          className={"flex-1 px-4 py-2 text-center z-10 transition-colors duration-300 ease-in-out text-m whitespace-nowrap " +
+          className={"flex-1 px-4 py-2 text-center z-10 transition-colors duration-300 ease-in-out text-m whitespace-nowrap font-semibold " +
             (index === props.currentIndex.value ? "text-white" : "text-black")}
           // The label itself is not clickable to advance, only the parent container.
         >
