@@ -21,7 +21,7 @@ export default function ToggleSelect(
   return (
     // Main container acts as the clickable surface.
     <div
-      className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
+      className="inline-flex gap-x-4 px-2 m-4 relative rounded-full bg-gray-200 shadow-inner shadow-lg cursor-pointer select-none transition-all duration-300 ease-in-out overflow-hidden max-w-full"
       onClick={switchArtist}
       title={(props.disabled &&
         "Complete your current game to switch artist.") || ""}
