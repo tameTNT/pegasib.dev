@@ -81,7 +81,9 @@ const GuessStatusComponent = (
   );
 };
 
-export default function ProgressBlock(props: GuessInfoProps & {gameIsOver : Signal<boolean>}) {
+export default function ProgressBlock(
+  props: GuessInfoProps & { gameIsOver: Signal<boolean> },
+) {
   const correctIndex = props.history.value.findIndex((item) =>
     item.result === guessResult.CORRECT
   );
