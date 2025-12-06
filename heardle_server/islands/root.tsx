@@ -131,10 +131,9 @@ export default function Root(
           <h2 class="">{useComputed(() => currentArtistObj.value.blurb)}</h2>
           <p class="italic text-xs">
             Next new song at{" "}
-            <abbr title={tmrwDate.toLocaleString([])}>
+            <abbr title={tmrwDate.toLocaleString([], {dateStyle: 'short'})}>
               {tmrwDate.toLocaleTimeString([], timeOptions)}
             </abbr>.
-            {/* todo: fix abbr no hover display on mobile devices */}
           </p>
           <p class="italic text-xs">
             <a

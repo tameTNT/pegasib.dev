@@ -36,3 +36,10 @@ a {
         @apply bg-[url(gfriend_vertical.webp)] md:bg-[url(gfriend_wide.webp)] bg-center;
     }
 }
+
+/* For touch only devices that can't hover */
+@media not all and (hover: hover) {
+    abbr[title]::after {
+        content:' ('attr(title)')';
+    }
+}
