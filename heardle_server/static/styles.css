@@ -26,8 +26,7 @@ a {
 .background {
     background-color: rgba(0, 0, 0, 0.6);
     background-blend-mode: darken;
-    background-repeat: no-repeat;
-    background-size: cover;
+    @apply bg-no-repeat bg-cover bg-fixed;
 
     &.loona {
         @apply bg-[url(loona_vertical.webp)] lg:bg-[url(loona_wide.jpg)] bg-bottom;

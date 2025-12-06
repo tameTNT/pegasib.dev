@@ -114,7 +114,7 @@ export default function Root(
       {/*  todo: add reddit user link  */}
       <div
         className={useComputed(() =>
-          `mx-auto flex flex-col h-screen justify-between items-center background ${currentArtistObj.value.background}`
+          `mx-auto flex flex-col min-h-screen justify-between items-center background ${currentArtistObj.value.background}`
         )}
       >
         <main class="text-center w-3/4 md:w-1/2">
