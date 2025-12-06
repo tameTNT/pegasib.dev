@@ -153,6 +153,7 @@ export default function Root(
           {/* todo: update the props of these components to just pass one detailed struct? */}
           <ProgressBlock
             max={maxGuesses}
+            gameIsOver={gameIsOver}
             current={currentGuess}
             history={guessHistory}
             artistForGame={currentArtistObj}

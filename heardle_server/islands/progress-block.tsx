@@ -1,5 +1,5 @@
 import { JSX } from "preact";
-import { useSignalEffect } from "@preact/signals";
+import { Signal, useSignalEffect } from "@preact/signals";
 
 import { GuessInfoProps } from "./islandProps.d.ts";
 import { guessResult, PastGuess } from "../enums.ts";
@@ -81,13 +81,13 @@ const GuessStatusComponent = (
   );
 };
 
-export default function ProgressBlock(props: GuessInfoProps) {
+export default function ProgressBlock(props: GuessInfoProps & {gameIsOver : Signal<boolean>}) {
   const correctIndex = props.history.value.findIndex((item) =>
     item.result === guessResult.CORRECT
   );
 
   useSignalEffect(() => { // Runs whenever current Signal changes
-    if (props.current.value > 0) {
+    if (props.current.value > 0 && !props.gameIsOver.value) {
       const activeGuessEl = document.getElementById(
         `guess-${props.current.value}`,
       );
