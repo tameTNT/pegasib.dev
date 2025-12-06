@@ -28,13 +28,12 @@ a {
     background-blend-mode: darken;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
 
     &.loona {
-        background-image: url("hi_high_diving_board_crop.jpg");
+        @apply bg-[url(loona_vertical.webp)] lg:bg-[url(loona_wide.jpg)] bg-bottom;
     }
 
     &.gfriend {
-        background-image: url("https://www.allkpop.com/upload/2024/12/content/221146/web_data/allkpop_1734886093_gfriend.jpg");
+        @apply bg-[url(gfriend_vertical.jpg)] md:bg-[url(gfriend_wide.jpg)] bg-center;
     }
 }
