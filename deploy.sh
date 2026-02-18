@@ -2,10 +2,6 @@
 
 set -euo pipefail
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm use 24.13.1
-
 echo "Starting Deno build and deployment for home_server..."
 cd ~/pegasib.dev/home_server
 deno task build
