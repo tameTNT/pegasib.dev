@@ -39,36 +39,22 @@ jobs:
             --port 22 \
             --cidr ${{ steps.ip.outputs.ipv4 }}/32
       # Uses deploy strategy of https://stackoverflow.com/a/66661512/7253717
-      - name: deploy to EC2 Server (via ssh-deploy)
+      - name: upload and deploy to EC2 Server (via ssh-deploy)
         uses: easingthemes/ssh-deploy@v5.1.1
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          SCRIPT_BEFORE: |
-            export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
-            cd ~/pegasib.dev
           # -i = output a change-summary for all updates, -r = recurse into dirs, -l = copy links, -g = group, -o = owner,
           # -D = --devices --specials, -z = compress, -v = verbose, -c = skip based on checksum, not mod-time & size
-          # --delete-after = receiver deletes after transfer, not before (to empty .pup directory first)
+          # --delete-after = receiver deletes after transfer, not before
           ARGS: "-rlgoDzvc -i --delete-after"
           SOURCE: "/"
           TARGET: "~/pegasib.dev"
           # Excludes all node_modules subdirectories etc. Do not include git things on server.
           EXCLUDE: "*/node_modules/, */_fresh/, .git/, .run/, .github/"
-          SCRIPT_AFTER: |
-            export PATH="/home/${{ secrets.REMOTE_USER }}/.deno/bin:$PATH"
-            echo "Starting Deno build and deployment for home_server..."
-            cd ~/pegasib.dev/home_server
-            deno task build
-            echo "Starting Deno build and deployment for heardle_server..."
-            cd ../heardle_server
-            deno task build
-            cd ~/pegasib.dev
-            echo "Re-enabling pup service and restarting servers..."
-            pm2 reload ecosystem.config.js
-            echo "⚠️ Don't forget to reload nginx if necessary: sudo nginx -s reload"
-          SCRIPT_AFTER_REQUIRED: true
+      - name: reload deno process and start server
+        run: ./deploy.sh
       - name: revoke runner ip address (via aws CLI)
         run: |
           aws ec2 revoke-security-group-ingress \
