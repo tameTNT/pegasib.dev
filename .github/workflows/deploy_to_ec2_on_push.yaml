@@ -64,6 +64,8 @@ jobs:
             cd ~/pegasib.dev
             echo "Reloading server process via pm2..."
             pm2 reload ecosystem.config.js
+            # save state in case of system restart
+            pm2 save
             echo "⚠️ Don't forget to reload nginx if necessary: sudo nginx -s reload"
           SCRIPT_AFTER_REQUIRED: true
       - name: revoke runner ip address (via aws CLI)
