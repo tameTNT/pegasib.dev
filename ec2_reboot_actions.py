@@ -24,6 +24,8 @@ print(f"EC2 server's new public IPv4 address: {external_ip}")
 # == Update DNS record with server's new IPv4 address ==
 client = Cloudflare()
 zone_id = os.getenv("CLOUDFLARE_ZONE_ID")
+if zone_id is None:
+    raise RuntimeError("CLOUDFLARE_ZONE_ID environment variable is not set.")
 
 DOMAIN_NAME = "pegasib.dev"
 subdomains_to_update = ["51", "kpop-heardle", "loona-heardle"]
