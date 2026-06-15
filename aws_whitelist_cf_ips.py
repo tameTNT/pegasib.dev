@@ -11,9 +11,9 @@ import requests
 from botocore.exceptions import ClientError
 
 # --- CONFIGURATION ---
-SECURITY_GROUP_ID = "sg-01f56315173a15add"  # Replace with your Security Group ID
-AWS_REGION = "eu-west-2"                    # Replace with your AWS Region
-PORTS_TO_OPEN = [443]                       # HTTPS only
+SECURITY_GROUP_ID = "sg-01f56315173a15add"  # "Cloudflare IPs" security group
+AWS_REGION = "eu-west-2"
+PORTS_TO_OPEN = [443]  # HTTPS only
 # ---------------------
 
 def get_cloudflare_ips():
@@ -81,8 +81,8 @@ def sync_security_group():
     new_ip_permissions = []
     
     for port in PORTS_TO_OPEN:
-        ipv4_ranges = [{"CidrIp": ip, "Description": "Cloudflare IPv4"} for ip in cf_ipv4]
-        ipv6_ranges = [{"CidrIpv6": ip, "Description": "Cloudflare IPv6"} for ip in cf_ipv6]
+        ipv4_ranges = [{"CidrIp": ip, "Description": "Cloudflare IPv4 - programmatically added"} for ip in cf_ipv4]
+        ipv6_ranges = [{"CidrIpv6": ip, "Description": "Cloudflare IPv6 - programmatically added"} for ip in cf_ipv6]
         
         new_ip_permissions.append({
             "IpProtocol": "tcp",
@@ -93,7 +93,7 @@ def sync_security_group():
         })
 
     # 6. Authorize new rules
-    print(f"Authorizing {len(cf_ipv4)} IPv4 and {len(cf_ipv6)} IPv6 ranges on ports {PORTS_TO_OPEN}...")
+    print(f"Authorising {len(cf_ipv4)} IPv4 and {len(cf_ipv6)} IPv6 ranges on ports {PORTS_TO_OPEN}...")
     try:
         ec2.authorize_security_group_ingress(
             GroupId=SECURITY_GROUP_ID,
@@ -104,5 +104,4 @@ def sync_security_group():
         print(f"Error authorizing new rules: {e}")
 
 if __name__ == "__main__":
-    # sync_security_group()
-    pass
+    sync_security_group()
