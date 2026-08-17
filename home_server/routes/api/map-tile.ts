@@ -1,6 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
 
-const API_KEY = Deno.env.get("OS_MAPS_API_KEY");
 const CACHE_DIR = "./tile_cache";
 const MEMORY_CACHE = new Map<string, Uint8Array>();
 const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -15,10 +14,6 @@ interface CacheMetadata {
 let cacheMetadata: CacheMetadata = { tiles: {}, totalSize: 0 };
 let lastCleanupTime = 0;
 const CLEANUP_INTERVAL = 5 * 60 * 1000; // Cleanup every 5 minutes
-
-if (!API_KEY) {
-  console.warn("OS_MAPS_API_KEY environment variable not set");
-}
 
 // Ensure cache directory exists
 async function ensureCacheDir() {
@@ -213,8 +208,9 @@ export const handler: Handlers = {
     if (!z || !x || !y) {
       return new Response("Missing z, x, or y parameter", { status: 400 });
     }
-
+    const API_KEY = Deno.env.get("OS_MAPS_API_KEY");
     if (!API_KEY) {
+      console.warn("OS_MAPS_API_KEY environment variable not set");
       return new Response("API key not configured", { status: 500 });
     }
 
