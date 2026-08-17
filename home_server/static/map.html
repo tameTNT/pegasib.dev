@@ -15,19 +15,46 @@
     />
     <style>
       body {
-        margin: 0;
-        padding: 0;
+          margin: 0;
+          padding: 0;
       }
       #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+      }
+      .map-key-button {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 1000;
+      }
+      .map-key-button a {
+          display: inline-block;
+          padding: 10px 15px;
+          color: #000000;
+          background-color: #ffffff;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          font-family: "Arial", sans-serif;
+          font-size: 14px;
+          text-decoration: none;
+          border-radius: 4px;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+      .map-key-button a:hover {
+          background-color: rgb(243 243 243);
+          text-decoration: underline;
       }
     </style>
   </head>
   <body>
     <div id="map"></div>
+    <div class="map-key-button">
+      <a href="https://www.ordnancesurvey.co.uk/documents/Explorer-Generic-Legend-English-2022-09.pdf" target="_blank">Key</a>
+    </div>
 
     <script
       src="https://cdn.jsdelivr.net/gh/OrdnanceSurvey/os-api-branding@latest/os-api-branding.js"
@@ -40,7 +67,7 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"
     ></script>
     <script>
-      // Setup the EPSG:27700 (British National Grid) projection.
+      // Set up the EPSG:27700 (British National Grid) projection.
       const crs = new L.Proj.CRS(
         "EPSG:27700",
         "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs",
