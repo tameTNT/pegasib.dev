@@ -86,6 +86,16 @@
       .map-locate-button button:disabled {
           cursor: default;
       }
+
+      .location-marker {
+          width: 18px !important;
+          height: 18px !important;
+          margin: -9px 0 0 -9px;
+          border: 2px solid #ffffff;
+          border-radius: 50%;
+          background-color: #1976d2;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      }
   </style>
 </head>
 <body>
@@ -113,8 +123,10 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"
 ></script>
 <script>
+    const Leaflet = window.L;
+
     // Set up the EPSG:27700 (British National Grid) projection.
-    const crs = new L.Proj.CRS(
+    const crs = new Leaflet.Proj.CRS(
         "EPSG:27700",
         "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs",
         {
@@ -139,7 +151,7 @@
     );
 
     // Instantiate a tile layer object for the Leisure style (displayed at zoom levels 0-9).
-    const leisure = L.tileLayer(
+    const leisure = Leaflet.tileLayer(
         "/api/map-tile?z={z}&x={x}&y={y}",
         {
             maxZoom: 9,
@@ -166,7 +178,9 @@
         attributionControl: false,
     };
 
-    const map = L.map("map", mapOptions);
+    const map = Leaflet.map("map", mapOptions);
+    let locationMarker;
+    let locationMarkerTimeout;
 
     // Location button
     document.getElementById("locate-btn").addEventListener("click", function () {
@@ -180,7 +194,24 @@
         iconSpan.innerText = "location_searching"
         navigator.geolocation.getCurrentPosition(
             function (pos) {
-                map.setView([pos.coords.latitude, pos.coords.longitude], 9);
+                const location = [pos.coords.latitude, pos.coords.longitude];
+                if (locationMarker) {
+                    locationMarker.setLatLng(location);
+                } else {
+                    locationMarker = Leaflet.marker(location, {
+                        icon: Leaflet.divIcon({
+                            className: "location-marker",
+                            iconSize: [18, 18],
+                            iconAnchor: [9, 9],
+                        }),
+                    }).addTo(map);
+                }
+                clearTimeout(locationMarkerTimeout);
+                locationMarkerTimeout = setTimeout(function () {
+                    map.removeLayer(locationMarker);
+                    locationMarker = null;
+                }, 5000);
+                map.setView(location, 8);
                 btn.disabled = false;
                 iconSpan.innerText = "my_location"
             },
