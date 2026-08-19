@@ -38,7 +38,7 @@ def download_playlist(uri: str, output_file_name: str, initial_offset: int = 0, 
     playlist_resp = sp.playlist_items(uri, offset=initial_offset)
     tracks_got += map(extract_track_from_playlist_item, playlist_resp["items"])
     while len(tracks_got) + initial_offset < playlist_resp["total"]:
-        playlist_resp = sp.playlist_items(uri, offset=len(tracks_got)+initial_offset)
+        playlist_resp = sp.playlist_items(uri, offset=len(tracks_got) + initial_offset)
         tracks_got += map(extract_track_from_playlist_item, playlist_resp["items"])
 
     print(f"Got {len(tracks_got)} tracks from playlist successfully (initial_offset={initial_offset}).")
@@ -46,7 +46,7 @@ def download_playlist(uri: str, output_file_name: str, initial_offset: int = 0, 
     # Scrape the mp3 preview URLs manually
     full_track_info = []
     for i, track in enumerate(tracks_got):
-        print(f"On track: {i+1: 3}/{len(tracks_got):03}", end="\r")
+        print(f"On track: {i + 1: 3}/{len(tracks_got):03}", end="\r")
         track_resp = requests.get(track["url"])
         if track_resp.status_code == 200:
             raw = track_resp.content.decode("utf-8")
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Defaults to LOONA songs playlist uri
     parser.add_argument("-u", "--uri", default="05bRCDfqjNVnysz17hocZn")
-    parser.add_argument("-f", "--output-file", default="heardle_track_info.json")
+    parser.add_argument("-f", "--output-file", default="heardle_loona_track_info.json")
     parser.add_argument("-o", "--offset", default=0)
     args = parser.parse_args()
 

@@ -6,7 +6,7 @@ export default function Home() {
 
   return ( // todo: Korean localisation/translation of home page
     <Root
-      version="v3.2.0"
+      version="v4.0.0"
       availableArtists={config_data.supported_artists}
       maxGuesses={MAX_GUESSES}
     />
