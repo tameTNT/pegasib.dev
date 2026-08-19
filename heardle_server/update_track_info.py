@@ -78,11 +78,11 @@ if __name__ == "__main__":
     cli_output_file = args.output_file
     offset = args.offset
 
-    load_dotenv()  # Loads SPOTIFY_CLIENT_ID, and SPOTIFY_CLIENT_SECRET
+    load_dotenv()  # Loads SPOTIPY_CLIENT_ID, and SPOTIPY_CLIENT_SECRET
 
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-        client_id=os.getenv("SPOTIFY_CLIENT_ID"),
-        client_secret=os.getenv("SPOTIFY_CLIENT_SECRET"),
+        client_id=os.getenv("SPOTIPY_CLIENT_ID"),
+        client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"),
     ))
 
     download_playlist(uri, cli_output_file, offset, sp)
