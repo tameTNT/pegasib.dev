@@ -4,15 +4,14 @@
 .env.test.local
 .env.production.local
 .env.local
-
-.cache
-
-/home_server/redirects.log
-
 .idea/
 
-# Fresh build directory
+# site-generated files
+redirects.log
+tile_cache/
+.cache
+
+# fresh build directory
 _fresh/
 # npm dependencies
 node_modules/
-

@@ -2,13 +2,13 @@
   "supported_artists": [
     {
       "name": "LOONA",
-      "blurb": "Includes solo, subunit, and all post-BBC tracks (up to Soft Error).",
+      "blurb": "Includes solo, subunit, and all post-BBC tracks (up to <Hyper-Ego>).",
       "playlist_url": "https://open.spotify.com/playlist/05bRCDfqjNVnysz17hocZn",
       "background": "loona"
     },
     {
       "name": "GFriend",
-      "blurb": "Includes all Spotify-available group and solo/subgroup songs (inc. OSTs) up to Oct 2025.",
+      "blurb": "Includes all Spotify-available group and solo/subgroup songs (inc. OSTs) up to Aug 2026.",
       "playlist_url": "https://open.spotify.com/playlist/5qPzAE10vkPbaP5DkN7upp",
       "background": "gfriend"
     }
