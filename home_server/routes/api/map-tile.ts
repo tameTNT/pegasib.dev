@@ -222,12 +222,16 @@ export const handler: Handlers = {
         // Check file cache
         tileData = await getFileCache(z, x, y);
       }
+      const REFERER = Deno.env.get("REFERER");
 
       // If not in cache, fetch from API
       if (!tileData) {
         const tileUrl =
           `https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/${z}/${x}/${y}.png?key=${API_KEY}`;
-        const response = await fetch(tileUrl);
+        const response = await fetch(
+          tileUrl,
+          REFERER ? { headers: { referer: REFERER } } : undefined,
+        );
 
         if (!response.ok) {
           return new Response("Failed to fetch tile", {
