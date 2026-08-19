@@ -9,6 +9,7 @@
 # site-generated files
 redirects.log
 tile_cache/
+.cache
 
 # fresh build directory
 _fresh/
