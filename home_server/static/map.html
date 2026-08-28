@@ -1,170 +1,179 @@
 <!DOCTYPE html>
 <!-- https://labs.os.uk/public/os-data-hub-examples/os-maps-api/zxy-example-additional-zoom-levels#leaflet -->
 <html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>OS Map</title>
-  <link
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OS Map</title>
+    <link
       href="https://cdn.jsdelivr.net/gh/OrdnanceSurvey/os-api-branding@latest/os-api-branding.css"
       rel="stylesheet"
-  />
-  <link
+    />
+    <link
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       rel="stylesheet"
-  />
-  <link
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,1,200"
-      rel="stylesheet"/>
-  <style>
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="icons/favicon.svg"
+      sizes="any"
+      type="image/svg+xml"
+    />
+    <style>
       body {
-          margin: 0;
-          padding: 0;
+        margin: 0;
+        padding: 0;
       }
 
       #map {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
       }
 
       .map-key-button {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          z-index: 1000;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
       }
 
       .map-key-button a {
-          display: inline-block;
-          padding: 10px 15px;
-          color: #000000;
-          background-color: #ffffff;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          font-family: "Arial", sans-serif;
-          font-size: 14px;
-          text-decoration: none;
-          border-radius: 4px;
-          border: none;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
+        display: inline-block;
+        padding: 10px 15px;
+        color: #000000;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        font-family: "Arial", sans-serif;
+        font-size: 14px;
+        text-decoration: none;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
       }
 
       .map-key-button a:hover {
-          background-color: rgb(243 243 243);
-          text-decoration: underline;
+        background-color: rgb(243 243 243);
+        text-decoration: underline;
       }
 
       .map-locate-button {
-          position: absolute;
-          bottom: 20px;
-          right: 10px;
-          z-index: 1000;
+        position: absolute;
+        bottom: 20px;
+        right: 10px;
+        z-index: 1000;
       }
 
       .map-locate-button button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 38px;
-          height: 38px;
-          color: #000000;
-          background-color: #ffffff;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          font-size: 18px;
-          border-radius: 4px;
-          border: none;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        color: #000000;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        font-size: 18px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
       }
 
       .map-locate-button button:hover {
-          background-color: rgb(243 243 243);
+        background-color: rgb(243 243 243);
       }
 
       .map-locate-button button:disabled {
-          cursor: default;
+        cursor: default;
       }
 
       .location-marker {
-          width: 18px !important;
-          height: 18px !important;
-          margin: -9px 0 0 -9px;
-          border: 2px solid #ffffff;
-          border-radius: 50%;
-          background-color: #1976d2;
-          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+        width: 18px !important;
+        height: 18px !important;
+        margin: -9px 0 0 -9px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        background-color: #1976d2;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
       }
-  </style>
-</head>
-<body>
-<div id="map"></div>
-<div class="map-key-button">
-  <a href="https://www.ordnancesurvey.co.uk/documents/Explorer-Generic-Legend-English-2022-09.pdf"
-     target="_blank">Key</a>
-</div>
-<div class="map-locate-button">
-  <button id="locate-btn" title="Go to my location">
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="map-key-button">
+      <a
+        href="https://www.ordnancesurvey.co.uk/documents/Explorer-Generic-Legend-English-2022-09.pdf"
+        target="_blank"
+      >Key</a>
+    </div>
+    <div class="map-locate-button">
+      <button id="locate-btn" title="Go to my location">
         <span class="material-symbols-outlined">
-        my_location
+          my_location
         </span>
-  </button>
-</div>
+      </button>
+    </div>
 
-<script
-    src="https://cdn.jsdelivr.net/gh/OrdnanceSurvey/os-api-branding@latest/os-api-branding.js"
-></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.19.0/proj4.min.js"
-></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"
-></script>
-<script>
-    const Leaflet = window.L;
+    <script
+      src="https://cdn.jsdelivr.net/gh/OrdnanceSurvey/os-api-branding@latest/os-api-branding.js"
+    ></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.19.0/proj4.min.js"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"
+    ></script>
+    <script>
+      const Leaflet = window.L;
 
-    // Set up the EPSG:27700 (British National Grid) projection.
-    const crs = new Leaflet.Proj.CRS(
+      // Set up the EPSG:27700 (British National Grid) projection.
+      const crs = new Leaflet.Proj.CRS(
         "EPSG:27700",
         "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs",
         {
-            resolutions: [
-                896.0,
-                448.0,
-                224.0,
-                112.0,
-                56.0,
-                28.0,
-                14.0,
-                7.0,
-                3.5,
-                1.75,
-                0.875,
-                0.4375,
-                0.21875,
-                0.109375,
-            ],
-            origin: [-238375.0, 1376256.0],
+          resolutions: [
+            896.0,
+            448.0,
+            224.0,
+            112.0,
+            56.0,
+            28.0,
+            14.0,
+            7.0,
+            3.5,
+            1.75,
+            0.875,
+            0.4375,
+            0.21875,
+            0.109375,
+          ],
+          origin: [-238375.0, 1376256.0],
         },
-    );
+      );
 
-    // Instantiate a tile layer object for the Leisure style (displayed at zoom levels 0-9).
-    const leisure = Leaflet.tileLayer(
+      // Instantiate a tile layer object for the Leisure style (displayed at zoom levels 0-9).
+      const leisure = Leaflet.tileLayer(
         "/api/map-tile?z={z}&x={x}&y={y}",
         {
-            maxZoom: 9,
+          maxZoom: 9,
         },
-    );
+      );
 
-    // Transform coordinates.
-    const transformCoords = function (arr) {
+      // Transform coordinates.
+      const transformCoords = function (arr) {
         return proj4("EPSG:27700", "EPSG:4326", arr).reverse();
-    };
+      };
 
-    // Initialize the map.
-    const mapOptions = {
+      // Initialize the map.
+      const mapOptions = {
         crs: crs,
         layers: [leisure],
         minZoom: 0,
@@ -172,56 +181,62 @@
         center: transformCoords([543536, 257925]),
         zoom: 6,
         maxBounds: [
-            transformCoords([-238375.0, 0.0]),
-            transformCoords([900000.0, 1376256.0]),
+          transformCoords([-238375.0, 0.0]),
+          transformCoords([900000.0, 1376256.0]),
         ],
         attributionControl: false,
-    };
+      };
 
-    const map = Leaflet.map("map", mapOptions);
-    let locationMarker;
-    let locationMarkerTimeout;
+      const map = Leaflet.map("map", mapOptions);
+      let locationMarker;
+      let locationMarkerTimeout;
 
-    // Location button
-    document.getElementById("locate-btn").addEventListener("click", function () {
-        const btn = this;
-        const iconSpan = btn.getElementsByTagName("span").item(0);
-        if (!navigator.geolocation) {
+      // Location button
+      document.getElementById("locate-btn").addEventListener(
+        "click",
+        function () {
+          const btn = this;
+          const iconSpan = btn.getElementsByTagName("span").item(0);
+          if (!navigator.geolocation) {
             alert("Geolocation is not supported by your browser.");
             return;
-        }
-        btn.disabled = true;
-        iconSpan.innerText = "location_searching"
-        navigator.geolocation.getCurrentPosition(
+          }
+          btn.disabled = true;
+          iconSpan.innerText = "location_searching";
+          navigator.geolocation.getCurrentPosition(
             function (pos) {
-                const location = [pos.coords.latitude, pos.coords.longitude];
-                if (locationMarker) {
-                    locationMarker.setLatLng(location);
-                } else {
-                    locationMarker = Leaflet.marker(location, {
-                        icon: Leaflet.divIcon({
-                            className: "location-marker",
-                            iconSize: [18, 18],
-                            iconAnchor: [9, 9],
-                        }),
-                    }).addTo(map);
-                }
-                clearTimeout(locationMarkerTimeout);
-                locationMarkerTimeout = setTimeout(function () {
-                    map.removeLayer(locationMarker);
-                    locationMarker = null;
-                }, 5000);
-                map.setView(location, 8);
-                btn.disabled = false;
-                iconSpan.innerText = "my_location"
+              const location = [
+                pos.coords.latitude,
+                pos.coords.longitude,
+              ];
+              if (locationMarker) {
+                locationMarker.setLatLng(location);
+              } else {
+                locationMarker = Leaflet.marker(location, {
+                  icon: Leaflet.divIcon({
+                    className: "location-marker",
+                    iconSize: [18, 18],
+                    iconAnchor: [9, 9],
+                  }),
+                }).addTo(map);
+              }
+              clearTimeout(locationMarkerTimeout);
+              locationMarkerTimeout = setTimeout(function () {
+                map.removeLayer(locationMarker);
+                locationMarker = null;
+              }, 5000);
+              map.setView(location, 8);
+              btn.disabled = false;
+              iconSpan.innerText = "my_location";
             },
             function () {
-                alert("Unable to determine your location.");
-                btn.disabled = false;
-                iconSpan.innerText = "my_location"
-            }
-        );
-    });
-</script>
-</body>
+              alert("Unable to determine your location.");
+              btn.disabled = false;
+              iconSpan.innerText = "my_location";
+            },
+          );
+        },
+      );
+    </script>
+  </body>
 </html>
